@@ -14,4 +14,16 @@ int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 	
 	bdd_increment_table("utilisateur");
 }
-s
+int bdd_supprimer_utilisateur(unsigned long int id){
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","a");
+	
+
+	//alors supprimer la "ligne" utilisateur
+	//et remplace la derniere ligne par l'emplacement de la ligne supprimé
+	
+	fwrite(&utilisateur,sizeof(Utilisateur),1,file);
+	fclose(file);
+	
+        bdd_decrement_table("utlisateur");
+}
