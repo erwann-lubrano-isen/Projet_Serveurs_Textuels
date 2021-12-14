@@ -16,6 +16,8 @@ typedef struct Membre {
 
 int bdd_creer_membre(unsigned long int idServeur, unsigned long idUtilisateur);
 int bdd_check_membre(unsigned long int idServeur, unsigned long idUtilisateur);
+int bdd_supprimer_membre(unsigned long int idServeur, unsigned long idUtilisateur);
+void bdd_afficher_membres();
 
 
 #endif
