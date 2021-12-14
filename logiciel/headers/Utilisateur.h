@@ -9,4 +9,6 @@ typedef struct utilisateur {
 	char motDePasse[];
 } Utilisateur;
 
+int bdd_creer_utilisateur(char pseudo[], char motDePasse[]);
+
 #endif
