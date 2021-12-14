@@ -8,7 +8,7 @@
 typedef struct salon {
 	unsigned long int idSalon;
 	unsigned long int idServeur;
-	char Nom[];
+	char Nom[30];
 }Salon;
 
 int bd_Salon_check(unsigned long int idSalon, unsigned long int idServeur);
