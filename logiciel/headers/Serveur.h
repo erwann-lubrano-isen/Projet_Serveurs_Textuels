@@ -14,5 +14,5 @@ typedef struct serveur {
 #endif
 
 int bd_creationServeur(const char *const nom, unsigned long int IdProprio);
-int bd_suppressionServeur(const char *const nom);
+int bd_suppressionServeur(unsigned long int id);
 void afficheServeur();

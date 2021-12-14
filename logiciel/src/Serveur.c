@@ -19,7 +19,7 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	return 0;
 }
 
-int bd_suppressionServeur(const char *const nom) {
+int bd_suppressionServeur(unsigned long int id) {
 
 	FILE *fichier = fopen("rsc/serveur.dat", "r+");
 	if (fichier == NULL) return -1;
@@ -27,7 +27,7 @@ int bd_suppressionServeur(const char *const nom) {
 	Serveur serveur;
 	
 	for(int i = 1; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
-		if (strcmp(serveur.nom, nom) == 0) {
+		if (serveur.id == id) {
 			fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")-1), SEEK_SET); //Positionnement du curseur au début de la dernière ligne
 			fread(&serveur, sizeof(Serveur), 1, fichier);	//Obtention de la dernière ligne dans serveur
 			fseek(fichier, sizeof(Serveur)*(i-1), SEEK_SET); //Positionnement au début de la ligne i
@@ -38,14 +38,3 @@ int bd_suppressionServeur(const char *const nom) {
 	}
 	fclose(fichier);	
 }
-
-void afficheServeur() {
-	FILE *fichier = fopen("rsc/serveur.dat", "r");
-	Serveur serveur;
-	for(int i = 1; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
-		printf("Serveur N°%d:\n", i);
-		printf("\tNom: %s\tidProprio: %lu\t idServ: %lu\n", serveur.nom, serveur.idProprio, serveur.id);
-	}
-	fclose(fichier);
-}
-
