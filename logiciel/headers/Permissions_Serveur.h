@@ -8,5 +8,7 @@ typedef struct Permissions_Serveur{
 	unsigned long int User;
 	char perms[3];
 }Permissions_Serveur;
+
+int insert_perm_serveur(unsigned long int id_serveur, unsigned long int User, char perms[]);
 	
 #endif

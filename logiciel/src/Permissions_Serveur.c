@@ -2,7 +2,7 @@
 #include "../headers/Permissions_Serveur.h"
 #include "../headers/Serial.h"
 
-int insert_perm_salon(unsigned long int id_serveur, unsigned long int User, char perms[]){
+int insert_perm_serveur(unsigned long int id_serveur, unsigned long int User, char perms[]){
 	FILE * fichier;
 	fichier = fopen("rsc/permission_serveur.dat","a"); //ouverture de salon.dat
 	if(fichier == NULL)return -1;

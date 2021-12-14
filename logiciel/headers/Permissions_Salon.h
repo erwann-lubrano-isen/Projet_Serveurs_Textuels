@@ -7,5 +7,7 @@ typedef struct Permissions_Salon{
 	char Role[40];
 	char perms[3];
 }Permissions_Salon;
-	
+
+int insert_perm_salon(unsigned long int id_salon, char Role[], char perms[]);
+
 #endif

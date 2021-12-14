@@ -8,10 +8,11 @@
 typedef struct salon {
 	unsigned long int idSalon;
 	unsigned long int idServeur;
-	char Nom[30];
+	char nom[30];
 }Salon;
 
-int bd_Salon_check(unsigned long int idSalon, unsigned long int idServeur);
-int bd_create_Salon(char Nom[], unsigned long int idServeur);
-
+int bdd_Salon_check(unsigned long int idSalon, unsigned long int idServeur);
+int bdd_create_Salon(char nom[], unsigned long int idServeur);
+void bdd_afficher_salon();
+int bdd_supprimer_salon(unsigned long int idSalon, unsigned long idServeur);
 #endif
