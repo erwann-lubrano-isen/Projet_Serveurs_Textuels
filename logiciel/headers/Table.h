@@ -12,6 +12,8 @@ typedef struct Table{
 
 int bdd_increment_table(const char * const name);
 
+int bdd_decrement_table(const char * const name);
+
 int bdd_getSize_table(const char * const name);
 
 #endif
