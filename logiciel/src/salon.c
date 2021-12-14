@@ -86,7 +86,40 @@ void bdd_afficher_salon(){
 	fclose(file);
 }
 	
-	
+int supprimer_salons_serveur(unsigned long int idServeur){
+	int size = bdd_getSize_table("salon");
+	if(size==0)return 0;
+	if(size==1){
+		bdd_decrement_table("salon");
+		return 0;
+	}
+	int i =0;
+	Salon salon;
+	Salon dernierSalon
+	FILE * file = NULL;
+	file = fopen("rsc/salon.dat","r+");
+	fseek(file,sizeof(Salon)*(size-1),SEEK_SET);
+	fread(&dernierSalon,sizeof(Salon),1,file);
+	fseek(file,0,SEEK_SET);
+	while(fread(&salon,sizeof(Salon),1,file) != EOF && i < size){
+		++i;
+		if(salon.idServeur==idServeur){
+			fseek(file,-sizeof(Salon),SEEK_CUR);
+			fwrite(&dernierSalon,sizeof(Salon),1,file);
+			if(size>=1){
+				bdd_decrement_table("salon");
+				--size;
+			}
+			--i;
+			fseek(file,sizeof(Salon)*(size-1),SEEK_SET);
+			fread(&dernierSalon,sizeof(Salon),1,file);
+			fseek(file,i*(sizeof(Salon)),SEEK_SET);
+		}
+		
+	}
+	fclose(file);
+	return 0;
+}
 		
 
 
