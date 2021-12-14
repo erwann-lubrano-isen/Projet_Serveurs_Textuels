@@ -1,4 +1,4 @@
-bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o
+bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o
 	gcc obj/*.o -o bin/prog
 
 
@@ -13,3 +13,6 @@ obj/table.o: src/Table.c headers/Table.h
 
 obj/message.o: src/Message.c headers/Message.h
 	gcc -c src/Message.c -o obj/message.o
+	
+obj/invitation.o: src/Invitation.c headers/Invitation.h
+	gcc -o obj/invitation.o -c src/Invitation.c
