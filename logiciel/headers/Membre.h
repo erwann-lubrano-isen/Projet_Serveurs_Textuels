@@ -1,5 +1,5 @@
 #ifndef __MEMBRE_H_
-#define __UTILISATEUR_H_
+#define __MEMBRE_H_
 
 #include <stdio.h>
 #include <string.h>

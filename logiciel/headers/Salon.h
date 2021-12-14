@@ -1,5 +1,5 @@
 #ifndef __SALON_H_
-#define __UTILISATEUR_H_
+#define __SALON_H_
 
 #include "stdio.h"
 #include "Table.h"

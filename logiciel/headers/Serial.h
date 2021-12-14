@@ -1,7 +1,8 @@
-#include <string.h>
-#include <stdio.h>
 #ifndef __SERIAL_H_
 #define __SERIAL_H_
+#include <string.h>
+#include <stdio.h>
+
 
 typedef struct Serial{
 	char table_name[30];
@@ -9,6 +10,5 @@ typedef struct Serial{
 	unsigned long int count;
 }Serial;
 
-#endif
-
 unsigned long int incrementeSerial(char nomTable[]);
+#endif

@@ -5,8 +5,8 @@
 
 typedef struct utilisateur {
 	unsigned long int id;
-	char pseudo[];
-	char motDePasse[];
+	char pseudo[30];
+	char motDePasse[30];
 } Utilisateur;
 
 void bdd_afficher_utilisateur();
