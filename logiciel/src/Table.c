@@ -3,7 +3,7 @@
 int bdd_increment_table(const char * const name){
 	FILE * file =NULL;
 	file= fopen("rsc/table.dat","r+");
-	if(file==NULL)return 1;
+	if(file==NULL)return -1;
 	Table table;
 	while(fread(&table,sizeof(Table),1,file) != EOF){
 		if(strcmp(table.name,name)==0){
@@ -16,4 +16,19 @@ int bdd_increment_table(const char * const name){
 	}
 	fclose(file);
 	return 0;
+}
+
+int bdd_getSize_table(const char * const name){
+	FILE * file =NULL;
+	file= fopen("rsc/table.dat","r");
+	if(file==NULL)return -1;
+	Table table;
+	while(fread(&table,sizeof(Table),1,file) != EOF){
+		if(strcmp(table.name,name)==0){
+			fclose(file);
+			return table.size;
+		}
+	}
+	fclose(file);
+	return -2;
 }

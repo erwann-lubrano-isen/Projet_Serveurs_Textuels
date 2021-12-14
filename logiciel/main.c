@@ -1,7 +1,8 @@
 #include "headers/Membre.h"
+#include "headers/Table.h"
+#include <stdio.h>
 
 int main(){
-	bdd_creer_membre(1,5);
-	bdd_creer_membre(4,5);
+	printf("%d\n",bdd_getSize_table("membre"));
 	return 0;
 }
