@@ -10,5 +10,6 @@ typedef struct utilisateur {
 } Utilisateur;
 
 int bdd_creer_utilisateur(char pseudo[], char motDePasse[]);
+int bdd_supprimer_utilisateur(unsigned long int id);
 
 #endif
