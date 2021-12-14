@@ -11,5 +11,19 @@ int insert_perm_salon(unsigned long int id_salon, char Role[], char perms[]){
 	strcpy(perm_salon.perms, perms);
 	perm_salon.id_salon=id_salon;
 	fclose(fichier);
+	bdd_increment_table("permission_salon");
 	return 0;
+}
+
+void bdd_afficher_perm_salon(){
+	int size = bdd_getSize_table("permission_salon");
+	int i =0;
+	Permissions_Salon permissions_Salon;
+	FILE * file = NULL;
+	file = fopen("rsc/permission_salon.dat","r");
+	while(fread(&permissions_Salon,sizeof(Permissions_Salon),1,file) != EOF && i < size){
+		printf("serv : %lu\tRole : %s\t%3s\n",permissions_Salon.id_salon,permissions_Salon.Role,permissions_Salon.perms);
+		++i;
+	}
+	fclose(file);
 }

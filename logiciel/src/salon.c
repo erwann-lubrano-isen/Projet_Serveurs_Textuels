@@ -1,7 +1,7 @@
 #include <string.h>
 #include "../headers/Salon.h"
 #include "../headers/Serial.h"
-
+#include "../headers/Table.h"
 
 int bdd_Salon_check(unsigned long int idSalon, unsigned long int idServeur){
 	FILE * fichier;
