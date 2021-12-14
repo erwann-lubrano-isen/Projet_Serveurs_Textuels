@@ -8,11 +8,11 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	serveur.idProprio = idProprio;
 	
 	FILE *fichier;
-	fichier = fopen("rsc/serveur.dat", "a+"); //Ouverture de fichier
+	fichier = fopen("rsc/serveur.dat", "r+"); //Ouverture de fichier
 	if(fichier == NULL) return -1; //Vérification d'erreur
 	
 	serveur.id = incrementeSerial("serveur"); //Incrementation de serial
-	//fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
+	fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
 	bdd_increment_table("serveur");
 	fwrite(&serveur, sizeof(Serveur), 1, fichier);
 	fclose(fichier);
