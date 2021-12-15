@@ -7,10 +7,11 @@ int main() {
 	bd_creationServeur("azjhfetydfe", 123);
 	bd_creationServeur("Lqdzedftyzyf", 1);
 	bd_creationServeur("kchgdbfyu", 2);
-	afficheServeur();
+	afficheServeur(); 
 	bd_suppressionServeur("LeServeur");
 	afficheServeur();*/
-	incrementeSerial("serveur");
-	
+	//incrementeSerial("serveur");
+	char cmd[]="!help ldes hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
+	signup(cmd);
 	return 0;
 }

@@ -24,7 +24,7 @@ int signup(char commande[]){
 	char * cmd=strtok(commande," ");
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
-	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
+	if(pseudo==NULL || motdepasse==NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
 		printf("commande incorrecte\n");
 		return 1;
 	}
@@ -51,7 +51,7 @@ int login(char commande[]){
 	char * cmd=strtok(commande," ");
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
-	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
+	if(pseudo==NULL || motdepasse==NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
 		printf("commande incorrecte\n");
 		return 1;
 	}
