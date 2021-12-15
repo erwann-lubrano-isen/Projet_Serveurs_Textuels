@@ -29,7 +29,7 @@ void helpSalon(){
 
 int permSalon(unsigned long int id_salon){
 	char *role = strtok(NULL, " ");
-    	char *perm = strtok(NULL, " ");
+    	char *perm = strtok(NULL, "\n");
     	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){
     		printf("Commande invalide");
     		return -1;

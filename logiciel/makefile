@@ -2,7 +2,6 @@ bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj
 	gcc obj/*.o -o bin/prog
 
 
-
 obj/permissions_salon.o: src/Permissions_Salon.c headers/Permissions_Salon.h
 	gcc -o obj/permissions_salon.o -c src/Permissions_Salon.c
 

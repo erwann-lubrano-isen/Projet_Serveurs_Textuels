@@ -13,11 +13,13 @@ int main() {
 	printf("\n");
 	bdd_creer_utilisateur(test, ss);
 	bdd_afficher_utilisateur();
-	bd_creationServeur("tb", 0);
+	bd_creationServeur("serveurdebg", 0);
 	bdd_create_Salon("salondebg", 0);
 	if (bdd_Salon_check(0, 0)==1){
-		printf("TBBB\n");
+		printf("Salon crée\n");
 	}
-    	menuSalon(0);
+	//bdd_afficher_salon();
+    	menuSalon(0,0);
+    	
 	return 0;
 }
