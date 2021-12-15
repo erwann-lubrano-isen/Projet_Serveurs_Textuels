@@ -19,7 +19,7 @@ int main() {
 		printf("Salon crée\n");
 	}
 	//bdd_afficher_salon();
-    	menuSalon(0,0);
+    	menuSalon(0,0,0);
     	
 	return 0;
 }
