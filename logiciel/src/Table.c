@@ -9,7 +9,6 @@ int bdd_increment_table(const char * const name){
 		if(strcmp(table.name,name)==0){
 			fseek(file,-sizeof(Table),SEEK_CUR);
 			++table.size;
-			printf("%s\t%d\n",table.name,table.size);
 			fwrite(&table,sizeof(Table),1,file);
 			break;
 		}
@@ -41,8 +40,7 @@ int bdd_decrement_table(const char * const name){
 	while(fread(&table,sizeof(Table),1,file) != EOF){
 		if(strcmp(table.name,name)==0){
 			fseek(file,-sizeof(Table),SEEK_CUR);
-			--table.size;
-			printf("%s\t%d\n",table.name,table.size);
+			if(table.size >0)--table.size;
 			fwrite(&table,sizeof(Table),1,file);
 			break;
 		}
