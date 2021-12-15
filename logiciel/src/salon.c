@@ -95,7 +95,7 @@ int supprimer_salons_serveur(unsigned long int idServeur){
 	}
 	int i =0;
 	Salon salon;
-	Salon dernierSalon
+	Salon dernierSalon;
 	FILE * file = NULL;
 	file = fopen("rsc/salon.dat","r+");
 	fseek(file,sizeof(Salon)*(size-1),SEEK_SET);
