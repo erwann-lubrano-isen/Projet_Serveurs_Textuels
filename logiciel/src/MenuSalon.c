@@ -8,7 +8,9 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur) {
     	char *commande = strtok(buffer, " ");
     	
     	if(!(strcmp(commande, "!help\n"))) helpSalon();
-    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon);
+    	
+    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon); //verifier si user est admin du serveur pour utiliser cette commande
+    	
     	else if(!(strcmp(commande, "!msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "!exit\n"))) return 0;
     	else if(!(strcmp(commande, "!back\n"))) return 1;
@@ -20,7 +22,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur) {
 
 void helpSalon(){
 	printf("-------------Voici la liste des commandes--------------\n");
-	printf("!perm rolename perm :  Change les droits pour le salon\n");
+	printf("!perm rolename perm :  Change les droits pour le salon\n"); //Verif si user est admin pour afficher cette option
 	printf("!msg text: Envoyer un message\n");
 	printf("!exit : Quitter le programme\n");
 	printf("!back : Retur en arrière\n");
