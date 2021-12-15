@@ -6,12 +6,13 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	Serveur serveur;
 	strcpy(serveur.nom, nom);	//Initialisation de serveur 
 	serveur.idProprio = idProprio;
+	serveur.id = incrementeSerial("serveur"); //Incrementation de serial
 	
 	FILE *fichier;
 	fichier = fopen("rsc/serveur.dat", "r+"); //Ouverture de fichier
 	if(fichier == NULL) return -1; //Vérification d'erreur
 	
-	serveur.id = incrementeSerial("serveur"); //Incrementation de serial
+	
 	fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
 	bdd_increment_table("serveur");
 	fwrite(&serveur, sizeof(Serveur), 1, fichier);
@@ -38,6 +39,15 @@ int bd_suppressionServeur(unsigned long int id) {
 	}
 	fclose(fichier);	
 }
+
+
+/*
+void bd_suppressionMembresEtServeur(unsigned long int id) {
+	bd_suppressionServeur(id);
+	supprimer_membres_serveur(id);
+	supprimer_salons_serveur(id);
+}*/
+
 
 int bd_suppressionMembresEtServeur(unsigned long int id) {
 	bd_suppressionServeur(id);
