@@ -1,44 +1,16 @@
-#include "headers/Membre.h"
-#include "headers/Table.h"
-#include "headers/Message.h"
-#include "headers/Invitation.h"
-#include "headers/Utilisateur.h"
-#include <stdio.h>
-#include <time.h>
-#include <stdint.h>
-#include "headers/Connexions_Action.h"
+#include "headers/Serial.h"
+#include "headers/Serveur.h"
 
-int main(){
-	/*char pseudo[30];
-	char motdepasse[30];
-	printf("\nPseudo ? :");
-	scanf("%s", pseudo);
-	printf("\nMDP ? : ");
-	scanf("%s", motdepasse);
-	printf("\n");
-	bdd_creer_utilisateur(pseudo, motdepasse);
-	bdd_afficher_utilisateur();*/
-	/*printf("%d\n",bdd_check_membre(15,20));
-	supprimer_membres_serveur(15);
-	printf("%d\n",bdd_check_membre(15,20));
-	bdd_afficher_membres();
-	printf("%d\n",bdd_getSize_table("membre"));
-	time_t date=time(NULL);
-	bdd_creer_message(1, 1, date, "machin\n");
-	bdd_afficherMessages();
-	bdd_supprimer_message(1, 1, date);
-	bdd_afficherMessages();
+int main() {
+	/*printf("%d", bdd_getSize_table("serveur"));
+	bd_creationServeur("LeServeur", 53);
+	bd_creationServeur("azjhfetydfe", 123);
+	bd_creationServeur("Lqdzedftyzyf", 1);
+	bd_creationServeur("kchgdbfyu", 2);
+	afficheServeur();
+	bd_suppressionServeur("LeServeur");
+	afficheServeur();*/
+	incrementeSerial("serveur");
 	
-	bdd_creer_invitation(1,3);
-	bdd_creer_invitation(5,6);
-	
-	bdd_supprimer_invitation(5,6);
-	bdd_afficher_invitation();*/
-	affich_help();
-	char cmd[]="!help lesfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff deuxboulesdunmec";
-	char cmd2[]="!help lesfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff deuxboulesdunmec";
-	signup(cmd);
-	login(cmd2);
-	bdd_afficher_utilisateur();
 	return 0;
 }
