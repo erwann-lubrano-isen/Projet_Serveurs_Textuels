@@ -1,4 +1,4 @@
-bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/connexions_action.o
+bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/connexions_action.o obj/acceuil_actions.o
 	gcc obj/*.o -o bin/prog
 
 
@@ -26,5 +26,5 @@ obj/utilisateur.o: src/Utilisateur.c headers/Utilisateur.h headers/Serial.h head
 obj/connexions_action.o: headers/Connexions_Action.h src/Connexions_Action.c headers/Utilisateur.h headers/Table.h headers/Connexions_Action.h 
 	gcc -o obj/connexions_action.o -c src/Connexions_Action.c
 	
-obj/acceuil_actions.o: headers/Connexions_Action.h src/Connexions_Action.c
-	gcc -o obj/acceuil_actions.o -c src/Connexions_Action.c
+obj/acceuil_actions.o: headers/Acceuil_Actions.h src/Acceuil_Actions.c
+	gcc -o obj/acceuil_actions.o -c src/Acceuil_Actions.c

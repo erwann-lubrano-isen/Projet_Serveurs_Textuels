@@ -1,6 +1,6 @@
 #include "../headers/Acceuil_Actions.h"
 
-int menuAcceuil(unsigned long int user_id){
+int menu_Acceuil(unsigned long int user_id){
 	char buffer[128];
     
     do{

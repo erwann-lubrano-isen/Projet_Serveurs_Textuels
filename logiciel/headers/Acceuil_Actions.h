@@ -1,9 +1,8 @@
-#ifndef __ACCEUIL_ACTION_H_
-#define __ACCEUIL_ACTION_H_
+#ifndef __ACCEUIL_ACTION_H__
+#define __ACCEUIL_ACTION_H__
 
 #include <stdio.h>
 #include <string.h>
 
-int menuAcceuil(unsigned long int user_id);
-
+int menu_Acceuil(unsigned long int user_id);
 #endif
