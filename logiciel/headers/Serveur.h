@@ -7,6 +7,7 @@
 #include "Membre.h"
 #include "Salon.h"
 
+
 typedef struct serveur {
 	unsigned long int id;
 	char nom[30];

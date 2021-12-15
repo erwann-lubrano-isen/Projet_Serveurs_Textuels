@@ -7,6 +7,7 @@
 
 #include "Utilisateur.h"
 #include "Table.h"
+#include "Acceuil_Actions.h"
 
 
 void affich_help();

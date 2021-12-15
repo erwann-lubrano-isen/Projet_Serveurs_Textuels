@@ -90,8 +90,10 @@ int menuConnexion() {
     	
     	if(!(strcmp(commande, "!help"))) affich_help();
     	else if(!(strcmp(commande, "!signup"))) signup();
-    	else if(!(strcmp(commande, "!login"))) login();
-    	else if(!(strcmp(commande, "!exit"))) return 0;
+    	else if(!(strcmp(commande, "!login"))){
+    		unsigned long int user_id=login();
+    		if(user_id!=0)menuAcceuil(user_id);
+    	}else if(!(strcmp(commande, "!exit"))) return 0;
     	else printf("Action inexistante\n");
     }while(1);    
     return 0;
