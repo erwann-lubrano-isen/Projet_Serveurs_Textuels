@@ -79,18 +79,20 @@ int login(){
 }
 
 int menuConnexion() {
-    char buffer[127];
+    char buffer[128];
     
     do{
     	fgets(buffer, 127, stdin);
+    	int lenght = strlen(buffer);
+    	buffer[lenght-1]=' ';
+    	buffer[lenght]='\0';
+    	printf("%s",buffer);
     	char *commande = strtok(buffer, " ");
     	
     	if(!(strcmp(commande, "!help"))) affich_help();
     	else if(!(strcmp(commande, "!signup"))) signup();
     	else if(!(strcmp(commande, "!login"))) login();
     	else if(!(strcmp(commande, "!exit"))) return 0;
-    	else if(!(strcmp(commande, "!back"))) return 1;
-    	//else if(!(strcmp(commande, "!display"))) ;//display
     	else printf("Action inexistante\n");
     }while(1);    
     return 0;

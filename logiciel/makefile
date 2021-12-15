@@ -24,4 +24,4 @@ obj/utilisateur.o: src/Utilisateur.c headers/Utilisateur.h headers/Serial.h head
 	gcc -o obj/utilisateur.o -c src/Utilisateur.c
 
 obj/connexions_action.o: headers/Connexions_Action.h src/Connexions_Action.c headers/Utilisateur.h headers/Table.h
-	gcc -o obj/connexions_action.o src/Connexions_Action.c
+	gcc -o obj/connexions_action.o -c src/Connexions_Action.c
