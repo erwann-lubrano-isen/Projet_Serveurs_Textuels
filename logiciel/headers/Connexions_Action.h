@@ -9,6 +9,6 @@
 
 void affich_help();
 int signup(char commande[]);
-int login(char commande[]);
+unsigned long int  login(char commande[]);
 
 #endif
