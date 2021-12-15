@@ -9,7 +9,6 @@ unsigned long int incrementeSerial(char nomTable[]) {	//Permet d'incrementer le 
 		if (strcmp(serial.table_name, nomTable)) {
 			fseek(fichier, -sizeof(unsigned long int), SEEK_CUR);
 			unsigned long int valSerialFinale = serial.count + 1;
-			printf("%lu", valSerialFinale-1);
 			fwrite(&valSerialFinale, sizeof(unsigned long int), 1, fichier);
 			return serial.count;
 		}
