@@ -2,6 +2,7 @@
 
 
 
+
 void affich_help(){
 puts("gfre");
 	printf("Liste des commandes disponibles : \n");
@@ -20,11 +21,10 @@ puts("gfre");
 	printf("\t !die \n");
 }
 
-int signup(char commande[]){
-	char * cmd=strtok(commande," ");
+int signup(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
-	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
+	if(pseudo == NULL || motdepasse == NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
 		printf("commande incorrecte\n");
 		return 1;
 	}
@@ -47,38 +47,59 @@ int signup(char commande[]){
 	return 0;
 }
 
-int login(char commande[]){
-	char * cmd=strtok(commande," ");
+unsigned long int  login(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
-	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
+	if(pseudo == NULL || motdepasse == NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
 		printf("commande incorrecte\n");
-		return 1;
+		return 0;
 	}
 	FILE * fichier;
 	Utilisateur utilisateur;
 	fichier = fopen("rsc/utilisateur.dat","r");
 	int size = bdd_getSize_table("utilisateur");
 	int i=0;
-	if(fichier == NULL)return -1;
+	if(fichier == NULL)return 0;
 	while(fread(&utilisateur,sizeof(Utilisateur),1,fichier)!=EOF&&i<size){
 		if(strcmp(pseudo,utilisateur.pseudo)==0){
 			
 			if(strcmp(motdepasse,utilisateur.motDePasse)==0){
 				fclose(fichier);
 				printf("Connecte !\n");
-				return 0;
+				return utilisateur.id;
 			}
 			printf("Mot de passe incorrecte\n");
 			fclose(fichier);
-			return 1;
+			return 0;
 		}
 		++i;
 	}
 	printf("utilisateur inexistant\n");
 	fclose(fichier);
-	bdd_creer_utilisateur(pseudo, motdepasse);
-	return 1;
+	return 0;
+}
+
+int menuConnexion() {
+    char buffer[128];
+    
+    do{
+    	fgets(buffer, 127, stdin);
+    	int lenght = strlen(buffer);
+    	buffer[lenght-1]=' ';
+    	buffer[lenght]='\0';
+    	char *commande = strtok(buffer, " ");
+    	
+    	if(!(strcmp(commande, "!help"))) affich_help();
+    	else if(!(strcmp(commande, "!signup"))) signup();
+    	else if(!(strcmp(commande, "!login"))){
+    		unsigned long int user_id=login();
+    		if(user_id!=0) {
+    			if(menu_Acceuil(user_id)==0)return 0;
+    		}
+    	}else if(!(strcmp(commande, "!exit"))) return 0;
+    	else printf("Action inexistante\n");
+    }while(1);    
+    return 0;
 }
 
 

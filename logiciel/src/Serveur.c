@@ -39,9 +39,19 @@ int bd_suppressionServeur(unsigned long int id) {
 	}
 	fclose(fichier);	
 }
+
+
 /*
 void bd_suppressionMembresEtServeur(unsigned long int id) {
 	bd_suppressionServeur(id);
 	supprimer_membres_serveur(id);
 	supprimer_salons_serveur(id);
 }*/
+
+
+int bd_suppressionMembresEtServeur(unsigned long int id) {
+	bd_suppressionServeur(id);
+	supprimer_membres_serveur(id);
+	//supprimer_salons_serveur(id);
+	return 0;
+}
