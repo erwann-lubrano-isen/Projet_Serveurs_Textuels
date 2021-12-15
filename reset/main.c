@@ -41,9 +41,9 @@ int main(){
 	
 	file = fopen("rsc/serial.dat","w");
 	Serial serials[3]={
-		{"serveur","id",0},
-		{"utilisateur","id",0},
-		{"salon","id",0}};
+		{"serveur","id",1},
+		{"utilisateur","id",1},
+		{"salon","id",1}};
 	fwrite(serials,sizeof(Serial),3,file);
 	fclose(file);
 	return 0;

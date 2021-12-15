@@ -10,8 +10,9 @@
 
 
 void affich_help();
-int signup();
-int login();
 int menuConnexion();
+int signup();
+unsigned long int  login();
 
 #endif
+
