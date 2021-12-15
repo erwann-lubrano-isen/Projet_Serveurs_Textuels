@@ -1,16 +1,23 @@
-#include "headers/Serial.h"
+#include "headers/MenuSalon.h"
 #include "headers/Serveur.h"
+#include "headers/Salon.h"
+#include "headers/Utilisateur.h"
 
 int main() {
-	/*printf("%d", bdd_getSize_table("serveur"));
-	bd_creationServeur("LeServeur", 53);
-	bd_creationServeur("azjhfetydfe", 123);
-	bd_creationServeur("Lqdzedftyzyf", 1);
-	bd_creationServeur("kchgdbfyu", 2);
-	afficheServeur();
-	bd_suppressionServeur("LeServeur");
-	afficheServeur();*/
-	incrementeSerial("serveur");
-	
+	char test[30];
+	char ss[30];
+	printf("PSEUDO : ");
+	scanf("%s", test);
+	printf("\nMDP : ");
+	scanf("%s", ss);
+	printf("\n");
+	bdd_creer_utilisateur(test, ss);
+	bdd_afficher_utilisateur();
+	bd_creationServeur("tb", 0);
+	bdd_create_Salon("salondebg", 0);
+	if (bdd_Salon_check(0, 0)==1){
+		printf("TBBB\n");
+	}
+    	menuSalon(0);
 	return 0;
 }

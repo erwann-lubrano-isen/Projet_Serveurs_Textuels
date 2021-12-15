@@ -1,18 +1,17 @@
 #include "../headers/MenuSalon.h"
 
 
-int menuSalon() {
+int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur) {
     char buffer[127];
-    
     do{
     	fgets(buffer, 127, stdin);
     	char *commande = strtok(buffer, " ");
     	
-    	if(!(strcmp(commande, "!help"))) helpSalon();
+    	if(!(strcmp(commande, "!help\n"))) helpSalon();
     	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon);
-    	else if(!(strcmp(commande, "!msg"))) msgSalon(id_salon);
-    	else if(!(strcmp(commande, "!exit"))) return 0;
-    	else if(!(strcmp(commande, "!back"))) return 1;
+    	else if(!(strcmp(commande, "!msg"))) msgSalon(id_salon, id_utilisateur);
+    	else if(!(strcmp(commande, "!exit\n"))) return 0;
+    	else if(!(strcmp(commande, "!back\n"))) return 1;
     	//else if(!(strcmp(commande, "!display"))) ;//display
     	else printf("%s: Action inexistante\n", commande);
     }while(1);    
@@ -35,12 +34,12 @@ int permSalon(unsigned long int id_salon){
     		printf("Commande invalide");
     		return -1;
     	}
-	insert_perm_salon(id_salon, role, perms);
+	insert_perm_salon(id_salon, role, perm);
 	return 0; 
 }
 
-int msgSalon(unsigned long int id_salon){
-	char *texte = strtok(NULL, " ");
+int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
+	char *texte = strtok(NULL, "\0");
 	if (strlen(texte)>120){
 		printf("Message trop long");
 		return -1;
