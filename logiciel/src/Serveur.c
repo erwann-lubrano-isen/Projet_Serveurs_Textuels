@@ -11,7 +11,7 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	FILE *fichier;
 	fichier = fopen("rsc/serveur.dat", "r+"); //Ouverture de fichier
 	if(fichier == NULL) return -1; //Vérification d'erreur
-	
+	//** mettre l'utilisateur qui cree le serveur, "administrateur", dans role de membre, donc ça cree le 1er membre du serveur
 	
 	fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
 	bdd_increment_table("serveur");
@@ -41,17 +41,9 @@ int bd_suppressionServeur(unsigned long int id) {
 }
 
 
-/*
-void bd_suppressionMembresEtServeur(unsigned long int id) {
-	bd_suppressionServeur(id);
-	supprimer_membres_serveur(id);
-	supprimer_salons_serveur(id);
-}*/
-
-
 int bd_suppressionMembresEtServeur(unsigned long int id) {
 	bd_suppressionServeur(id);
 	supprimer_membres_serveur(id);
-	//supprimer_salons_serveur(id);
+	supprimer_salons_serveur(id);
 	return 0;
 }
