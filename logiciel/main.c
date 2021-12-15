@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdint.h>
+#include "headers/Connexions_Action.h"
 
 int main(){
-	
-	char pseudo[30];
+	/*char pseudo[30];
 	char motdepasse[30];
 	printf("\nPseudo ? :");
 	scanf("%s", pseudo);
@@ -17,7 +17,7 @@ int main(){
 	scanf("%s", motdepasse);
 	printf("\n");
 	bdd_creer_utilisateur(pseudo, motdepasse);
-	bdd_afficher_utilisateur();
+	bdd_afficher_utilisateur();*/
 	/*printf("%d\n",bdd_check_membre(15,20));
 	supprimer_membres_serveur(15);
 	printf("%d\n",bdd_check_membre(15,20));
@@ -34,5 +34,11 @@ int main(){
 	
 	bdd_supprimer_invitation(5,6);
 	bdd_afficher_invitation();*/
+	affich_help();
+	char cmd[]="!help lesfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff deuxboulesdunmec";
+	char cmd2[]="!help lesfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff deuxboulesdunmec";
+	signup(cmd);
+	login(cmd2);
+	bdd_afficher_utilisateur();
 	return 0;
 }
