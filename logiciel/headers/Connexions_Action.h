@@ -6,9 +6,12 @@
 #include <stdlib.h>
 
 #include "Utilisateur.h"
+#include "Table.h"
+
 
 void affich_help();
-int signup(char commande[]);
-int login(char commande[]);
+int signup();
+int login();
+int menuConnexion();
 
 #endif
