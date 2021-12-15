@@ -94,7 +94,7 @@ int menuConnexion() {
     	else if(!(strcmp(commande, "!login"))){
     		unsigned long int user_id=login();
     		if(user_id!=0) {
-    			menu_Acceuil(user_id);
+    			if(menu_Acceuil(user_id)==0)return 0;
     		}
     	}else if(!(strcmp(commande, "!exit"))) return 0;
     	else printf("Action inexistante\n");
