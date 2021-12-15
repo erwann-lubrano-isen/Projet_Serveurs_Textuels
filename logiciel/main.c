@@ -11,7 +11,8 @@ int main() {
 	bd_suppressionServeur("LeServeur");
 	afficheServeur();*/
 	//incrementeSerial("serveur");
-	char cmd[]="!help ldes hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
-	signup(cmd);
+	help_acceuil();
+	char cmd[]="!create ";
+	create_serv(cmd,1);
 	return 0;
 }
