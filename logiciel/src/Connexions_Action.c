@@ -20,8 +20,7 @@ puts("gfre");
 	printf("\t !die \n");
 }
 
-int signup(char commande[]){
-	char * cmd=strtok(commande," ");
+int signup(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
@@ -47,8 +46,7 @@ int signup(char commande[]){
 	return 0;
 }
 
-int login(char commande[]){
-	char * cmd=strtok(commande," ");
+int login(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
@@ -77,8 +75,25 @@ int login(char commande[]){
 	}
 	printf("utilisateur inexistant\n");
 	fclose(fichier);
-	bdd_creer_utilisateur(pseudo, motdepasse);
 	return 1;
+}
+
+int menuConnexion() {
+    char buffer[127];
+    
+    do{
+    	fgets(buffer, 127, stdin);
+    	char *commande = strtok(buffer, " ");
+    	
+    	if(!(strcmp(commande, "!help"))) affich_help();
+    	else if(!(strcmp(commande, "!signup"))) signup();
+    	else if(!(strcmp(commande, "!login"))) login();
+    	else if(!(strcmp(commande, "!exit"))) return 0;
+    	else if(!(strcmp(commande, "!back"))) return 1;
+    	//else if(!(strcmp(commande, "!display"))) ;//display
+    	else printf("Action inexistante\n");
+    }while(1);    
+    return 0;
 }
 
 
