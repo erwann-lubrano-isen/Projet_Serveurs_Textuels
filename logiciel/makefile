@@ -1,4 +1,4 @@
-bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/serveur.o obj/salon.o obj/menusalon.o  obj/permissions_salon.o obj/connexions_action.o obj/acceuil_actions.o
+bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/serveur.o obj/salon.o obj/menusalon.o  obj/permissions_salon.o obj/connexions_action.o obj/acceuil_actions.o obj/demande.o obj/permissions_serveur.o 
 	gcc obj/*.o -o bin/prog
 
 
@@ -8,10 +8,10 @@ obj/permissions_salon.o: src/Permissions_Salon.c headers/Permissions_Salon.h
 obj/menusalon.o: src/MenuSalon.c headers/MenuSalon.h
 	gcc -o obj/menusalon.o -c src/MenuSalon.c
 
-obj/serveur.o: src/Serveur.c headers/Serveur.h
+obj/serveur.o: src/Serveur.c headers/Serveur.h headers/Membre.h headers/Table.h
 	gcc -o obj/serveur.o -c src/Serveur.c
 
-obj/salon.o: src/salon.c headers/Salon.h
+obj/salon.o: src/salon.c headers/Salon.h 
 	gcc -o obj/salon.o -c src/salon.c
 
 obj/membre.o: src/Membre.c headers/Membre.h headers/Table.h
@@ -40,3 +40,9 @@ obj/connexions_action.o: headers/Connexions_Action.h src/Connexions_Action.c hea
 	
 obj/acceuil_actions.o: headers/Acceuil_Actions.h src/Acceuil_Actions.c
 	gcc -o obj/acceuil_actions.o -c src/Acceuil_Actions.c
+
+obj/demande.o: src/Demande.c headers/Demande.h headers/Table.h 
+	gcc -c src/Demande.c -o obj/demande.o
+	
+obj/permissions_serveur.o: src/Permissions_Serveur.c headers/Permissions_Serveur.h headers/Table.h
+	gcc -c src/Permissions_Serveur.c -o obj/permissions_serveur.o

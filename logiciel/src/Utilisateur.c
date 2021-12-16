@@ -2,7 +2,7 @@
 
 int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 	FILE * file = NULL;
-	file = fopen("rsc/utilisateur.dat","a");
+	file = fopen("rsc/utilisateur.dat","r+");
 	if(file == NULL) return -1;
 	
 	Utilisateur utilisateur;
@@ -10,7 +10,7 @@ int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 	strcpy(utilisateur.pseudo , pseudo);
 	strcpy(utilisateur.motDePasse, motDePasse);
 	
-	fseek(file, 0, SEEK_END); //position du curseur a la fin du fichier
+	fseek(file, sizeof(Utilisateur)*(bdd_getSize_table("utilisateur")), SEEK_SET); //position du curseur a la fin de la table
 	
 	bdd_increment_table("utilisateur");  //augmente d'une place
 	fwrite(&utilisateur,sizeof(Utilisateur),1,file);  //met la struc utilisateur dans le fichier, a la fin

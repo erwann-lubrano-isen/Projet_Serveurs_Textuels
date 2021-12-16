@@ -74,21 +74,20 @@ int create_serv(char commande[], unsigned long int idProprio){
 		return 1;
 	}
 	FILE * fichier;
-	Utilisateur utilisateur;
+	Serveur serveur;
 	fichier = fopen("rsc/s.dat","r");
 	int size = bdd_getSize_table("utilisateur");
 	int i=0;
 	if(fichier == NULL)return -1;
 	while(fread(&serveur,sizeof(Serveur),1,fichier)!=EOF&&i<size){
-			if(serveur.id==serveur_id){
-				fclose(fichier);
-				if(serveur.idProprio == user_id){
-					bd_suppressionServeur(serveur.id);
-					return 0;
-				}else{
-					printf("Ce serveur ne vous appartient pas\n");
-					return 2;
-				}
+		if(serveur.id==serveur_id){
+			fclose(fichier);
+			if(serveur.idProprio == user_id){
+				bd_suppressionServeur(serveur.id);
+				return 0;
+			}else{
+				printf("Ce serveur ne vous appartient pas\n");
+				return 2;
 			}
 		}
 	}
