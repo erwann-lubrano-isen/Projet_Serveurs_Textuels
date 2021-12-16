@@ -63,7 +63,7 @@ void bdd_afficher_demande(){
 	FILE * file = NULL;
 	file = fopen("rsc/demande.dat","r");
 	while(fread(&demande,sizeof(Demande),1,file) != EOF && i < size){
-		printf("id_salon : %lu\tid_seveur:%lu\n",demande.user_id,demande.server_id);
+		printf("id_utilisateur : %lu\tid_seveur:%lu\n",demande.user_id,demande.server_id);
 		++i;
 	}
 	fclose(file);

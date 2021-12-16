@@ -10,7 +10,7 @@
 typedef struct Membre {
 	unsigned long int idServeur;
 	unsigned long int idUtilisateur;
-	char role[40];
+	char role[30];
 } Membre;
 
 
@@ -21,6 +21,5 @@ int bdd_supprimer_membre(unsigned long int idServeur, unsigned long idUtilisateu
 void bdd_afficher_membres();
 int supprimer_membres_serveur(unsigned long int idServeur);
 int role(unsigned long int userid, unsigned long int id_serveur);
-
 
 #endif

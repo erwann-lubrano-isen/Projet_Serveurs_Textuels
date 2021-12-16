@@ -37,18 +37,19 @@ int menu_Acceuil(unsigned long int user_id){
 }
 
 void help_acceuil(){
-printf("Commandes disponibles au menu acceuil :\n");
-printf("\tcreate servername\n");
-printf("\tjoin serverID\n");
-printf("\tquit serverID\n");
-printf("\tdelete serverID\n");
-printf("\tlistserver\n");
-printf("\tlistinvitation\n");
-printf("\taccept serverID (invitation)\n");
-printf("\topen serverID\n");
-printf("\texit\n");
-printf("\tlogout\n");
-printf("\tdie\n");
+	printf("Commandes disponibles au menu acceuil :\n");
+	printf("\tcreate servername\n");
+	printf("\tjoin serverID\n");
+	printf("\tquit serverID\n");
+	printf("\tdelete serverID\n");
+	printf("\tlistserver\n");
+	printf("\tlistinvitation\n");
+	printf("\taccept serverID (invitation)\n");
+	printf("\topen serverID\n");
+	printf("\texit\n");
+	printf("\tlogout\n");
+	printf("\tdie\n");
+
 }
 
 int create_serv(unsigned long int idProprio){
