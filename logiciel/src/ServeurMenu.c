@@ -146,14 +146,15 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 	FILE *fichier = fopen("rsc/membre.dat", "r");
 	
 	Membre membre;
-	char [30] nomRole;
+	char nomRole[30];
 	
 	int i = 0;
-	while(i < bdd_getSize_table("membre_serveur") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
+	while(i < bdd_getSize_table("membre_serveur") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) {
 		if(membre.idUtilisateur == idUtilisateur && idServ == membre.idServeur) {
 			strcpy(nomRole, membre.role);
 			break;
 		}
+		++i;
 	}
 
 	fclose(fichier);
@@ -166,14 +167,13 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 		if(salon.idServeur == idServ) {
 			FILE *fichier2 = fopen("rsc/permissions_salon.dat", "r");
 			Permissions_Salon PS;
-			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier)) {
+			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier);++y) {
 				if(PS.id_salon == salon.idSalon)
 					if(PS.perms[0] == 'r')
 						printf("%s\n", salon.nom);
 			}
 		}
 	}
-	fclose(fichier2);
 	fclose(fichier);
 }
 
@@ -182,7 +182,7 @@ int assignationRole(unsigned long int idServ) {
 	char *nomRole = strtok(NULL, " ");
 	
 	FILE *fichier = fopen("permission_serveur.dat", "r+");
-	
+	Membre membre;
 	Permissions_Serveur PS;
 	int i;
 	for(i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {//Vérification de l'existance du role
@@ -198,11 +198,11 @@ int assignationRole(unsigned long int idServ) {
 	}
 	
 	if(bdd_getUtilisateur_id(pseudo) == 0) {
-		printf(
+		printf("\n");
 	
 	}
 	
-	Membre membre;
+	
 	
 	for(i = 0; i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
 		if(membre.idUtilisateur == bdd_getUtilisateur_id(pseudo)) {
