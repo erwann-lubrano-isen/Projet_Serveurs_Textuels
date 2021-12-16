@@ -5,9 +5,9 @@
 #include "Table.h"
 
 typedef struct Permissions_Serveur{
-	unsigned long int id_serveur;
-	unsigned long int User;
-	char perms[3];
+	unsigned long int id_serveur; //
+	char Role[40]; //role du serveur
+	char perms[3]; //WX
 }Permissions_Serveur;
 
 int insert_perm_serveur(unsigned long int id_serveur, unsigned long int User, char perms[]);
