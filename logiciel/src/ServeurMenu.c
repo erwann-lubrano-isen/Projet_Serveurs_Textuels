@@ -64,9 +64,9 @@ int invitation() {
 		return -1;
 	}
 	
-	utilisateur utilisateur;
+	Utilisateur utilisateur;
 	for(i = 0; fread(&utilisateur, sizeof(Utilisateur), 1, fichier) != EOF && i < bdd_getSize_table("utilisateur"); ++i) {
-		if(!(strcmp(utilisateur.nom, pseudo))) break;
+		if(!(strcmp(utilisateur.pseudo, pseudo))) break;
 	}
 	fclose(fichier);
 	
@@ -75,7 +75,7 @@ int invitation() {
 		return 1;
 	}
 	
-	bdd_creer_invitation(utilisateur.id ,serveur.id)
+	bdd_creer_invitation(utilisateur.id ,serveur.id);
 	return 0;
 }
 

@@ -1,4 +1,3 @@
-#include <string.h>
 #include "../headers/Acceuil.h"
 
 int acceuil() {
