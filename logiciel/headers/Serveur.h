@@ -19,6 +19,7 @@ typedef struct serveur {
 int bd_creationServeur(const char *const nom, unsigned long int IdProprio);
 int bd_suppressionServeur(unsigned long int id);
 int bd_suppressionMembresEtServeur(unsigned long int id);
+unsigned long int bdd_getServeur_id(const char * nom);
 
 #endif
 
