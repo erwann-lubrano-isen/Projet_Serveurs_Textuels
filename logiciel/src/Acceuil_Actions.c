@@ -190,3 +190,44 @@ int list_invit(unsigned int long user_id){
 	fclose(fichier);
 	return 0;
 }
+
+int quit_serv(unsigned long int userid){
+	char * servername=strtok(NULL," ");
+	if(servername==NULL || strlen(servername)>30){
+		printf("commande incorrecte\n");
+		return 1;
+	}
+	FILE * fichier = fopen("rsc/serveur.dat", "r+");
+	//FILE * file = fopen("rsc/membre.dat", "r+");
+	//Membre membre;
+	Serveur serveur;
+	int i=0;
+	unsigned long int serveur_id=bdd_getServeur_id(servername);
+	if(serveur_id==0){
+		printf("Serveur inexistant\n");
+		return 1;
+	}
+	for(int i = 0; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
+		if (serveur_id == serveur.id && userid == serveur.idProprio) {
+			printf("Impossible pour le propietaire du serveur");
+			fclose(fichier);
+			return 0;
+		}
+	}
+	fclose(fichier);
+	/*
+	for(int j = 0; j < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, file) != EOF; ++j) {
+		if (serveur_id == membre.idServeur && userid == membre.idUtilisateur) {
+			fseek(file, sizeof(Membre)*(bdd_getSize_table("membre")-1), SEEK_SET); //Positionnement du curseur au début de la dernière ligne
+			fread(&membre, sizeof(Membre), 1, file);	//Obtention de la dernière ligne dans serveur
+			fseek(file, sizeof(Membre)*(j-1), SEEK_SET); //Positionnement au début de la ligne i
+			fwrite(&membre, sizeof(Membre), 1, file);	//Ecriture de la dernière ligne contenue dans serveur
+			bdd_decrement_table("membre");
+			return 0;
+		}
+	}
+	fclose(file);
+*/
+	bdd_supprimer_membre(serveur_id, userid);
+	return 0;
+}
