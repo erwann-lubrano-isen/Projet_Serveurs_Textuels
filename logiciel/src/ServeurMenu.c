@@ -1,5 +1,6 @@
 #include "../headers/ServeurMenu.h"
 
+
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 	while (1) {
 		prompt_serveur(idUtilisateur,idServ);
@@ -15,8 +16,8 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		printf("\n%s\n", buffer);
 		if(strcmp(commande, "help") == 0) helpServeur();
 		else if(strcmp(commande, "invite") == 0) invitation(idServ);
-		else if(strcmp(commande, "accept") == 0) return 3;
-		else if(strcmp(commande, "create") == 0) return 4;
+		else if(strcmp(commande, "accept") == 0) accept(idServ);
+		else if(strcmp(commande, "create") == 0) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0) return 5;
 		else if((strcmp(commande, "role") == 0 ));
 		else if((strcmp(commande, "open")==0)){
@@ -58,11 +59,21 @@ int invitation(unsigned long int idServ) {
 		return 0;		
 	}
 	
+	FILE *fichier = fopen("rsc/invitation.dat", "r");
+	
+	Invitation invitation;
+	
+	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
+		if(invitation.user_id == idU && invitation.server_id) {
+			printf("%s à déjà été invité dans ce serveur\n", pseudo);
+			return 0;
+		}
+	}
 	bdd_creer_invitation(idU ,idServ);
 	return 0;
 }
 
-/*int accept (unsigned long int idServ) {
+int accept(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " "); 
 	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
 	
@@ -74,21 +85,45 @@ int invitation(unsigned long int idServ) {
 	FILE *fichier = fopen("rsc/demande.dat", "r");
 	Demande demande;
 	
-	int UtilisateurIntrouvable = 0;
-	int AucuneDemande = 0;
-	int i;
-	
-	for(i = 0; i < bdd_getSize_table("demande") && fread(&demande, sizeof(Demande), 1, fichier) != EOF; ++i) {
-		if(demande.user_id == idU)
-	
-	
+	for(int i = 0; i < bdd_getSize_table("demande") && fread(&demande, sizeof(Demande), 1, fichier) != EOF; ++i) {
+		if(demande.user_id == idU && demande.server_id == idServ) {
+			bdd_supprimer_demande(idU, idServ);
+			bdd_creer_membre(idServ, idU, "membre");
+			printf("\n%s est devenu membre du serveur\n", pseudo);
+			return 0;
+		}
 	}
-
-
-
-
+	printf("Aucune demande de %s\n", pseudo);
+	return 0;
 }
-*/
+
+int createSalon(unsigned long int idServ) {
+	char *nomSalon = strtok(NULL, " ");
+	if(bdd_getSalon_id(idServ ,nomSalon) == 0) {
+		bdd_create_Salon(nomSalon, idServ);
+	}
+	else printf("Ce salon existe déjà !\n");
+	return 0;
+}
+
+int deleteSalon(unsigned long int idServ) {
+	char *nomSalon = strtok(NULL, " ");
+	
+	unsigned long int idSalon= bdd_getSalon_id(idServ, nomSalon);
+	
+	if(idSalon != 0) {
+		bdd_supprimer_salon(idSalon, idServ);
+	}
+	else printf("Ce salon n'existe pas !\n");
+	return 0;
+}
+
+
+
+
+
+
+
 
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	int size = bdd_getSize_table("utilisateur");
