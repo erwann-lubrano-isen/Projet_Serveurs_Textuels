@@ -2,10 +2,11 @@
 
 int bdd_creer_invitation(unsigned long int user_id, unsigned long int server_id){
 	FILE * file = NULL;
-	file = fopen("rsc/invitation.dat","a");
+	file = fopen("rsc/invitation.dat","r+");
 	Invitation invitation;
 	invitation.user_id=user_id;
 	invitation.server_id=server_id;
+	fseek(file, sizeof(Invitation)*(bdd_getSize_table("invitation")), SEEK_SET);
 	fwrite(&invitation,sizeof(Invitation),1,file);
 	fclose(file);
 	file = NULL;
