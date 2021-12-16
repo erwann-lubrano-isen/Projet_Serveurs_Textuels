@@ -6,6 +6,7 @@
 #include "Table.h"
 #include "Serveur.h"
 #include "Utilisateur.h"
+#include "Demande.h"
 
 int menu_Acceuil(unsigned long int user_id);
 //int delete_serveur(char commande[], unsigned long int user_id);

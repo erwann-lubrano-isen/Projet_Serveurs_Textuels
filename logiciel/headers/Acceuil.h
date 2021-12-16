@@ -2,6 +2,7 @@
 #define __ACCEUIL_H_
 
 #include <stdio.h>
+#include <string.h>
 
 int acceuil();
 

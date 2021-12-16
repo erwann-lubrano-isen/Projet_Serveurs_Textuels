@@ -60,7 +60,7 @@ int create_serv(char commande[], unsigned long int idProprio){
 	return 0;
 }
 
-/*int delete_serveur(char commande[], unsigned long int user_id){
+int delete_serveur(char commande[], unsigned long int user_id){
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
 		printf("commande incorrecte\n");
@@ -97,18 +97,25 @@ int create_serv(char commande[], unsigned long int idProprio){
 
 int join_serv(unsigned long int userid){
 	char * servername=strtok(NULL," ");
-	if(userid==NULL || servername==NULL){
+	if(servername==NULL || strlen(servername)>30){
 		printf("commande incorrecte\n");
 		return 1;
 	}
 	FILE * fichier;
 	Demande demande;
+	unsigned long int serveur_id=bdd_getServeur_id(servername);
+	if(serveur_id==0){
+		printf("Serveur inexistant\n");
+		return 1;
+	}
 	fichier = fopen("rsc/demande.dat","r");
 	int size = bdd_getSize_table("demande");
 	int i=0;
+	
+	
 	if(fichier == NULL)return -1;
 	while(fread(&demande,sizeof(Demande),1,fichier)!=EOF&&i<size){
-		if(strcmp(servername,demande.nom)==0){
+		if(serveur_id==demande.server_id){
 			fclose(fichier);
 			printf("demande deja existante!\n");
 			return 1;
@@ -116,6 +123,6 @@ int join_serv(unsigned long int userid){
 		++i;
 	}
 	fclose(fichier);
-	bdd_stock_demande(userid,serverid);
+	bdd_stock_demande(userid,serveur_id);
 	return 0;
-}*/
+}
