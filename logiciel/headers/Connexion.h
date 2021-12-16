@@ -5,6 +5,5 @@
 #define __CONNEXION_H_
 
 int connexion();
-void helpConnexion();
 
 #endif

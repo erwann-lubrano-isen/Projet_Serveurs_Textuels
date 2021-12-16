@@ -1,27 +1,14 @@
 #include "../headers/Connexions_Action.h"
 
-
-
-void affich_help(){
-puts("gfre");
-	printf("Liste des commandes disponibles : \n");
-	printf("\t !login userID MotDePasse \n");
-	printf("\t !signup pseudo MotDePasse \n");
-	printf("\t !create servername \n");
-	printf("\t !join serverID \n");
-	printf("\t !quit serverID \n");
-	printf("\t !delete serverID \n");
-	printf("\t !listserver \n");
-	printf("\t !listinvitation \n");
-	printf("\t !accept serverID (invitation) \n");
-	printf("\t !open serverID \n");
-	printf("\t !exit \n");
-	printf("\t !logout\n");
-	printf("\t !die \n");
+void helpConnexion() {
+	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu");
+	printf("\n!login \"pseudonyme\" \"mot de passe\" :\n\tPermet de se connecter");
+	printf("\n!signup \"pseudonyme\" \"mot de passe\" :\n\tPermet de créer un compte");
+	printf("\n!exit :\n\tQuitter");
 }
 
+
 int signup(char commande[]){
-	char * cmd=strtok(commande," ");
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){
@@ -47,8 +34,7 @@ int signup(char commande[]){
 	return 0;
 }
 
-int login(char commande[]){
-	char * cmd=strtok(commande," ");
+int login(char commande[]) {
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(strlen(pseudo)>30 || strlen(motdepasse) > 30){

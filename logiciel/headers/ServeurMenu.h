@@ -4,5 +4,7 @@
 #define __CONNEXION_H_
 
 int menuServeur();
+void helpServeur();
+void invitation();
 
 #endif

@@ -7,7 +7,7 @@
 
 #include "Utilisateur.h"
 
-void affich_help();
+void helpConnexion();
 int signup(char commande[]);
 int login(char commande[]);
 
