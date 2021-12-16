@@ -45,3 +45,20 @@ int bd_suppressionMembresEtServeur(unsigned long int id) {
 	//supprimer_salons_serveur(id);
 	return 0;
 }
+
+unsigned long int bdd_getServeur_id(const char * nom){
+	int size = bdd_getSize_table("serveur");
+	int i =0;
+	Serveur serveur;
+	FILE * file = NULL;
+	file = fopen("rsc/serveur.dat","r");
+	while(fread(&membre,sizeof(Serveur),1,file) != EOF && i <= size){
+		if(strcmp(serveur.nom,nom)==0){
+			fclose(file);
+			return serveur.nom;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
