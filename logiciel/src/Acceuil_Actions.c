@@ -10,9 +10,9 @@ int menu_Acceuil(unsigned long int user_id){
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
     	
-    	if(!(strcmp(commande, "!help")));
-		else if(!(strcmp(commande, "!back")))return 1;
-    	else if(!(strcmp(commande, "!exit"))) return 0;
+    	if(!(strcmp(commande, "!help")))list_serv();
+	else if(!(strcmp(commande, "!back")))return 1;
+    	else if((strcmp(commande, "!exit")==0)) return 0;
     	else printf("Action inexistante\n");
     }while(1);    
     return 0;
@@ -125,4 +125,18 @@ int join_serv(unsigned long int userid){
 	fclose(fichier);
 	bdd_stock_demande(userid,serveur_id);
 	return 0;
+}
+
+void list_serv(){
+	FILE * fichier;
+	fichier = fopen("rsc/serveur.dat","r");
+	Serveur serveur;
+	int size = bdd_getSize_table("salon");
+	if(fichier == NULL)return -1;
+	int i=0;
+	while(i<size){
+		printf("id_serv : %lu Nom serv : %s id_proprio : %lu \n",serveur.id,serveur.nom,serveur.idProprio);
+		}
+		++i;
+		fclose(fichier);
 }
