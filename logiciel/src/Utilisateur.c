@@ -61,6 +61,23 @@ int bdd_supprimer_utilisateur(unsigned long int id){
 	return 0;
 }
 
+unsigned long int bdd_getUtilisateur_id(const char * nom){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(strcmp(utilisateur.pseudo,nom)==0){
+			fclose(file);
+			return utilisateur.id;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
+
 void bdd_afficher_utilisateur(){
 	int size = bdd_getSize_table("utilisateur");
 	int i =0;
