@@ -115,4 +115,34 @@ int supprimer_membres_serveur(unsigned long int idServeur){
 	return 0;
 }
 
+int role(unsigned long int userid, unsigned long int id_serveur){
+	char *rolename = strtok(NULL, " "); 
+	if(rolename==NULL || strlen(rolename)>40 || strlen(rolename) > 40){
+		printf("commande incorrecte\n");
+		return 1;
+	}
+	FILE * fichier;
+	Membre membre;
+	fichier = fopen("rsc/membre.dat","r");
+	int size = bdd_getSize_table("Membre");
+	int i=0,j=0;
+	if(fichier == NULL)return -1;
+	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
+		if(userid == membre.idUtilisateur && id_serveur ==membre.idServeur ){
+			printf("role deja attribué !\n");
+			fseek(fichier,-sizeof(Membre),SEEK_CUR);
+			fwrite(&membre,sizeof(Membre),1,fichier);
+			fclose(fichier);
+			return 0;
+		}
+		++i;
+		
+	}
+	fclose(fichier);
+	//bd_creationServeur(servname,idProprio);
+	//bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
+	return 0;
+}
+
+
 

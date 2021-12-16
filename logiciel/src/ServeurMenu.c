@@ -71,11 +71,13 @@ int invitation(unsigned long int idServ) {
 	
 	}
 
-
-
-
 }
 */
+
+
+
+
+
 
 
 
