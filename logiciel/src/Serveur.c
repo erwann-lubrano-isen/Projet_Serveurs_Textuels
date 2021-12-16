@@ -54,7 +54,7 @@ unsigned long int bdd_getServeur_id(const char * nom){
 	Serveur serveur;
 	FILE * file = NULL;
 	file = fopen("rsc/serveur.dat","r");
-	while(fread(&membre,sizeof(Serveur),1,file) != EOF && i <= size){
+	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i <= size){
 		if(strcmp(serveur.nom,nom)==0){
 			fclose(file);
 			return serveur.nom;
