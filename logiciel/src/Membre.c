@@ -2,10 +2,11 @@
 
 int bdd_creer_membre(unsigned long int idServeur, unsigned long idUtilisateur){
 	FILE * file = NULL;
-	file = fopen("rsc/membre.dat","a");
+	file = fopen("rsc/membre.dat","r+");
 	Membre membre;
 	membre.idUtilisateur=idUtilisateur;
 	membre.idServeur=idServeur;
+	fseek(file, sizeof(Membre)*(bdd_getSize_table("membre")), SEEK_SET);
 	fwrite(&membre,sizeof(Membre),1,file);
 	fclose(file);
 	file = NULL;

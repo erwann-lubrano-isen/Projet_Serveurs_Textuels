@@ -2,13 +2,14 @@
 
 int bdd_creer_message(unsigned long int id_salon, unsigned long int id_utilisateur, time_t date, const char * const texte){
 	FILE * file = NULL;
-	file = fopen("rsc/message.dat","a");
+	file = fopen("rsc/message.dat","r+");
 	if(file == NULL)return -1;
 	Message message;
 	message.id_salon = id_salon;
 	message.id_utilisateur = id_utilisateur;
 	message.date = date;
 	memcpy(message.texte,texte,(strlen(texte)<120)?strlen(texte):120);
+	fseek(file, sizeof(Message)*(bdd_getSize_table("message")), SEEK_SET);
 	fwrite(&message,sizeof(Message),1,file);
 	fclose(file);
 	file = NULL;
