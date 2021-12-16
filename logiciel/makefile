@@ -46,6 +46,6 @@ obj/demande.o: src/Demande.c headers/Demande.h headers/Table.h
 	
 obj/permissions_serveur.o: src/Permissions_Serveur.c headers/Permissions_Serveur.h headers/Table.h
 	gcc -c src/Permissions_Serveur.c -o obj/permissions_serveur.o
-	
+
 obj/serveurmenu.o: src/ServeurMenu.c headers/ServeurMenu.h
 	gcc -c src/ServeurMenu.c -o obj/serveurmenu.o
