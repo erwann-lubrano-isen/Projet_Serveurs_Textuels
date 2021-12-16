@@ -74,11 +74,17 @@ int menuConnexion() {
     
     do{
     	connexion_prompt();
+    	
     	fgets(buffer, 127, stdin);
-    	int lenght = strlen(buffer);
-    	if(lenght==1)continue;
+    	if(buffer[0]==' '){
+    		printf("Action inexistante\n");
+    		continue;
+    	}
+    	int lenght = strlen(buffer); 
+    	if(lenght<=1)continue;    
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
+    	
     	char *commande = strtok(buffer, " ");
     	
     	if(!(strcmp(commande, "help"))) affich_help();

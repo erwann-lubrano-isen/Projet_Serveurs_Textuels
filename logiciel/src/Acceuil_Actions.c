@@ -10,8 +10,8 @@ int menu_Acceuil(unsigned long int user_id){
     		printf("Action inexistante\n");
     		continue;
     	}
-    	int lenght = strlen(buffer);    //je l'ai mis en commentaire, et j'ai rajouter des \n après les commande seules, dans les "if"
-    	if(lenght<=1)continue;          //car avec cette solution a gauche, si on met ' ' en commande, ça fait un dump
+    	int lenght = strlen(buffer); 
+    	if(lenght<=1)continue;    
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
  
