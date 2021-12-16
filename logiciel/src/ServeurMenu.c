@@ -141,9 +141,9 @@ int permServeur(unsigned long int idServ,unsigned long int idUtilisateur ){
 	return 0;
 }
 
-/*int listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
+void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 
-	FILE *fichier = fopen("rsc/salon.dat", "r");
+	FILE *fichier = fopen("rsc/membre.dat", "r");
 	
 	Membre membre;
 	char [30] nomRole;
@@ -151,15 +151,31 @@ int permServeur(unsigned long int idServ,unsigned long int idUtilisateur ){
 	int i = 0;
 	while(i < bdd_getSize_table("membre_serveur") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
 		if(membre.idUtilisateur == idUtilisateur && idServ == membre.idServeur) {
-			strcpy(nomRole
-			
-		
+			strcpy(nomRole, membre.role);
+			break;
 		}
-		
+	}
+
+	fclose(fichier);
 	
+	fichier = fopen("rsc/salon.dat", "r");
 	
+	Salon salon;
 	
-}*/
+	for(i = 0; i < bdd_getSize_table("salon") && fread(&salon, sizeof(Salon), 1, fichier) != EOF ; ++i) {
+		if(salon.idServeur == idServ) {
+			FILE *fichier2 = fopen("rsc/permissions_salon.dat", "r");
+			Permissions_Salon PS;
+			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier)) {
+				if(PS.id_salon == salon.idSalon)
+					if(PS.perms[0] == 'r')
+						printf("%s\n", salon.nom);
+			}
+		}
+	}
+	fclose(fichier2);
+	fclose(fichier);
+}
 
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	int size = bdd_getSize_table("utilisateur");
