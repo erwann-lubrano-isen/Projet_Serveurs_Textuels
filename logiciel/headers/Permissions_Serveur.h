@@ -10,7 +10,7 @@ typedef struct Permissions_Serveur{
 	char perms[3]; //WX
 }Permissions_Serveur;
 
-int insert_perm_serveur(unsigned long int id_serveur, unsigned long int User, char perms[]);
+int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[]);
 void bdd_afficher_perm_serveur();
 	
 #endif
