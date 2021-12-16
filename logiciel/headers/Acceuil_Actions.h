@@ -23,4 +23,5 @@ int list_serv(unsigned int long user_id);
 int list_invit(unsigned int long user_id);
 unsigned long int openServeur(unsigned int long user_id);
 int quit_serv(unsigned long int userid);
+void prompt_acceuil(unsigned long int user_id);
 #endif

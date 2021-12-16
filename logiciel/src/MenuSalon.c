@@ -8,12 +8,11 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	char *commande = strtok(buffer, " ");
     	
     	if(!(strcmp(commande, "!help\n"))) helpSalon();
-    	
-    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon);// if (isAdmin(id_user, id_serveur))
     	else if(!(strcmp(commande, "!msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "!exit\n"))) return 0;
     	else if(!(strcmp(commande, "!back\n"))) return 1;
-    	//else if(!(strcmp(commande, "!display"))) ;//display
+    	//else if(!(strcmp(commande, "!display"))) ;//display affiche msg du salon
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
 }
