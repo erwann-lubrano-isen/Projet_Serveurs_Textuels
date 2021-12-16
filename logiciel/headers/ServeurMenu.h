@@ -24,5 +24,6 @@ void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id);
 void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur);
 int permServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 int accept(unsigned long int idServ);
+int assignationRole(unsigned long int idServ);
 
 #endif

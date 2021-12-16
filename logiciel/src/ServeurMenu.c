@@ -177,6 +177,47 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 	fclose(fichier);
 }
 
+int assignationRole(unsigned long int idServ) {
+	char *pseudo = strtok(NULL, " ");
+	char *nomRole = strtok(NULL, " ");
+	
+	FILE *fichier = fopen("permission_serveur.dat", "r+");
+	
+	Permissions_Serveur PS;
+	int i;
+	for(i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {//Vérification de l'existance du role
+		if(strcmp(PS.Role, nomRole) == 0) {
+			strcpy(membre.role, nomRole);
+			break;
+		}
+	}
+	
+	if(i == bdd_getSize_table("permission_serveur")) {
+		printf("Le role \"%s\" n'existe pas\n", nomRole);
+		return 0;
+	}
+	
+	if(bdd_getUtilisateur_id(pseudo) == 0) {
+		printf(
+	
+	}
+	
+	Membre membre;
+	
+	for(i = 0; i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
+		if(membre.idUtilisateur == bdd_getUtilisateur_id(pseudo)) {
+			strcpy(membre.role, nomRole);
+			fseek(fichier, sizeof(Membre)*(i-1), SEEK_SET);
+			fwrite(&membre, sizeof(Membre), 1, fichier);
+			printf("%s est désormais %s\n", pseudo, nomRole);
+			return 0;
+		}
+	}
+	if (i == bdd_getSize_table("membre"))
+		printf("%s n'est pas membre du serveur\n", pseudo);
+	return 0;
+}
+
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	int size = bdd_getSize_table("utilisateur");
 	int i =0;
