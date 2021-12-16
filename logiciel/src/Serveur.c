@@ -57,7 +57,7 @@ unsigned long int bdd_getServeur_id(const char * nom){
 	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i <= size){
 		if(strcmp(serveur.nom,nom)==0){
 			fclose(file);
-			return serveur.nom;
+			return serveur.id;
 		}
 		++i;
 	}
