@@ -6,7 +6,7 @@
 
 typedef struct Permissions_Serveur{
 	unsigned long int id_serveur; //
-	char Role[40]; //role du serveur
+	char Role[30]; //role du serveur
 	char perms[3]; //WX
 }Permissions_Serveur;
 
