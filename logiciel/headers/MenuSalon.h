@@ -4,7 +4,7 @@
 #include <time.h>
 #include "Permissions_Salon.h"
 #include "Message.h"
-
+#include "ServeurMenu.h"
 
 void helpSalon();
 int permSalon(unsigned long int id_salon);
