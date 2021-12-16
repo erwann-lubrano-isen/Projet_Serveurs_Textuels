@@ -12,5 +12,6 @@
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 void helpServeur();
 int invitation();
+void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id);
 
 #endif
