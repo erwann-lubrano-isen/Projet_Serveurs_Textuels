@@ -6,24 +6,30 @@ int menu_Acceuil(unsigned long int user_id){
     do{
     	prompt_acceuil(user_id);
     	fgets(buffer, 127, stdin);
-    	int lenght = strlen(buffer);
-    	if(lenght==1)continue;
+    	
+/*    	int lenght = strlen(buffer);    //je l'ai mis en commentaire, et j'ai rajouter des \n après les commande seules, dans les "if"
+    	if(lenght==1)continue;          //car avec cette solution a gauche, si on met ' ' en commande, ça fait un dump
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
+ */
+    	
     	char *commande = strtok(buffer, " ");
    
-    	if(!(strcmp(commande, "help")))help_acceuil();
+    	if(!(strcmp(commande, "help\n")))help_acceuil();
     	else if(!(strcmp(commande, "create")))create_serv(user_id);
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
     	//else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
-    	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
+    	else if(!(strcmp(commande, "listserver\n")))list_serv(user_id);
     	
-    	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
-	else if(!(strcmp(commande, "logout")))return 1;
-    	else if(!(strcmp(commande, "exit"))) return 0;
-    	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
-    	else if(!(strcmp(commande, "die")))bdd_supprimer_utilisateur(user_id);
-    	
+    	else if(!(strcmp(commande, "listinvitation\n")))list_invit(user_id);
+	else if(!(strcmp(commande, "logout\n")))return 1;
+    	else if(!(strcmp(commande, "exit\n"))) return 0;
+    	else if(!(strcmp(commande, "quit\n")))quit_serv(user_id);
+    	else if(!(strcmp(commande, "die\n"))){
+    		bdd_supprimer_utilisateur(user_id);
+    		printf("Utilisateur %lu ", user_id);
+    		return 1;
+    	}
     	else if(!(strcmp(commande, "open"))){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
@@ -50,8 +56,9 @@ void help_acceuil(){
 	printf("\tlistinvitation\n");
 	printf("\taccept serverID (invitation)\n");
 	printf("\topen serverID\n");
-	printf("\texit\n");
+	
 	printf("\tlogout\n");
+	printf("\texit\n");
 	printf("\tdie\n");
 
 }

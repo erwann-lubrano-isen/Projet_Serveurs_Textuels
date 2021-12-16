@@ -17,3 +17,8 @@ unsigned long int incrementeSerial(char nomTable[]) {	//Permet d'incrementer le 
 	fclose(fichier);
 	return -1; //Table introuvale
 }
+
+
+//faire un decrement, qu'on utilisera a chaques suppression
+
+
