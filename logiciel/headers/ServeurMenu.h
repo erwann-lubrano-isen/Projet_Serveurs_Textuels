@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "Serveur.h"
+#include "Salon.h"
 #include "Utilisateur.h"
 #include "Invitation.h"
 #include "Demande.h"
@@ -18,9 +19,10 @@ void helpServeur();
 int invitation();
 int createSalon(unsigned long int idServ);
 int deleteSalon(unsigned long int idServ);
-int permServeur(unsigned long int idServ);
 int isAdmin(unsigned long int id_user, unsigned long int id_serveur);
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id);
 int listeSalon(unsigned long int idServ, unsigned long int idUtilisateur);
+int permServeur(unsigned long int idServ, unsigned long int idUtilisateur);
+int accept(unsigned long int idServ);
 
 #endif
