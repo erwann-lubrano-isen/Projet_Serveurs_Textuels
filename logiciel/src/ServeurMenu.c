@@ -122,7 +122,7 @@ int deleteSalon(unsigned long int idServ) {
 	return 0;
 }
 
-int permServeur(unsigned long int idServ){
+int permServeur(unsigned long int idServ,unsigned long int idUtilisateur ){
 	char *nomRole = strtok(NULL, " ");
 	char *perm = strtok(NULL, " ");
 	

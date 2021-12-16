@@ -9,5 +9,6 @@ typedef struct Demande{
 int bdd_stock_demande(unsigned long int user_id, unsigned long int server_id);
 int bdd_supprimer_demande(unsigned long int user_id, unsigned long server_id);
 void bdd_afficher_demande();
+int bdd_supprimer_demande_parId(unsigned long int user_id);
 
 #endif

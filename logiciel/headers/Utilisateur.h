@@ -2,6 +2,9 @@
 #define __UTILISATEUR_H_
 #include "Serial.h"
 #include "Table.h"
+#include "Membre.h"
+#include "Demande.h"
+#include "Invitation.h"
 
 typedef struct utilisateur {
 	unsigned long int id;

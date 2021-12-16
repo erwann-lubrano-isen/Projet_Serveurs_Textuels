@@ -50,7 +50,7 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	return 0;
 }
 
-
+/* DOIT ETRE DANS MENU SERVEUR 
 int list_salon(unsigned int long user_id){
 FILE * fichier;
 	fichier = fopen("rsc/membre.dat","r");
@@ -68,7 +68,7 @@ FILE * fichier;
 			int j=0;
 			while(fread(&salon,sizeof(Salon),1,file)!=EOF&&j<sizes){
 				if(membre.idServeur=salon.idServeur){
-					printf("\t%s\n",salon.nom);
+					printf("\t%s\n",salon.nom)
 				}
 				++j;
 			}
@@ -79,4 +79,4 @@ FILE * fichier;
 	fclose(fichier);
 	return 0;
 }
-
+*/

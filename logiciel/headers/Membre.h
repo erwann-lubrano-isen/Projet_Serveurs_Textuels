@@ -20,6 +20,7 @@ int bdd_check_membre(unsigned long int idServeur, unsigned long idUtilisateur);
 int bdd_supprimer_membre(unsigned long int idServeur, unsigned long idUtilisateur);
 void bdd_afficher_membres();
 int supprimer_membres_serveur(unsigned long int idServeur);
+int supprimer_membres_parId(unsigned long int id_user);
 int role(unsigned long int userid, unsigned long int id_serveur);
 
 #endif
