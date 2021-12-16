@@ -114,6 +114,40 @@ int supprimer_membres_serveur(unsigned long int idServeur){
 	fclose(file);
 	return 0;
 }
+int supprimer_membres_parId(unsigned long int id_user){
+	int size = bdd_getSize_table("membre");
+	if(size==0)return 0;
+	if(size==1){
+		bdd_decrement_table("membre");
+		return 0;
+	}
+	int i =0;
+	Membre membre;
+	Membre dernierMembre;
+	FILE * file = NULL;
+	file = fopen("rsc/membre.dat","r+");
+	fseek(file,sizeof(Membre)*(size-1),SEEK_SET);
+	fread(&dernierMembre,sizeof(Membre),1,file);
+	fseek(file,0,SEEK_SET);
+	while(fread(&membre,sizeof(Membre),1,file) != EOF && i < size){
+		++i;
+		if(membre.idUtilisateur==id_user){
+			fseek(file,-sizeof(Membre),SEEK_CUR);
+			fwrite(&dernierMembre,sizeof(Membre),1,file);
+			if(size>=1){
+				bdd_decrement_table("membre");
+				--size;
+			}
+			--i;
+			fseek(file,sizeof(Membre)*(size-1),SEEK_SET);
+			fread(&dernierMembre,sizeof(Membre),1,file);
+			fseek(file,i*(sizeof(Membre)),SEEK_SET);
+		}
+		
+	}
+	fclose(file);
+	return 0;
+}
 
 int role(unsigned long int userid, unsigned long int id_serveur){
 	char *rolename = strtok(NULL, " "); 

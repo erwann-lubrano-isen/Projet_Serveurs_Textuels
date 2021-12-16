@@ -7,17 +7,8 @@ void affich_help(){
 	printf("Liste des commandes disponibles : \n");
 	printf("\t !login userID MotDePasse \n");
 	printf("\t !signup pseudo MotDePasse \n");
-	printf("\t !create servername \n");
-	printf("\t !join serverID \n");
-	printf("\t !quit serverID \n");
-	printf("\t !delete serverID \n");
-	printf("\t !listserver \n");
-	printf("\t !listinvitation \n");
-	printf("\t !accept serverID (invitation) \n");
-	printf("\t !open serverID \n");
 	printf("\t !exit \n");
-	printf("\t !logout\n");
-	printf("\t !die \n");
+
 }
 
 int signup(){

@@ -122,7 +122,7 @@ int deleteSalon(unsigned long int idServ) {
 	return 0;
 }
 
-int permServeur(unsigned long int idServ){
+int permServeur(unsigned long int idServ,unsigned long int idUtilisateur ){
 	char *nomRole = strtok(NULL, " ");
 	char *perm = strtok(NULL, " ");
 	
@@ -143,7 +143,7 @@ int permServeur(unsigned long int idServ){
 
 /*int listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 
-	FILE *fichier = fopen("rsc/Membre.dat", "r+");
+	FILE *fichier = fopen("rsc/salon.dat", "r");
 	
 	Membre membre;
 	char [30] nomRole;

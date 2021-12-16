@@ -12,5 +12,6 @@ typedef struct Invitation{
 int bdd_creer_invitation(unsigned long int user_id, unsigned long int server_id);
 void bdd_afficher_invitation();
 int bdd_supprimer_invitation(unsigned long int user_id, unsigned long server_id);
+int bdd_supprimer_invitation_parId(unsigned long int user_id);
 
 #endif
