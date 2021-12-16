@@ -1,4 +1,4 @@
-bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/serveur.o obj/salon.o obj/menusalon.o  obj/permissions_salon.o obj/connexions_action.o obj/acceuil_actions.o obj/demande.o obj/permissions_serveur.o 
+bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj/utilisateur.o obj/serial.o obj/serveur.o obj/salon.o obj/menusalon.o  obj/permissions_salon.o obj/connexions_action.o obj/acceuil_actions.o obj/demande.o obj/permissions_serveur.o obj/serveurmenu.o 
 	gcc obj/*.o -o bin/prog
 
 
@@ -46,3 +46,6 @@ obj/demande.o: src/Demande.c headers/Demande.h headers/Table.h
 	
 obj/permissions_serveur.o: src/Permissions_Serveur.c headers/Permissions_Serveur.h headers/Table.h
 	gcc -c src/Permissions_Serveur.c -o obj/permissions_serveur.o
+
+obj/serveurmenu.o: src/ServeurMenu.c headers/ServeurMenu.h
+	gcc -c src/ServeurMenu.c -o obj/serveurmenu.o
