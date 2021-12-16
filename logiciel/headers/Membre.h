@@ -9,7 +9,7 @@
 typedef struct Membre {
 	unsigned long int idServeur;
 	unsigned long int idUtilisateur;
-	char role[40];
+	char role[30];
 } Membre;
 
 
