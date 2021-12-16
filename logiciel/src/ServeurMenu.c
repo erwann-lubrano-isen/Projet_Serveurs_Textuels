@@ -18,7 +18,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		else if(strcmp(commande, "invite") == 0) invitation(idServ);
 		else if(strcmp(commande, "accept") == 0) accept(idServ);
 		else if(strcmp(commande, "create") == 0) createSalon(idServ);
-		else if(strcmp(commande, "delete") == 0) return 5;
+		else if(strcmp(commande, "delete") == 0) deleteSalon(idServ);
 		else if((strcmp(commande, "role") == 0 ));
 		else if((strcmp(commande, "open")==0)){
 			char * salonname = strtok(NULL," ");
@@ -66,10 +66,12 @@ int invitation(unsigned long int idServ) {
 	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
 		if(invitation.user_id == idU && invitation.server_id) {
 			printf("%s à déjà été invité dans ce serveur\n", pseudo);
+			fclose(fichier);
 			return 0;
 		}
 	}
 	bdd_creer_invitation(idU ,idServ);
+	fclose(fichier);
 	return 0;
 }
 
@@ -90,10 +92,12 @@ int accept(unsigned long int idServ) {
 			bdd_supprimer_demande(idU, idServ);
 			bdd_creer_membre(idServ, idU, "membre");
 			printf("\n%s est devenu membre du serveur\n", pseudo);
+			fclose(fichier);
 			return 0;
 		}
 	}
 	printf("Aucune demande de %s\n", pseudo);
+	fclose(fichier);
 	return 0;
 }
 
@@ -118,12 +122,44 @@ int deleteSalon(unsigned long int idServ) {
 	return 0;
 }
 
+int permServeur(unsigned long int idServ){
+	char *nomRole = strtok(NULL, " ");
+	char *perm = strtok(NULL, " ");
+	
+	FILE *fichier = fopen("rsc/permission_serveur.dat", "r+");
+	Permissions_Serveur PS;
+	
+	for(int i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {
+		if (strcmp(PS.Role, nomRole) == 0 && PS.id_serveur == idServ) {
+			strcpy(PS.perms, perm);
+			printf("Les droits du rôle \"%s\" ont été modifié\n", nomRole);
+			return 0;
+		}
+	}
+	insert_perm_serveur(idServ, nomRole, perm);
+	printf("Le rôle a été créé\n");
+	return 0;
+}
 
+/*int listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 
-
-
-
-
+	FILE *fichier = fopen("rsc/Membre.dat", "r+");
+	
+	Membre membre;
+	char [30] nomRole;
+	
+	int i = 0;
+	while(i < bdd_getSize_table("membre_serveur") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
+		if(membre.idUtilisateur == idUtilisateur && idServ == membre.idServeur) {
+			strcpy(nomRole
+			
+		
+		}
+		
+	
+	
+	
+}*/
 
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	int size = bdd_getSize_table("utilisateur");

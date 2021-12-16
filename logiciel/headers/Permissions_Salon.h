@@ -6,7 +6,7 @@
 
 typedef struct Permissions_Salon{
 	unsigned long int id_salon;
-	char Role[40];
+	char Role[30];
 	char perms[3];
 }Permissions_Salon;
 
