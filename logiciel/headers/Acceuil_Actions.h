@@ -9,6 +9,8 @@
 #include "Demande.h"
 #include "Invitation.h"
 #include "Membre.h"
+#include "ServeurMenu.h"
+
 
 int menu_Acceuil(unsigned long int user_id);
 int delete_serveur(char commande[], unsigned long int user_id);
@@ -19,4 +21,5 @@ int create_serv(unsigned long int idProprio);
 void help_acceuil();
 int list_serv(unsigned int long user_id);
 int list_invit(unsigned int long user_id);
+unsigned long int openServeur(unsigned int long user_id);
 #endif
