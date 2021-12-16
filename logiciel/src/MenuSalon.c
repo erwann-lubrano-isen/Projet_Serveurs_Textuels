@@ -48,3 +48,5 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	bdd_creer_message(id_salon, id_utilisateur, date, texte); //fonction de Message pour crée un message
 	return 0;
 }
+
+
