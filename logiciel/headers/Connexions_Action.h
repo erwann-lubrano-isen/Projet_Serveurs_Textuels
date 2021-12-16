@@ -15,6 +15,7 @@ void affich_help();
 int menuConnexion();
 int signup();
 unsigned long int  login();
+void connexion_prompt();
 
 #endif
 

@@ -65,6 +65,23 @@ unsigned long int bdd_getServeur_id(const char * nom){
 	return 0;
 }
 
+unsigned long int bdd_getProprietaireServeur_id(unsigned long int serveur_id){
+	int size = bdd_getSize_table("serveur");
+	int i =0;
+	Serveur serveur;
+	FILE * file = NULL;
+	file = fopen("rsc/serveur.dat","r");
+	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i <= size){
+		if(serveur.id==serveur_id){
+			fclose(file);
+			return serveur.idProprio;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
+
 void bdd_afficher_serveurs(){
 	int size = bdd_getSize_table("serveur");
 	int i =0;
