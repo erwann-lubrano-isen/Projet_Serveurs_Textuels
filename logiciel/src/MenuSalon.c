@@ -7,6 +7,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	fgets(buffer, 127, stdin);
     	char *commande = strtok(buffer, " ");
     	
+
     	if(!(strcmp(commande, "help\n"))) helpSalon();
     	
     	else if(!(strcmp(commande, "perm"))&&isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
