@@ -1,5 +1,32 @@
 #include "../headers/ServeurMenu.h"
 
+
+int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
+	while (1) {
+		prompt_serveur(idUtilisateur,idServ);
+		char buffer[128];
+		fgets(buffer, 127, stdin);
+		int lenght = strlen(buffer);
+		if(lenght==1)continue;
+		buffer[lenght-1]=' ';
+		buffer[lenght]='\0';
+			
+			
+		char *commande = strtok(buffer, " ");
+		printf("\n%s\n", buffer);
+		if(strcmp(commande, "help") == 0) helpServeur();
+		else if(strcmp(commande, "invite") == 0) invitation(idServ);
+		else if(strcmp(commande, "accept") == 0) accept(idServ);
+		else if(strcmp(commande, "create") == 0) createSalon(idServ);
+		else if(strcmp(commande, "delete") == 0) return 5;
+		else if((strcmp(commande, "role") == 0 ));
+		else if(strcmp(commande, "perm") == 0 ) return 7;
+		else if((strcmp(commande, "back") == 0 )) return 1;
+		else if((strcmp(commande, "exit") == 0 )) return 0;
+		else printf("%s: Action inexistante\n", commande);
+	}
+}
+
 void helpServeur() {
 	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu\n");
 	printf("\n!invite \"pseudonyme\" :\n\tPermet d'inviter un utilisateur\n");
@@ -58,29 +85,6 @@ int accept(unsigned long int idServ) {
 	return 0;
 }
 
-int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
-	while (1) {
-		char buffer[128];
-		fgets(buffer, 127, stdin);
-		int lenght = strlen(buffer);
-		buffer[lenght-1]=' ';
-		buffer[lenght]='\0';
-			
-		char *commande = strtok(buffer, " ");
-		printf("\n%s\n", buffer);
-		if(strcmp(commande, "!help") == 0) helpServeur();
-		else if(strcmp(commande, "!invite") == 0) invitation(idServ);
-		else if(strcmp(commande, "!accept") == 0) accept(idServ);
-		else if(strcmp(commande, "!create") == 0) createSalon(idServ);
-		else if(strcmp(commande, "!delete") == 0) return 5;
-		else if((strcmp(commande, "!role") == 0 ));
-		else if(strcmp(commande, "!perm") == 0 ) return 7;
-		else if((strcmp(commande, "!back") == 0 )) return 1;
-		else if((strcmp(commande, "!exit") == 0 )) return 0;
-		else printf("%s: Action inexistante\n", commande);
-	}
-}
-
 int createSalon(unsigned long int idServ) {
 	char *nomSalon = strtok(NULL, " ");
 	if(bdd_getSalon_id(idServ ,nomSalon) == 0) {
@@ -109,6 +113,35 @@ int permServeur(idServ, idUtilisateur){
 
 
 
+}
+
+void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+				int size2 = bdd_getSize_table("serveur");
+				int j =0;
+				Serveur serveur;
+				FILE * file2 = NULL;
+				file2 = fopen("rsc/serveur.dat","r");
+				while(fread(&serveur, sizeof(Serveur), 1, file2) != EOF && j <= size2){
+					if(serveur_id==serveur.id){
+						printf(">%s/%s $ ",utilisateur.pseudo,serveur.nom);
+						fclose(file);
+						fclose(file2);
+						return;
+					}
+					++j;
+				}
+			fclose(file2);
+		}
+		++i;
+	}
+	fclose(file);
 }
 
 

@@ -21,6 +21,7 @@ int bd_suppressionServeur(unsigned long int id);
 int bd_suppressionMembresEtServeur(unsigned long int id);
 unsigned long int bdd_getServeur_id(const char * nom);
 void bdd_afficher_serveurs();
+unsigned long int bdd_getProprietaireServeur_id(unsigned long int serveur_id);
 
 #endif
 

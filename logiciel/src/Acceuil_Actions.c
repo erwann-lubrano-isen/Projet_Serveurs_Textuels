@@ -4,18 +4,26 @@ int menu_Acceuil(unsigned long int user_id){
 	char buffer[128];
     
     do{
+    	prompt_acceuil(user_id);
     	fgets(buffer, 127, stdin);
     	int lenght = strlen(buffer);
+    	if(lenght==1)continue;
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
    
-    	if(!(strcmp(commande, "!help")));
-		else if(!(strcmp(commande, "!back")))return 1;
-    	else if(!(strcmp(commande, "!exit"))) return 0;
-    	else if(!(strcmp(commande, "!create")))create_serv(user_id);
-    	else if(!(strcmp(commande, "!listeserv")))list_serv(user_id);
-    	else if(!(strcmp(commande, "!debug"))){
+    	if(!(strcmp(commande, "help")));
+		else if(!(strcmp(commande, "back")))return 1;
+    	else if(!(strcmp(commande, "exit"))) return 0;
+    	else if(!(strcmp(commande, "create")))create_serv(user_id);
+    	else if(!(strcmp(commande, "listeserv")))list_serv(user_id);
+    	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
+    	else if(!(strcmp(commande, "open"))){
+    		unsigned long int id_serveur = openServeur(user_id);
+    		if(id_serveur!=0){
+    			if(menuServeur(id_serveur,user_id)==0)return 0;
+    		}
+    	}else if(!(strcmp(commande, "debug"))){
     		bdd_afficher_serveurs();
     		bdd_afficher_membres();
     		
@@ -146,11 +154,41 @@ int list_serv(unsigned int long user_id){
 			FILE * file;
 			file = fopen("rsc/serveur.dat","r");
 			Serveur serveur;
-			int size = bdd_getSize_table("serveur");
+			int sizes = bdd_getSize_table("serveur");
 			if(file == NULL)return -1;
 			int j=0;
-			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<size){
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<sizes){
 				if(membre.idServeur=serveur.id){
+					printf("\t%s\n",serveur.nom);
+				}
+				++j;
+			}
+			break;
+		}
+		++i;
+	}
+	fclose(fichier);
+	return 0;
+}
+
+	
+int list_invit(unsigned int long user_id){
+	FILE * fichier;
+	fichier = fopen("rsc/invitation.dat","r");
+	Invitation invitation;
+	int size = bdd_getSize_table("invitation");
+	if(fichier == NULL)return -1;
+	int i=0;
+	while(fread(&invitation,sizeof(Invitation),1,fichier)!=EOF&&i<size){
+		if(invitation.user_id==user_id){
+			FILE * file;
+			file = fopen("rsc/serveur.dat","r");
+			Serveur serveur;
+			int sizes = bdd_getSize_table("serveur");
+			if(file == NULL)return -1;
+			int j=0;
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&i<sizes){
+				if(invitation.server_id==serveur.id){
 					printf("\t%s\n",serveur.nom);
 				}
 				++j;
@@ -159,4 +197,80 @@ int list_serv(unsigned int long user_id){
 		++i;
 	}
 	fclose(fichier);
+	return 0;
+}
+
+
+int quit_serv(unsigned long int userid){
+	char * servername=strtok(NULL," ");
+	if(servername==NULL || strlen(servername)>30){
+		printf("commande incorrecte\n");
+		return 1;
+	}
+	FILE * fichier = fopen("rsc/serveur.dat", "r+");
+	//FILE * file = fopen("rsc/membre.dat", "r+");
+	//Membre membre;
+	Serveur serveur;
+	int i=0;
+	unsigned long int serveur_id=bdd_getServeur_id(servername);
+	if(serveur_id==0){
+		printf("Serveur inexistant\n");
+		return 1;
+	}
+	for(int i = 0; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
+		if (serveur_id == serveur.id && userid == serveur.idProprio) {
+			printf("Impossible pour le propietaire du serveur");
+			fclose(fichier);
+			return 0;
+		}
+	}
+	fclose(fichier);
+	/*
+	for(int j = 0; j < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, file) != EOF; ++j) {
+		if (serveur_id == membre.idServeur && userid == membre.idUtilisateur) {
+			fseek(file, sizeof(Membre)*(bdd_getSize_table("membre")-1), SEEK_SET); //Positionnement du curseur au début de la dernière ligne
+			fread(&membre, sizeof(Membre), 1, file);	//Obtention de la dernière ligne dans serveur
+			fseek(file, sizeof(Membre)*(j-1), SEEK_SET); //Positionnement au début de la ligne i
+			fwrite(&membre, sizeof(Membre), 1, file);	//Ecriture de la dernière ligne contenue dans serveur
+			bdd_decrement_table("membre");
+			return 0;
+		}
+	}
+	fclose(file);
+*/
+	bdd_supprimer_membre(serveur_id, userid);
+}
+
+unsigned long int openServeur(unsigned int long user_id){
+	char * servername=strtok(NULL," ");
+	if(servername==NULL || strlen(servername)>30){
+		printf("commande incorrecte\n");
+		return 0;
+	}
+	unsigned long int serveur_id=bdd_getServeur_id(servername);
+	if(serveur_id==0){
+		printf("serveur inexistant\n");
+	}else if(bdd_check_membre(serveur_id,user_id)){
+		return serveur_id;
+	}else{
+		printf("Vous n'etes pas membre de ce serveur\n");
+	}
+	return 0;
+}
+
+void prompt_acceuil(unsigned long int user_id){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+			fclose(file);
+			printf(">%s $ ",utilisateur.pseudo);
+			return;
+		}
+		++i;
+	}
+	fclose(file);
 }

@@ -8,21 +8,18 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	char *commande = strtok(buffer, " ");
     	
     	if(!(strcmp(commande, "!help\n"))) helpSalon();
-    	
-    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon); //verifier si user est admin du serveur pour utiliser cette commande
-    	//peut etre faire une fonction verifAdmin(id_utilisateur, id_serveur); recherche du serveur par rapport a son id, une fois trouvé, si id_utilisateur = serveur.id_proprio , elle renvois 1, alors on affiche l'option !perm
+    	else if(!(strcmp(commande, "!perm"))) permSalon(id_salon);// if (isAdmin(id_user, id_serveur))
     	else if(!(strcmp(commande, "!msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "!exit\n"))) return 0;
     	else if(!(strcmp(commande, "!back\n"))) return 1;
-    	//else if(!(strcmp(commande, "!display"))) ;//display
+    	//else if(!(strcmp(commande, "!display"))) ;//display affiche msg du salon
     	else printf("%s: Action inexistante\n", commande);
-    }while(1);    
-    return 0;
+    }while(1);
 }
 
 void helpSalon(){
 	printf("-------------Voici la liste des commandes--------------\n");
-	printf("!perm rolename perm :  Change les droits pour le salon\n"); //Verif si user est admin pour afficher cette option
+	printf("!perm rolename perm :  Change les droits pour le salon\n"); // if (isAdmin(id_user, id_serveur))
 	printf("!msg text: Envoyer un message\n");
 	printf("!exit : Quitter le programme\n");
 	printf("!back : Retur en arrière\n");
@@ -37,7 +34,7 @@ int permSalon(unsigned long int id_salon){
     		return -1;
     	}
 	insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
-	return 0; 
+	return 0;
 }
 
 int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){

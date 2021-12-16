@@ -82,23 +82,29 @@ int menuConnexion() {
     char buffer[128];
     
     do{
+    	connexion_prompt();
     	fgets(buffer, 127, stdin);
     	int lenght = strlen(buffer);
+    	if(lenght==1)continue;
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
     	
-    	if(!(strcmp(commande, "!help"))) affich_help();
-    	else if(!(strcmp(commande, "!signup"))) signup();
-    	else if(!(strcmp(commande, "!login"))){
+    	if(!(strcmp(commande, "help"))) affich_help();
+    	else if(!(strcmp(commande, "signup"))) signup();
+    	else if(!(strcmp(commande, "login"))){
     		unsigned long int user_id=login();
     		if(user_id!=0) {
     			if(menu_Acceuil(user_id)==0)return 0;
     		}
-    	}else if(!(strcmp(commande, "!exit"))) return 0;
+    	}else if(!(strcmp(commande, "exit"))) return 0;
     	else printf("Action inexistante\n");
     }while(1);    
     return 0;
+}
+
+void connexion_prompt(){
+	printf(">$ ");
 }
 
 
