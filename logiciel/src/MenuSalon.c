@@ -47,3 +47,32 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	bdd_creer_message(id_salon, id_utilisateur, date, texte); //fonction de Message pour crée un message
 	return 0;
 }
+
+int list_salon(unsigned int long user_id){
+FILE * fichier;
+	fichier = fopen("rsc/membre.dat","r");
+	Membre membre;
+	int size = bdd_getSize_table("membre");
+	if(fichier == NULL)return -1;
+	int i=0;
+	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
+		if(membre.idUtilisateur==user_id){
+			FILE * file;
+			file = fopen("rsc/salon.dat","r");
+			Salon salon;
+			int sizes = bdd_getSize_table("salon");
+			if(file == NULL)return -1;
+			int j=0;
+			while(fread(&salon,sizeof(Salon),1,file)!=EOF&&j<sizes){
+				if(membre.idServeur=salon.idServeur){
+					printf("\t%s\n",salon.nom);
+				}
+				++j;
+			}
+			break;
+		}
+		++i;
+	}
+	fclose(fichier);
+	return 0;
+}
