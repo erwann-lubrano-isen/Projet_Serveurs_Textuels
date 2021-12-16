@@ -26,18 +26,18 @@ int menu_Acceuil(unsigned long int user_id){
 }
 
 void help_acceuil(){
-printf("Commandes disponibles au menu acceuil :\n");
-printf("\t!create servername\n");
-printf("\t!join serverID\n");
-printf("\t!quit serverID\n");
-printf("\t!delete serverID\n");
-printf("\t!listserver\n");
-printf("\t!listinvitation\n");
-printf("\t!accept serverID (invitation)\n");
-printf("\t!open serverID\n");
-printf("\t!exit\n");
-printf("\t!logout\n");
-printf("\t!die\n");
+	printf("Commandes disponibles au menu acceuil :\n");
+	printf("\t!create servername\n");
+	printf("\t!join serverID\n");
+	printf("\t!quit serverID\n");
+	printf("\t!delete serverID\n");
+	printf("\t!listserver\n");
+	printf("\t!listinvitation\n");
+	printf("\t!accept serverID (invitation)\n");
+	printf("\t!open serverID\n");
+	printf("\t!exit\n");
+	printf("\t!logout\n");
+	printf("\t!die\n");
 }
 
 int create_serv(unsigned long int idProprio){
@@ -134,7 +134,7 @@ int join_serv(unsigned long int userid){
 	return 0;
 }
 
-void list_serv(unsigned int long user_id){
+int list_serv(unsigned int long user_id){
 	FILE * fichier;
 	fichier = fopen("rsc/membre.dat","r");
 	Membre membre;

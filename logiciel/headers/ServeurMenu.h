@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "Serveur.h"
 #include "Utilisateur.h"
+#include "Invitation.h"
+#include "Demande.h"
 #ifndef __CONNEXION_H_
 #define __CONNEXION_H_
 

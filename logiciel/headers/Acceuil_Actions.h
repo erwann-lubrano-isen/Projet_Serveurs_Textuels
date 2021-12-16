@@ -15,5 +15,5 @@ int join_serv(unsigned long int userid);
 //int join_serv(unsigned long int userid);
 int create_serv(unsigned long int idProprio);
 void help_acceuil();
-void list_serv(unsigned int long user_id);
+int list_serv(unsigned int long user_id);
 #endif

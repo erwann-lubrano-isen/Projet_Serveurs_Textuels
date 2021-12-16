@@ -55,7 +55,6 @@ int bdd_supprimer_invitation(unsigned long int user_id, unsigned long int server
 			fread(&derniereInvitation,sizeof(Invitation),1,file);
 			fseek(file,i*(sizeof(Invitation)),SEEK_SET);
 		}
-		
 	}
 	fclose(file);
 	return 0;
