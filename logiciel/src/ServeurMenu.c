@@ -19,7 +19,19 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		else if(strcmp(commande, "create") == 0) return 4;
 		else if(strcmp(commande, "delete") == 0) return 5;
 		else if((strcmp(commande, "role") == 0 ));
-		else if(strcmp(commande, "perm") == 0 ) return 7;
+		else if((strcmp(commande, "open")==0)){
+			char * salonname = strtok(NULL," ");
+			if(salonname == NULL || strlen(salonname) > 30){
+				printf("commande invalide\n");
+			}else{
+				unsigned long int salon_id = bdd_getSalon_id(idServ, salonname);
+				if(salon_id==0){
+					printf("Salon inexistant\n");
+				}else{
+					menuSalon(salon_id, idUtilisateur, idServ);
+				}
+			}
+		}else if(strcmp(commande, "perm") == 0 ) return 7;
 		else if((strcmp(commande, "back") == 0 )) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
@@ -105,6 +117,45 @@ void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 		++i;
 	}
 	fclose(file);
+}
+
+int isAdmin(unsigned long int id_user,unsigned long int id_serveur){ //EN ATTENTE DE LA FONCTION ROLE
+    int size = bdd_getSize_table("membres");
+    if(size==0)return 0;
+    int i =0;
+    Membre membre;
+    char monRole[40];
+    FILE * file = NULL;
+    file = fopen("rsc/membres.dat","r");
+    rewind(file); //mettre curseur au début du fichier
+    
+    while(fread(&membre,sizeof(Membre),1,file) != EOF && i < size){   //read tant que la taille max du fichier est atteinte
+        ++i;
+        if(membre.idUtilisateur==id_user && membre.idServeur==id_serveur){  //si l'id correspond, et que le serveur aussi
+             strcpy(monRole,membre.role); //recuperation du role
+             fclose(file);
+        }
+    }
+    
+    size = bdd_getSize_table("permissions_serveur");
+    if(size==0)return 0;
+    i =0;
+    Permissions_Serveur perm;
+    
+    file = NULL;
+    file = fopen("rsc/permission_serveur.dat","r");
+
+    rewind(file); //mettre curseur au début du fichier
+    
+    while(fread(&perm,sizeof(Permissions_Serveur),1,file) != EOF && i < size){   //read tant que la taille max du fichier est atteinte
+        ++i;
+        if(perm.id_serveur==id_serveur && strcmp(perm.Role,monRole)==0 && perm.perms[1]=='x' || bdd_getProprietaireServeur_id(id_serveur)==id_user){  //si l'id correspond
+            fclose(file); 
+            return 1;
+        }
+    }
+    
+    return 0;        
 }
 
 
