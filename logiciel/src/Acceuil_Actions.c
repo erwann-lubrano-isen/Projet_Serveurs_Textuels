@@ -134,7 +134,7 @@ int join_serv(unsigned long int userid){
 	return 0;
 }
 
-void list_serv(unsigned int long user_id){
+int list_serv(unsigned int long user_id){
 	FILE * fichier;
 	fichier = fopen("rsc/membre.dat","r");
 	Membre membre;
@@ -146,10 +146,10 @@ void list_serv(unsigned int long user_id){
 			FILE * file;
 			file = fopen("rsc/serveur.dat","r");
 			Serveur serveur;
-			int size = bdd_getSize_table("serveur");
+			int sizes = bdd_getSize_table("serveur");
 			if(file == NULL)return -1;
 			int j=0;
-			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<size){
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<sizes){
 				if(membre.idServeur=serveur.id){
 					printf("\t%s\n",serveur.nom);
 				}
@@ -159,4 +159,34 @@ void list_serv(unsigned int long user_id){
 		++i;
 	}
 	fclose(fichier);
+	return 0;
+}
+
+	
+int list_invit(unsigned int long user_id){
+	FILE * fichier;
+	fichier = fopen("rsc/invitation.dat","r");
+	Invitation invitation;
+	int size = bdd_getSize_table("invitation");
+	if(fichier == NULL)return -1;
+	int i=0;
+	while(fread(&invitation,sizeof(Invitation),1,fichier)!=EOF&&i<size){
+		if(invitation.user_id==user_id){
+			FILE * file;
+			file = fopen("rsc/serveur.dat","r");
+			Serveur serveur;
+			int sizes = bdd_getSize_table("serveur");
+			if(file == NULL)return -1;
+			int j=0;
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&i<sizes){
+				if(invitation.server_id==serveur.id){
+					printf("\t%s\n",serveur.nom);
+				}
+				++j;
+			}
+		}
+		++i;
+	}
+	fclose(fichier);
+	return 0;
 }

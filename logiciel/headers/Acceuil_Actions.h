@@ -7,6 +7,7 @@
 #include "Serveur.h"
 #include "Utilisateur.h"
 #include "Demande.h"
+#include "Invitation.h"
 
 int menu_Acceuil(unsigned long int user_id);
 int delete_serveur(char commande[], unsigned long int user_id);
@@ -15,5 +16,6 @@ int join_serv(unsigned long int userid);
 //int join_serv(unsigned long int userid);
 int create_serv(unsigned long int idProprio);
 void help_acceuil();
-void list_serv(unsigned int long user_id);
+int list_serv(unsigned int long user_id);
+int list_invit(unsigned int long user_id);
 #endif
