@@ -17,6 +17,7 @@ int bdd_increment_table(const char * const name){
 	return 0;
 }
 
+
 int bdd_getSize_table(const char * const name){
 	FILE * file =NULL;
 	file= fopen("rsc/table.dat","r");

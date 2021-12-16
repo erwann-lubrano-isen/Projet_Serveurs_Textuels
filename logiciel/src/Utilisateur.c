@@ -3,16 +3,20 @@
 int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 	FILE * file = NULL;
 	file = fopen("rsc/utilisateur.dat","a");
-
+	if(file == NULL) return -1;
+	
 	Utilisateur utilisateur;
 	utilisateur.id=incrementeSerial("utilisateur");
 	strcpy(utilisateur.pseudo , pseudo);
 	strcpy(utilisateur.motDePasse, motDePasse);
 	
-	fwrite(&utilisateur,sizeof(Utilisateur),1,file);  //met la struc utilisateur dans le fichier
-	fclose(file);
+	fseek(file, 0, SEEK_END); //position du curseur a la fin du fichier
 	
-	bdd_increment_table("utilisateur");
+	bdd_increment_table("utilisateur");  //augmente d'une place
+	fwrite(&utilisateur,sizeof(Utilisateur),1,file);  //met la struc utilisateur dans le fichier, a la fin
+	fclose(file);
+	return 0;
+	
 }
 
 int bdd_supprimer_utilisateur(unsigned long int id){
