@@ -100,7 +100,7 @@ int accept(unsigned long int idServ) {
 int createSalon(unsigned long int idServ) {
 	char *nomSalon = strtok(NULL, " ");
 	if(bdd_getSalon_id(idServ ,nomSalon) == 0) {
-		bdd_create_salon(nomSalon, idServ);
+		bdd_create_Salon(nomSalon, idServ);
 	}
 	else printf("Ce salon existe déjà !\n");
 	return 0;
@@ -118,14 +118,12 @@ int deleteSalon(unsigned long int idServ) {
 	return 0;
 }
 
-int permServeur(idServ, idUtilisateur){
-	char *nomRole = strtok(NULL, " ");
-	
-	
 
 
 
-}
+
+
+
 
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	int size = bdd_getSize_table("utilisateur");

@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "Table.h"
-
+#include "Permissions_Serveur.h"
+#include "Permissions_Salon.h"
 
 typedef struct Membre {
 	unsigned long int idServeur;
@@ -19,5 +20,6 @@ int bdd_check_membre(unsigned long int idServeur, unsigned long idUtilisateur);
 int bdd_supprimer_membre(unsigned long int idServeur, unsigned long idUtilisateur);
 void bdd_afficher_membres();
 int supprimer_membres_serveur(unsigned long int idServeur);
+int role(unsigned long int userid, unsigned long int id_serveur);
 
 #endif

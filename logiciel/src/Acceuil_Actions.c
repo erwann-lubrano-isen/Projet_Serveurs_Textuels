@@ -12,12 +12,15 @@ int menu_Acceuil(unsigned long int user_id){
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
    
-    	if(!(strcmp(commande, "help")));
+    	if(!(strcmp(commande, "help")))help_acceuil();
 		else if(!(strcmp(commande, "back")))return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "create")))create_serv(user_id);
-    	else if(!(strcmp(commande, "listeserv")))list_serv(user_id);
+    	else if(!(strcmp(commande, "join")))join_serv(user_id);
+    	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
+    	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
+    	//else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
     	else if(!(strcmp(commande, "open"))){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
@@ -35,17 +38,18 @@ int menu_Acceuil(unsigned long int user_id){
 
 void help_acceuil(){
 	printf("Commandes disponibles au menu acceuil :\n");
-	printf("\t!create servername\n");
-	printf("\t!join serverID\n");
-	printf("\t!quit serverID\n");
-	printf("\t!delete serverID\n");
-	printf("\t!listserver\n");
-	printf("\t!listinvitation\n");
-	printf("\t!accept serverID (invitation)\n");
-	printf("\t!open serverID\n");
-	printf("\t!exit\n");
-	printf("\t!logout\n");
-	printf("\t!die\n");
+	printf("\tcreate servername\n");
+	printf("\tjoin serverID\n");
+	printf("\tquit serverID\n");
+	printf("\tdelete serverID\n");
+	printf("\tlistserver\n");
+	printf("\tlistinvitation\n");
+	printf("\taccept serverID (invitation)\n");
+	printf("\topen serverID\n");
+	printf("\texit\n");
+	printf("\tlogout\n");
+	printf("\tdie\n");
+
 }
 
 int create_serv(unsigned long int idProprio){
@@ -75,7 +79,7 @@ int create_serv(unsigned long int idProprio){
 	return 0;
 }
 
-int delete_serveur(char commande[], unsigned long int user_id){
+int delete_serveur(char commande[], unsigned long int user_id){	//char commande[], 
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
 		printf("commande incorrecte\n");
@@ -187,12 +191,13 @@ int list_invit(unsigned int long user_id){
 			int sizes = bdd_getSize_table("serveur");
 			if(file == NULL)return -1;
 			int j=0;
-			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&i<sizes){
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<sizes){
 				if(invitation.server_id==serveur.id){
 					printf("\t%s\n",serveur.nom);
 				}
 				++j;
 			}
+			break;
 		}
 		++i;
 	}
@@ -219,7 +224,7 @@ int quit_serv(unsigned long int userid){
 	}
 	for(int i = 0; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
 		if (serveur_id == serveur.id && userid == serveur.idProprio) {
-			printf("Impossible pour le propietaire du serveur");
+			printf("Impossible pour le propietaire du serveur\n");
 			fclose(fichier);
 			return 0;
 		}
