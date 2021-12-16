@@ -9,11 +9,16 @@ int menu_Acceuil(unsigned long int user_id){
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
-    	
-    	if(!(strcmp(commande, "!help")))list_serv();
-	else if(!(strcmp(commande, "!back")))return 1;
-    	else if((strcmp(commande, "!exit")==0)) return 0;
-    	else printf("Action inexistante\n");
+   
+    	if(!(strcmp(commande, "!help")));
+		else if(!(strcmp(commande, "!back")))return 1;
+    	else if(!(strcmp(commande, "!exit"))) return 0;
+    	else if(!(strcmp(commande, "!create")))create_serv(user_id);
+    	else if(!(strcmp(commande, "!debug"))){
+    		bdd_afficher_serveurs();
+    		bdd_afficher_membres();
+    	}else printf("Action inexistante\n");
+
     }while(1);    
     return 0;
 }
@@ -33,8 +38,7 @@ printf("\t!logout\n");
 printf("\t!die\n");
 }
 
-int create_serv(char commande[], unsigned long int idProprio){
-	char * cmd=strtok(commande," ");
+int create_serv(unsigned long int idProprio){
 	char * servname=strtok(NULL," ");
 
 	if(servname==NULL || strlen(servname)>30 || strlen(servname) > 30){
@@ -57,6 +61,7 @@ int create_serv(char commande[], unsigned long int idProprio){
 	}
 	fclose(fichier);
 	bd_creationServeur(servname,idProprio);
+	bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
 	return 0;
 }
 

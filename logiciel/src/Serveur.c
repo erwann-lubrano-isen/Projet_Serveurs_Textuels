@@ -64,3 +64,16 @@ unsigned long int bdd_getServeur_id(const char * nom){
 	fclose(file);
 	return 0;
 }
+
+void bdd_afficher_serveurs(){
+	int size = bdd_getSize_table("serveur");
+	int i =0;
+	Serveur serveur;
+	FILE * file = NULL;
+	file = fopen("rsc/serveur.dat","r");
+	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i < size){
+		printf("id_serveur : %lu\tid_user: %lu\tnom : %s\n",serveur.id,serveur.idProprio,serveur.nom);
+		++i;
+	}
+	fclose(file);
+}
