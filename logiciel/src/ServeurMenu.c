@@ -1,81 +1,51 @@
 #include "../headers/ServeurMenu.h"
 
-int menuServeur() {
-	char buffer[127];
-	fgets(buffer, 127, stdin);
-	char *commande = strtok(buffer, " ");
-	if(!(strcmp(commande, "!help"))) helpServeur();
-	else if(!(strcmp(commande, "!invite"))) return 2;
-	else if(!(strcmp(commande, "!accept"))) return 3;
-	else if(!(strcmp(commande, "!create"))) return 4;
-	else if(!(strcmp(commande, "!delete"))) return 5;
-	else if(!(strcmp(commande, "!role"))) return 6;
-	else if(!(strcmp(commande, "!perm"))) return 7;
-	else if(!(strcmp(commande, "!back"))) return 1;
-	else if(!(strcmp(commande, "!exit"))) return 0;
-	else printf("%s: Action inexistante\n", commande);
-	return -1;
+int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
+	while (1) {
+		char buffer[128];
+		fgets(buffer, 127, stdin);
+		int lenght = strlen(buffer);
+		buffer[lenght-1]=' ';
+		buffer[lenght]='\0';
+			
+			
+		char *commande = strtok(buffer, " ");
+		printf("\n%s\n", buffer);
+		if(strcmp(commande, "!help") == 0) helpServeur();
+		else if(strcmp(commande, "!invite") == 0) invitation(idServ);
+		else if(strcmp(commande, "!accept") == 0) return 3;
+		else if(strcmp(commande, "!create") == 0) return 4;
+		else if(strcmp(commande, "!delete") == 0) return 5;
+		else if((strcmp(commande, "!role") == 0 ));
+		else if(strcmp(commande, "!perm") == 0 ) return 7;
+		else if((strcmp(commande, "!back") == 0 )) return 1;
+		else if((strcmp(commande, "!exit") == 0 )) return 0;
+		else printf("%s: Action inexistante\n", commande);
+	}
 }
 
 void helpServeur() {
-	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu");
-	printf("\n!invite \"pseudonyme\" :\n\tPermet d'inviter un utilisateur");
-	printf("\n!accept \"pseudonyme\" :\n\tPermet d'accepter l'inviation d'un utilisateur");
-	printf("\n!create \"nom de salon\" :\n\tPermet de créer un salon");
-	printf("\n!delete \"nom du salon\" :\n\tPermet de détruire un salon");
-	printf("\n!role \"pseudonyme\" \"nom du role\" :\n\tPermet d'affecter un membre à un rôle");
-	printf("\n!perm \"nom de rôle\" \"permissions\" :\n\tPermet de créer un rôle");
-	printf("\n!back :\n\tRetour à l'accueil");
-	printf("\n!exit :\n\tQuitter");
+	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu\n");
+	printf("\n!invite \"pseudonyme\" :\n\tPermet d'inviter un utilisateur\n");
+	printf("\n!accept \"pseudonyme\" :\n\tPermet d'accepter l'inviation d'un utilisateur\n");
+	printf("\n!create \"nom de salon\" :\n\tPermet de créer un salon\n");
+	printf("\n!delete \"nom du salon\" :\n\tPermet de détruire un salon\n");
+	printf("\n!role \"pseudonyme\" \"nom du role\" :\n\tPermet d'affecter un membre à un rôle\n");
+	printf("\n!perm \"nom de rôle\" \"permissions\" :\n\tPermet de créer un rôle\n");
+	printf("\n!back :\n\tRetour à l'accueil\n");
+	printf("\n!exit :\n\tQuitter\n");
 }
 
-int invitation() {
-	char pseudo[30];
-	char nomServeur[30];
-	printf("Entrez le pseudonyme du destinataire :");
-	scanf("%s", pseudo);
-	printf("\nEntrez le nom du serveur :");
-	scanf("%s", nomServeur);
-	
-	FILE *fichier = fopen("rsc/serveur.dat","r");
-	
-	if (fichier == NULL) {
-		printf("Erreur: impossible d'accéder à la base de données");
-		return -1;
+int invitation(unsigned long int idServ) {
+	char *pseudo = strtok(NULL, " "); 
+	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
+	;
+	if (idU == 0) {
+		printf("\n%s n'existe pas !\n", pseudo);
+		return 0;		
 	}
 	
-	Serveur serveur;
-	int i = 0;
-	for(; fread(&serveur, sizeof(Serveur), 1, fichier) != EOF && i < bdd_getSize_table("serveur"); ++i) {
-		if(!(strcmp(serveur.nom, nomServeur))) break;
-	}
-	fclose(fichier);
-	
-	if (!(i < bdd_getSize_table("serveur"))) {
-		printf("\nLe serveur nommé %s n'existe pas !\n", nomServeur);
-		return 1;
-	}
-
-	fichier = fopen("rsc/utilisateur.dat", "r");
-	
-	
-	if (fichier == NULL) {
-		printf("Erreur: impossible d'accéder à la base de données");
-		return -1;
-	}
-	
-	Utilisateur utilisateur;
-	for(i = 0; fread(&utilisateur, sizeof(Utilisateur), 1, fichier) != EOF && i < bdd_getSize_table("utilisateur"); ++i) {
-		if(!(strcmp(utilisateur.pseudo, pseudo))) break;
-	}
-	fclose(fichier);
-	
-	if (!(i < bdd_getSize_table("utilisateur"))) {
-		printf("\nL'utilisateur nommé %s n'existe pas !\n", pseudo);
-		return 1;
-	}
-	
-	bdd_creer_invitation(utilisateur.id ,serveur.id);
+	bdd_creer_invitation(idU ,idServ);
 	return 0;
 }
 
