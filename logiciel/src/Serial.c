@@ -10,6 +10,7 @@ unsigned long int incrementeSerial(char nomTable[]) {	//Permet d'incrementer le 
 			fseek(fichier, -sizeof(unsigned long int), SEEK_CUR);
 			unsigned long int valSerialFinale = serial.count + 1;
 			fwrite(&valSerialFinale, sizeof(unsigned long int), 1, fichier);
+			fclose(fichier);
 			return serial.count;
 		}
 	}
