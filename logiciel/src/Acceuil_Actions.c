@@ -15,7 +15,12 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "!exit"))) return 0;
     	else if(!(strcmp(commande, "!create")))create_serv(user_id);
     	else if(!(strcmp(commande, "!listeserv")))list_serv(user_id);
-    	else if(!(strcmp(commande, "!debug"))){
+    	else if(!(strcmp(commande, "!open"))){
+    		unsigned long int id_serveur = openServeur(user_id);
+    		if(id_serveur!=0){
+    			if(menuServeur(id_serveur,user_id)==0)return 0;
+    		}
+    	}else if(!(strcmp(commande, "!debug"))){
     		bdd_afficher_serveurs();
     		bdd_afficher_membres();
     		
@@ -188,5 +193,23 @@ int list_invit(unsigned int long user_id){
 		++i;
 	}
 	fclose(fichier);
+	return 0;
+}
+
+
+unsigned long int openServeur(unsigned int long user_id){
+	char * servername=strtok(NULL," ");
+	if(servername==NULL || strlen(servername)>30){
+		printf("commande incorrecte\n");
+		return 1;
+	}
+	unsigned long int serveur_id=bdd_getServeur_id(servername);
+	if(serveur_id==0){
+		printf("serveur inexistant\n");
+	}else if(bdd_check_membre(serveur_id,user_id)){
+		return serveur_id;
+	}else{
+		printf("Vous n'etes pas membre de ce serveur\n");
+	}
 	return 0;
 }
