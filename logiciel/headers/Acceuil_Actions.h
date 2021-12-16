@@ -1,12 +1,11 @@
-#ifndef __ACCEUIL_ACTIONS_H_
-#define __ACCEUIL_ACTIONS_H_
+#ifndef __ACCEUIL_ACTION_H__
+#define __ACCEUIL_ACTION_H__
 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include "Table.h"
 #include "Serveur.h"
 
-void help_acceuil();
-int create_serv(char commande[], unsigned long int idProprio);
-
+int menu_Acceuil(unsigned long int user_id);
+int delete_serveur(char commande[], unsigned long int user_id);
 #endif
