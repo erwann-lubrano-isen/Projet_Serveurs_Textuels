@@ -4,6 +4,7 @@ int menu_Acceuil(unsigned long int user_id){
 	char buffer[128];
     
     do{
+    	prompt_acceuil(user_id);
     	fgets(buffer, 127, stdin);
     	int lenght = strlen(buffer);
     	if(lenght==1)continue;
@@ -11,18 +12,18 @@ int menu_Acceuil(unsigned long int user_id){
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
    
-    	if(!(strcmp(commande, "!help")));
-		else if(!(strcmp(commande, "!back")))return 1;
-    	else if(!(strcmp(commande, "!exit"))) return 0;
-    	else if(!(strcmp(commande, "!create")))create_serv(user_id);
-    	else if(!(strcmp(commande, "!listeserv")))list_serv(user_id);
-    	else if(!(strcmp(commande, "!quit")))quit_serv(user_id);
-    	else if(!(strcmp(commande, "!open"))){
+    	if(!(strcmp(commande, "help")));
+		else if(!(strcmp(commande, "back")))return 1;
+    	else if(!(strcmp(commande, "exit"))) return 0;
+    	else if(!(strcmp(commande, "create")))create_serv(user_id);
+    	else if(!(strcmp(commande, "listeserv")))list_serv(user_id);
+    	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
+    	else if(!(strcmp(commande, "open"))){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
     			if(menuServeur(id_serveur,user_id)==0)return 0;
     		}
-    	}else if(!(strcmp(commande, "!debug"))){
+    	}else if(!(strcmp(commande, "debug"))){
     		bdd_afficher_serveurs();
     		bdd_afficher_membres();
     		
@@ -244,7 +245,7 @@ unsigned long int openServeur(unsigned int long user_id){
 	char * servername=strtok(NULL," ");
 	if(servername==NULL || strlen(servername)>30){
 		printf("commande incorrecte\n");
-		return 1;
+		return 0;
 	}
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
@@ -255,4 +256,21 @@ unsigned long int openServeur(unsigned int long user_id){
 		printf("Vous n'etes pas membre de ce serveur\n");
 	}
 	return 0;
+}
+
+void prompt_acceuil(unsigned long int user_id){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+			fclose(file);
+			printf(">%s $ ",utilisateur.pseudo);
+			return;
+		}
+		++i;
+	}
+	fclose(file);
 }
