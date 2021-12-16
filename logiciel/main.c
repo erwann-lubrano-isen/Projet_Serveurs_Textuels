@@ -2,8 +2,9 @@
 #include "headers/Serveur.h"
 #include "headers/Salon.h"
 #include "headers/Utilisateur.h"
+#include "headers/Connexions_Action.h"
 
 int main() {
-	bdd_afficher_utilisateur();
-	return menuServeur(1);
+    menuConnexion();
+	return 0;
 }

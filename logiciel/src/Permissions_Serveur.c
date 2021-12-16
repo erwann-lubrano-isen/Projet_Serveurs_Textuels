@@ -4,12 +4,14 @@
 
 int insert_perm_serveur(unsigned long int id_serveur, unsigned long int User, char perms[]){
 	FILE * fichier;
-	fichier = fopen("rsc/permission_serveur.dat","a"); //ouverture de salon.dat
+	fichier = fopen("rsc/permission_serveur.dat","r+"); //ouverture de salon.dat
 	if(fichier == NULL)return -1;
 	Permissions_Serveur perm_serveur;
 	strcpy(perm_serveur.perms, perms);
 	perm_serveur.id_serveur=id_serveur;
 	perm_serveur.User=User;
+	fseek(fichier, sizeof(Permissions_Serveur)*(bdd_getSize_table("permission_serveur")), SEEK_SET);
+	fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier);
 	fclose(fichier);
 	bdd_increment_table("permission_serveur");
 	return 0;

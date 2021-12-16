@@ -4,7 +4,6 @@
 
 
 void affich_help(){
-puts("gfre");
 	printf("Liste des commandes disponibles : \n");
 	printf("\t !login userID MotDePasse \n");
 	printf("\t !signup pseudo MotDePasse \n");

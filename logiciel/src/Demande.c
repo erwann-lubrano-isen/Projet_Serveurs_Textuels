@@ -5,11 +5,12 @@
 
 int bdd_stock_demande(unsigned long int user_id, unsigned long int server_id ){
 	FILE * fichier;
-	fichier = fopen("rsc/demande.dat","a"); //ouverture de salon.dat
+	fichier = fopen("rsc/demande.dat","r+"); //ouverture de salon.dat
 	if(fichier == NULL)return -1;
 	Demande demande;
 	demande.user_id=user_id;
 	demande.server_id=server_id;
+	fseek(fichier, sizeof(Demande)*(bdd_getSize_table("demande")), SEEK_SET);
 	fwrite(&demande, sizeof(Demande), 1, fichier);
 	fclose(fichier);
 	//serveur.id = incrementeSerial("serveur"); //Incrementation de serial

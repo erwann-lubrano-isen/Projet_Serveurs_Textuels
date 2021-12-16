@@ -29,9 +29,10 @@ int bdd_create_Salon(char nom[], unsigned long int idServeur){
 	
 	FILE * fichier;
 	
-	fichier = fopen("rsc/salon.dat","a"); //ouverture de salon.dat
+	fichier = fopen("rsc/salon.dat","r+"); //ouverture de salon.dat
 	if(fichier == NULL)return 0;
 	salon.idSalon=incrementeSerial("salon");	//renvoie la taille de salon (en fct de incrementation ou decrementation, valeur change)
+	fseek(fichier, sizeof(Salon)*(bdd_getSize_table("salon")), SEEK_SET);
 	fwrite(&salon,sizeof(Salon),1,fichier); // ecriture du nouveau salon dans le fichier
 	fclose(fichier);	
 	bdd_increment_table("salon");
