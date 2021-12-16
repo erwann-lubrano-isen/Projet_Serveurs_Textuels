@@ -14,9 +14,11 @@ int menu_Acceuil(unsigned long int user_id){
 		else if(!(strcmp(commande, "!back")))return 1;
     	else if(!(strcmp(commande, "!exit"))) return 0;
     	else if(!(strcmp(commande, "!create")))create_serv(user_id);
+    	else if(!(strcmp(commande, "!listeserv")))list_serv(user_id);
     	else if(!(strcmp(commande, "!debug"))){
     		bdd_afficher_serveurs();
     		bdd_afficher_membres();
+    		
     	}else printf("Action inexistante\n");
 
     }while(1);    
@@ -132,16 +134,29 @@ int join_serv(unsigned long int userid){
 	return 0;
 }
 
-void list_serv(){
+void list_serv(unsigned int long user_id){
 	FILE * fichier;
-	fichier = fopen("rsc/serveur.dat","r");
-	Serveur serveur;
-	int size = bdd_getSize_table("salon");
+	fichier = fopen("rsc/membre.dat","r");
+	Membre membre;
+	int size = bdd_getSize_table("membre");
 	if(fichier == NULL)return -1;
 	int i=0;
-	while(i<size){
-		printf("id_serv : %lu Nom serv : %s id_proprio : %lu \n",serveur.id,serveur.nom,serveur.idProprio);
+	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
+		if(membre.idUtilisateur==user_id){
+			FILE * file;
+			file = fopen("rsc/serveur.dat","r");
+			Serveur serveur;
+			int size = bdd_getSize_table("serveur");
+			if(file == NULL)return -1;
+			int j=0;
+			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<size){
+				if(membre.idServeur=serveur.id){
+					printf("\t%s\n",serveur.nom);
+				}
+				++j;
+			}
 		}
 		++i;
-		fclose(fichier);
+	}
+	fclose(fichier);
 }
