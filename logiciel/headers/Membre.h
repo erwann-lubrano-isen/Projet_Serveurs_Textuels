@@ -20,5 +20,4 @@ int bdd_supprimer_membre(unsigned long int idServeur, unsigned long idUtilisateu
 void bdd_afficher_membres();
 int supprimer_membres_serveur(unsigned long int idServeur);
 
-
 #endif
