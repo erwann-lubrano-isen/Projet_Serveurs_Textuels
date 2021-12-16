@@ -40,29 +40,40 @@ int invitation() {
 	FILE *fichier = fopen("rsc/serveur.dat","r");
 	
 	if (fichier == NULL) {
-	
-	
+		printf("Erreur: impossible d'accéder à la base de données");
+		return -1;
 	}
+	
 	Serveur serveur;
-	for(int i = 0; fread(&serveur, sizeof(Serveur), 1, fichier) != EOF && i < bdd_getSize_table("serveur"); ++i) {	///!\ PREVOIR UTILISATEUR INTROUVABLE
+	int i = 0;
+	for(; fread(&serveur, sizeof(Serveur), 1, fichier) != EOF && i < bdd_getSize_table("serveur"); ++i) {
 		if(!(strcmp(serveur.nom, nomServeur))) break;
 	}
 	fclose(fichier);
 	
+	if (!(i < bdd_getSize_table("serveur"))) {
+		printf("\nLe serveur nommé %s n'existe pas !\n", nomServeur);
+		return 1;
+	}
+
 	fichier = fopen("rsc/utilisateur.dat", "r");
 	
 	
 	if (fichier == NULL) {
-	
-	
+		printf("Erreur: impossible d'accéder à la base de données");
+		return -1;
 	}
 	
-	
 	utilisateur utilisateur;
-	for(int i = 0; fread(&utilisateur, sizeof(Utilisateur), 1, fichier) != EOF && i < bdd_getSize_table("utilisateur"); ++i) {
+	for(i = 0; fread(&utilisateur, sizeof(Utilisateur), 1, fichier) != EOF && i < bdd_getSize_table("utilisateur"); ++i) {
 		if(!(strcmp(utilisateur.nom, pseudo))) break;
 	}
 	fclose(fichier);
+	
+	if (!(i < bdd_getSize_table("utilisateur"))) {
+		printf("\nL'utilisateur nommé %s n'existe pas !\n", pseudo);
+		return 1;
+	}
 	
 	bdd_creer_invitation(utilisateur.id ,serveur.id)
 	return 0;
