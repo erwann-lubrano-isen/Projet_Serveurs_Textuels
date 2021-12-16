@@ -39,7 +39,6 @@ void helpServeur() {
 int invitation(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " "); 
 	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
-	;
 	if (idU == 0) {
 		printf("\n%s n'existe pas !\n", pseudo);
 		return 0;		
@@ -49,6 +48,33 @@ int invitation(unsigned long int idServ) {
 	return 0;
 }
 
+/*int accept (unsigned long int idServ) {
+	char *pseudo = strtok(NULL, " "); 
+	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
+	
+	if (idU == 0) {
+		printf("\n%s n'existe pas !\n", pseudo);
+		return 0;		
+	}
+	
+	FILE *fichier = fopen("rsc/demande.dat", "r");
+	Demande demande;
+	
+	int UtilisateurIntrouvable = 0;
+	int AucuneDemande = 0;
+	int i;
+	
+	for(i = 0; i < bdd_getSize_table("demande") && fread(&demande, sizeof(Demande), 1, fichier) != EOF; ++i) {
+		if(demande.user_id == idU)
+	
+	
+	}
+
+
+
+
+}
+*/
 
 
 
