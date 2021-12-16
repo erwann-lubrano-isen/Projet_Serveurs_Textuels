@@ -6,6 +6,7 @@ int menu_Acceuil(unsigned long int user_id){
     do{
     	fgets(buffer, 127, stdin);
     	int lenght = strlen(buffer);
+    	if(lenght==1)continue;
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
@@ -15,6 +16,7 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "!exit"))) return 0;
     	else if(!(strcmp(commande, "!create")))create_serv(user_id);
     	else if(!(strcmp(commande, "!listeserv")))list_serv(user_id);
+    	else if(!(strcmp(commande, "!quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "!open"))){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
@@ -160,6 +162,7 @@ int list_serv(unsigned int long user_id){
 				}
 				++j;
 			}
+			break;
 		}
 		++i;
 	}
@@ -198,7 +201,11 @@ int list_invit(unsigned int long user_id){
 
 
 int quit_serv(unsigned long int userid){
-
+	char * servername=strtok(NULL," ");
+	if(servername==NULL || strlen(servername)>30){
+		printf("commande incorrecte\n");
+		return 1;
+	}
 	FILE * fichier = fopen("rsc/serveur.dat", "r+");
 	//FILE * file = fopen("rsc/membre.dat", "r+");
 	//Membre membre;

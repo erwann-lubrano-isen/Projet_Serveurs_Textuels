@@ -5,6 +5,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		char buffer[128];
 		fgets(buffer, 127, stdin);
 		int lenght = strlen(buffer);
+		if(lenght==1)continue;
 		buffer[lenght-1]=' ';
 		buffer[lenght]='\0';
 			

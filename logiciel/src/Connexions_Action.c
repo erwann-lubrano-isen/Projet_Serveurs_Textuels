@@ -84,6 +84,7 @@ int menuConnexion() {
     do{
     	fgets(buffer, 127, stdin);
     	int lenght = strlen(buffer);
+    	if(lenght==1)continue;
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
     	char *commande = strtok(buffer, " ");
