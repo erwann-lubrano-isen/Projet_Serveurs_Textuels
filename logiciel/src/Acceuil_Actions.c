@@ -13,24 +13,28 @@ int menu_Acceuil(unsigned long int user_id){
     	char *commande = strtok(buffer, " ");
    
     	if(!(strcmp(commande, "help")))help_acceuil();
-		else if(!(strcmp(commande, "back")))return 1;
-    	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "create")))create_serv(user_id);
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
-    	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
-    	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
-    	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	//else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
+    	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
+    	
+    	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
+	else if(!(strcmp(commande, "logout")))return 1;
+    	else if(!(strcmp(commande, "exit"))) return 0;
+    	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
+    	else if(!(strcmp(commande, "die")))bdd_supprimer_utilisateur(user_id);
+    	
     	else if(!(strcmp(commande, "open"))){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
     			if(menuServeur(id_serveur,user_id)==0)return 0;
     		}
-    	}else if(!(strcmp(commande, "debug"))){
+    	}
+    	else if(!(strcmp(commande, "debug"))){
     		bdd_afficher_serveurs();
-    		bdd_afficher_membres();
-    		
-    	}else printf("Action inexistante\n");
+    		bdd_afficher_membres();	
+    	}
+    	else printf("Action inexistante\n");
 
     }while(1);    
     return 0;
