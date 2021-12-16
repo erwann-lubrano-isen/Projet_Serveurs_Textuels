@@ -8,6 +8,7 @@
 #include "Utilisateur.h"
 #include "Table.h"
 #include "Invitation.h"
+#include "MenuSalon.h"
 
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 void helpServeur();

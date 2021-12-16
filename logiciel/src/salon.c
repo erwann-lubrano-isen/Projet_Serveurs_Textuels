@@ -20,7 +20,7 @@ int bdd_Salon_check(unsigned long int idSalon, unsigned long int idServeur){
 	fclose(fichier);
 	return  0;		//si aucune égalitée retrouvée, return 0
 	//penser a serial
-	}
+}
 
 int bdd_create_Salon(char nom[], unsigned long int idServeur){
 	Salon salon;
@@ -122,5 +122,21 @@ int supprimer_salons_serveur(unsigned long int idServeur){
 	return 0;
 }
 		
+unsigned long int bdd_getSalon_id(unsigned long int id_serveur, const char * name){
+	int size = bdd_getSize_table("salon");
+	int i =0;
+	Salon salon;
+	FILE * file = NULL;
+	file = fopen("rsc/salon.dat","r");
+	while(fread(&salon, sizeof(Salon), 1, file) != EOF && i <= size){
+		if(strcmp(salon.nom,name)==0 && salon.idServeur==id_serveur){
+			fclose(file);
+			return salon.idSalon;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
 
 

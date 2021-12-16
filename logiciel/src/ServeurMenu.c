@@ -19,7 +19,19 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		else if(strcmp(commande, "create") == 0) return 4;
 		else if(strcmp(commande, "delete") == 0) return 5;
 		else if((strcmp(commande, "role") == 0 ));
-		else if(strcmp(commande, "perm") == 0 ) return 7;
+		else if((strcmp(commande, "open")==0)){
+			char * salonname = strtok(NULL," ");
+			if(salonname == NULL || strlen(salonname) > 30){
+				printf("commande invalide\n");
+			}else{
+				unsigned long int salon_id = bdd_getSalon_id(idServ, salonname);
+				if(salon_id==0){
+					printf("Salon inexistant\n");
+				}else{
+					menuSalon(salon_id, idUtilisateur, idServ);
+				}
+			}
+		}else if(strcmp(commande, "perm") == 0 ) return 7;
 		else if((strcmp(commande, "back") == 0 )) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
