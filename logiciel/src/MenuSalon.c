@@ -4,6 +4,7 @@
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
     char buffer[128];
     do{
+    	prompt_salon(id_utilisateur, id_serveur,  id_salon);
     	fgets(buffer, 127, stdin);
     	if(buffer[0]==' '){
     		printf("Action inexistante\n");
@@ -61,36 +62,7 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	return 0;
 }
 
-/* DOIT ETRE DANS MENU SERVEUR 
-int list_salon(unsigned int long user_id){
-FILE * fichier;
-	fichier = fopen("rsc/membre.dat","r");
-	Membre membre;
-	int size = bdd_getSize_table("membre");
-	if(fichier == NULL)return -1;
-	int i=0;
-	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
-		if(membre.idUtilisateur==user_id){
-			FILE * file;
-			file = fopen("rsc/salon.dat","r");
-			Salon salon;
-			int sizes = bdd_getSize_table("salon");
-			if(file == NULL)return -1;
-			int j=0;
-			while(fread(&salon,sizeof(Salon),1,file)!=EOF&&j<sizes){
-				if(membre.idServeur=salon.idServeur){
-					printf("\t%s\n",salon.nom)
-				}
-				++j;
-			}
-			break;
-		}
-		++i;
-	}
-	fclose(fichier);
-	return 0;
-}
-*/
+
 
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
 	if(!readPerm(id_salon,id_utilisateur))return 1;
@@ -160,7 +132,46 @@ void permMembresSalon(unsigned long int idSalon) {
 	fclose(fichier);
 	return;
 }
-
+void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsigned long int idSalon){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+				int size2 = bdd_getSize_table("serveur");
+				int j =0;
+				Serveur serveur;
+				FILE * file2 = NULL;
+				file2 = fopen("rsc/serveur.dat","r");
+				while(fread(&serveur, sizeof(Serveur), 1, file2) != EOF && j <= size2){
+					if(serveur_id==serveur.id){
+						int size3 = bdd_getSize_table("salon");
+						int x =0;
+						Salon salon;
+						FILE * file3 = NULL;
+						file3 = fopen("rsc/salon.dat","r");
+						while(fread(&salon, sizeof(Salon), 1, file3) != EOF && x <= size3){
+							if(idSalon==salon.idSalon){
+						
+								printf(">%s/%s/%s $ ",utilisateur.pseudo,serveur.nom,salon.nom);
+								fclose(file);
+								fclose(file2);
+								fclose(file3);
+								return;
+							}x++;
+						}
+					fclose(file3);
+					}
+					++j;
+				}
+				fclose(file2);
+		}
+		++i;
+	}
+fclose(file);
+}
 /*
 unsigned long int id_salon;
 	unsigned long int id_utilisateur;

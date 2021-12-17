@@ -30,7 +30,7 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
     		bdd_supprimer_utilisateur(user_id);
-    		printf("Utilisateur %lu ", user_id);
+    		printf("Utilisateur %lu supprimé\n", user_id);
     		return 1;
     	}
     	else if(!(strcmp(commande, "open"))){
@@ -158,7 +158,7 @@ int join_serv(unsigned long int userid){
 	}
 	fclose(fichier);
 	bdd_stock_demande(userid,serveur_id);
-	printf("Demande envoyé à %s", servername);
+	printf("Demande envoyé à %s\n", servername);
 	return 0;
 }
 
@@ -178,7 +178,7 @@ int list_serv(unsigned int long user_id){
 			if(file == NULL)return -1;
 			int j=0;
 			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<sizes){
-				if(membre.idServeur=serveur.id){
+				if(membre.idServeur==serveur.id){
 					printf("\t%s\n",serveur.nom);
 				}
 				++j;

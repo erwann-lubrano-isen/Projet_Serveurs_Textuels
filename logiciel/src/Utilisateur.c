@@ -27,6 +27,8 @@ int bdd_supprimer_utilisateur(unsigned long int id){
 	bdd_supprimer_demande_parId(id);
 	//invite
 	bdd_supprimer_invitation_parId(id);
+	//serveur
+	bdd_supprimer_serveur_parId(id);
 
 	int size = bdd_getSize_table("utilisateur");
 	if(size==0)return 0;
