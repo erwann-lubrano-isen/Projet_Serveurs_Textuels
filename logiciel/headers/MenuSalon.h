@@ -15,4 +15,5 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur);
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur);
 //int list_salon(unsigned int long user_id); DOIT ETRE FAIT DANS MENUSERVEUR ?
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon);
+void permMembresSalon(unsigned long int idSalon);
 #endif

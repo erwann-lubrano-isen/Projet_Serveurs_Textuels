@@ -13,6 +13,8 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	if(fichier == NULL) return -1; //Vérification d'erreur
 	//** mettre l'utilisateur qui cree le serveur, "administrateur", dans role de membre, donc ça cree le 1er membre du serveur
 	
+	insert_perm_serveur(serveur.id, "Admin", "wx");
+	insert_perm_serveur(serveur.id, "Membre", "--");
 	fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
 	bdd_increment_table("serveur");
 	fwrite(&serveur, sizeof(Serveur), 1, fichier);

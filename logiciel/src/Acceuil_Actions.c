@@ -90,7 +90,6 @@ int create_serv(unsigned long int idProprio){
 	fclose(fichier);
 	bd_creationServeur(servname,idProprio);
 	bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
-	insert_perm_serveur(bdd_getServeur_id(servname), "Admin", "wx");
 	
 	return 0;
 }

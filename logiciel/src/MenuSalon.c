@@ -13,17 +13,16 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	if(lenght<=1)continue;    
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
-    	
+    	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
-    	
-
     	if(!(strcmp(commande, "help"))) helpSalon();
-    	
-    	else if(!(strcmp(commande, "perm"))&&isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	else if(!(strcmp(commande, "perm")) && isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
-    	else if(!(strcmp(commande, "exit\n"))) return 0;
-    	else if(!(strcmp(commande, "back\n"))) return 1;
-    	else if(!(strcmp(commande, "display\n")))displayMsg(id_utilisateur, id_serveur, id_salon);
+    	else if(!(strcmp(commande, "exit"))) return 0;
+    	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
+    	else if(!(strcmp(commande, "back"))) return 1;
+    	else if(!(strcmp(commande, "display"))) displayMsg(id_utilisateur, id_serveur, id_salon);
+    	
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
 }
@@ -32,6 +31,7 @@ void helpSalon(){
 	printf("-------------Voici la liste des commandes--------------\n");
 	printf("!perm rolename perm :  Change les droits pour le salon\n"); // if (isAdmin(id_user, id_serveur))
 	printf("!msg text: Envoyer un message\n");
+	printf("!role : Voir les roles du salons\n");
 	printf("!exit : Quitter le programme\n");
 	printf("!back : Retur en arrière\n");
 	printf("!display : Afficher tout les messages\n");
@@ -39,7 +39,9 @@ void helpSalon(){
 
 int permSalon(unsigned long int id_salon){
 	char *role = strtok(NULL, " ");
-    	char *perm = strtok(NULL, "\n");
+    	char *perm = strtok(NULL, " ");
+    	printf("\nlongueur de perm %lu\n", strlen(perm));
+    	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
     	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
     		printf("Commande invalide\n");
     		return -1;
@@ -91,10 +93,8 @@ FILE * fichier;
 */
 
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
-
 	if(!readPerm(id_salon,id_utilisateur))return 1;
 	int sizeMessage = bdd_getSize_table("message");
-	puts("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 	Message message;
 	int nbMessage=0;
 	{
@@ -102,7 +102,6 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		FILE * file3 = NULL;
 		file3 = fopen("rsc/message.dat","r");
 		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
-		puts("eee");
 			if(message.id_salon==id_salon){
 				++nbMessage;
 			}
@@ -117,7 +116,6 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		FILE * file3 = NULL;
 		file3 = fopen("rsc/message.dat","r");
 		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
-		puts("eee");
 			if(message.id_salon==id_salon){
 				memcpy(&msgs[nbMessage],&message,sizeof(Message));
 				++nbMessage;
@@ -141,6 +139,26 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		printf("%s\n%s\n\n",ctime(&msg->date),msg->texte);
 	}
 
+}
+void permMembresSalon(unsigned long int idSalon) {
+
+	int size = bdd_getSize_table("permission_salon");
+	FILE *fichier = fopen("rsc/permission_salon.dat", "r");
+	Permissions_Salon perm;
+	char nomRole[30];
+	int i = 0;
+	
+	while(i < size && fread(&perm, sizeof(Permissions_Salon), 1, fichier) != EOF) 
+	{	
+		if(perm.id_salon==idSalon) 
+		{
+			printf("%s [%s]\n", perm.Role, perm.perms);
+		
+		}
+	i++;
+	}
+	fclose(fichier);
+	return;
 }
 
 /*
