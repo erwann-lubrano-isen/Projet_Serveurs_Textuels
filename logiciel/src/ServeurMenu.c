@@ -69,11 +69,11 @@ int invitation(unsigned long int idServ) {
 		printf("\n%s n'existe pas !\n", pseudo);
 		return 0;		
 	}
-	
+	FILE * fichier=NULL;
 	fichier = fopen("rsc/demande.dat","r");
 	Demande demande;
-	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&demande, sizeof(Demande), 1, fichier)) {
-		if(demande.user_id == user_id, demande.server_id == server_id) {
+	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&demande, sizeof(Demande), 1, fichier);++i) {
+		if(demande.user_id == idU, demande.server_id == idServ) {
 			bdd_creer_membre(idServ, idU, "Membre");
 			printf("%s est devenu membre du serveur\n", pseudo);
 			bdd_supprimer_invitation(idU, idServ);
@@ -194,11 +194,15 @@ int assignationRole(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " ");
 	char *nomRole = strtok(NULL, " ");
 	
-	FILE *fichier = fopen("permission_serveur.dat", "r+");
+	if(pseudo==NULL || nomRole== NULL){
+		return -2;
+	}
+	
+	FILE *fichier = fopen("rsc/membre.dat", "r+");
 	Membre membre;
 	Permissions_Serveur PS;
 	int i;
-	for(i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {//Vérification de l'existance du role
+	/*for(i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {//Vérification de l'existance du role
 		if(strcmp(PS.Role, nomRole) == 0) {
 			strcpy(membre.role, nomRole);
 			break;
@@ -213,16 +217,18 @@ int assignationRole(unsigned long int idServ) {
 	if(bdd_getUtilisateur_id(pseudo) == 0) {
 		printf("\n");
 	
-	}
+	}*/
 	
+	int sizeMembre=bdd_getSize_table("membre") ;
+	unsigned long int user_id=bdd_getUtilisateur_id(pseudo);
 	
-	
-	for(i = 0; i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
-		if(membre.idUtilisateur == bdd_getUtilisateur_id(pseudo)) {
+	for(i = 0; i < sizeMembre && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
+		if(membre.idUtilisateur == user_id) {
 			strcpy(membre.role, nomRole);
-			fseek(fichier, sizeof(Membre)*(i-1), SEEK_SET);
+			fseek(fichier, -sizeof(Membre), SEEK_CUR);
 			fwrite(&membre, sizeof(Membre), 1, fichier);
 			printf("%s est désormais %s\n", pseudo, nomRole);
+			fclose(fichier);
 			return 0;
 		}
 	}

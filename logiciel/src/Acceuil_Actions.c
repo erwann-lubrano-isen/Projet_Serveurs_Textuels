@@ -136,12 +136,12 @@ int join_serv(unsigned long int userid){
 		return 1;
 	}
 	
-	FILE * fichier = fopen("rsc/invitation.dat");
+	FILE * fichier = fopen("rsc/invitation.dat","r");
 	Invitation invitation;
 	unsigned long int idServ = bdd_getServeur_id(servername);
 	
 	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
-		if(invitation.userid == userid && invitation.server_id == idServ) {
+		if(invitation.user_id == userid && invitation.server_id == idServ) {
 			bdd_creer_membre(idServ, userid, "Membre");
 			printf("Vous avez rejoint %s\n", servername);
 			bdd_supprimer_invitation(userid, idServ);
