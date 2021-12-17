@@ -4,17 +4,26 @@
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
     char buffer[128];
     do{
+    	prompt_salon(id_utilisateur, id_serveur,  id_salon);
     	fgets(buffer, 127, stdin);
+    	if(buffer[0]==' '){
+    		printf("Action inexistante\n");
+    		continue;
+    	}
+    	int lenght = strlen(buffer); 
+    	if(lenght<=1)continue;    
+    	buffer[lenght-1]=' ';
+    	buffer[lenght]='\0';
+    	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
-    	
-
-    	if(!(strcmp(commande, "help\n"))) helpSalon();
-    	
-    	else if(!(strcmp(commande, "perm"))&&isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	if(!(strcmp(commande, "help"))) helpSalon();
+    	else if(!(strcmp(commande, "perm")) && isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
-    	else if(!(strcmp(commande, "exit\n"))) return 0;
-    	else if(!(strcmp(commande, "back\n"))) return 1;
-    	else if(!(strcmp(commande, "display\n")))displayMsg(id_utilisateur, id_serveur, id_salon);
+    	else if(!(strcmp(commande, "exit"))) return 0;
+    	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
+    	else if(!(strcmp(commande, "back"))) return 1;
+    	else if(!(strcmp(commande, "display"))) displayMsg(id_utilisateur, id_serveur, id_salon);
+    	
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
 }
@@ -23,6 +32,7 @@ void helpSalon(){
 	printf("-------------Voici la liste des commandes--------------\n");
 	printf("!perm rolename perm :  Change les droits pour le salon\n"); // if (isAdmin(id_user, id_serveur))
 	printf("!msg text: Envoyer un message\n");
+	printf("!role : Voir les roles du salons\n");
 	printf("!exit : Quitter le programme\n");
 	printf("!back : Retur en arrière\n");
 	printf("!display : Afficher tout les messages\n");
@@ -30,7 +40,9 @@ void helpSalon(){
 
 int permSalon(unsigned long int id_salon){
 	char *role = strtok(NULL, " ");
-    	char *perm = strtok(NULL, "\n");
+    	char *perm = strtok(NULL, " ");
+    	printf("\nlongueur de perm %lu\n", strlen(perm));
+    	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
     	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
     		printf("Commande invalide\n");
     		return -1;
@@ -50,42 +62,11 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	return 0;
 }
 
-/* DOIT ETRE DANS MENU SERVEUR 
-int list_salon(unsigned int long user_id){
-FILE * fichier;
-	fichier = fopen("rsc/membre.dat","r");
-	Membre membre;
-	int size = bdd_getSize_table("membre");
-	if(fichier == NULL)return -1;
-	int i=0;
-	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
-		if(membre.idUtilisateur==user_id){
-			FILE * file;
-			file = fopen("rsc/salon.dat","r");
-			Salon salon;
-			int sizes = bdd_getSize_table("salon");
-			if(file == NULL)return -1;
-			int j=0;
-			while(fread(&salon,sizeof(Salon),1,file)!=EOF&&j<sizes){
-				if(membre.idServeur=salon.idServeur){
-					printf("\t%s\n",salon.nom)
-				}
-				++j;
-			}
-			break;
-		}
-		++i;
-	}
-	fclose(fichier);
-	return 0;
-}
-*/
+
 
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
-
 	if(!readPerm(id_salon,id_utilisateur))return 1;
 	int sizeMessage = bdd_getSize_table("message");
-	puts("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 	Message message;
 	int nbMessage=0;
 	{
@@ -93,7 +74,6 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		FILE * file3 = NULL;
 		file3 = fopen("rsc/message.dat","r");
 		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
-		puts("eee");
 			if(message.id_salon==id_salon){
 				++nbMessage;
 			}
@@ -108,7 +88,6 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		FILE * file3 = NULL;
 		file3 = fopen("rsc/message.dat","r");
 		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
-		puts("eee");
 			if(message.id_salon==id_salon){
 				memcpy(&msgs[nbMessage],&message,sizeof(Message));
 				++nbMessage;
@@ -133,7 +112,66 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 	}
 
 }
+void permMembresSalon(unsigned long int idSalon) {
 
+	int size = bdd_getSize_table("permission_salon");
+	FILE *fichier = fopen("rsc/permission_salon.dat", "r");
+	Permissions_Salon perm;
+	char nomRole[30];
+	int i = 0;
+	
+	while(i < size && fread(&perm, sizeof(Permissions_Salon), 1, fichier) != EOF) 
+	{	
+		if(perm.id_salon==idSalon) 
+		{
+			printf("%s [%s]\n", perm.Role, perm.perms);
+		
+		}
+	i++;
+	}
+	fclose(fichier);
+	return;
+}
+void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsigned long int idSalon){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+				int size2 = bdd_getSize_table("serveur");
+				int j =0;
+				Serveur serveur;
+				FILE * file2 = NULL;
+				file2 = fopen("rsc/serveur.dat","r");
+				while(fread(&serveur, sizeof(Serveur), 1, file2) != EOF && j <= size2){
+					if(serveur_id==serveur.id){
+						int size3 = bdd_getSize_table("salon");
+						int x =0;
+						Salon salon;
+						FILE * file3 = NULL;
+						file3 = fopen("rsc/salon.dat","r");
+						while(fread(&salon, sizeof(Salon), 1, file3) != EOF && x <= size3){
+							if(idSalon==salon.idSalon){
+						
+								printf(">%s/%s/%s $ ",utilisateur.pseudo,serveur.nom,salon.nom);
+								fclose(file);
+								fclose(file2);
+								fclose(file3);
+								return;
+							}x++;
+						}
+					fclose(file3);
+					}
+					++j;
+				}
+				fclose(file2);
+		}
+		++i;
+	}
+fclose(file);
+}
 /*
 unsigned long int id_salon;
 	unsigned long int id_utilisateur;

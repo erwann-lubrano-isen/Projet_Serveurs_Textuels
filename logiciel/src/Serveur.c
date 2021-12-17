@@ -13,6 +13,8 @@ int bd_creationServeur(const char * const nom, unsigned long int idProprio) {
 	if(fichier == NULL) return -1; //Vérification d'erreur
 	//** mettre l'utilisateur qui cree le serveur, "administrateur", dans role de membre, donc ça cree le 1er membre du serveur
 	
+	insert_perm_serveur(serveur.id, "Admin", "wx");
+	insert_perm_serveur(serveur.id, "Membre", "--");
 	fseek(fichier, sizeof(Serveur)*(bdd_getSize_table("serveur")), SEEK_SET);
 	bdd_increment_table("serveur");
 	fwrite(&serveur, sizeof(Serveur), 1, fichier);
@@ -38,6 +40,40 @@ int bd_suppressionServeur(unsigned long int id) {
 		}
 	}
 	fclose(fichier);	
+}
+int bdd_supprimer_serveur_parId(unsigned long int user_id){
+	int size = bdd_getSize_table("server");
+	if(size==0)return 0;
+	if(size==1){
+		bdd_decrement_table("server");
+		return 0;
+	}
+	int i =0;
+	Serveur serveur;
+	Serveur dernierServeur;
+	FILE * file = NULL;
+	file = fopen("rsc/serveur.dat","r+");
+	fseek(file,sizeof(Serveur)*(size-1),SEEK_SET);
+	fread(&dernierServeur,sizeof(Serveur),1,file);
+	fseek(file,0,SEEK_SET);
+	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i < size){
+		++i;
+		if(serveur.idProprio==user_id){
+			fseek(file,-sizeof(Serveur),SEEK_CUR);
+			fwrite(&dernierServeur,sizeof(Serveur),1,file);
+			if(size>=1){
+				bdd_decrement_table("serveur");
+				--size;
+			}
+			--i;
+			fseek(file,sizeof(Serveur)*(size-1),SEEK_SET);
+			fread(&dernierServeur,sizeof(Serveur),1,file);
+			fseek(file,i*(sizeof(Serveur)),SEEK_SET);
+		}
+		
+	}
+	fclose(file);
+	return 0;
 }
 
 
