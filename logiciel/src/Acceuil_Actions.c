@@ -1,20 +1,20 @@
 #include "../headers/Acceuil_Actions.h"
 
 int menu_Acceuil(unsigned long int user_id){
-	char buffer[128];
-    
+    char buffer[128];
+
     do{
     	prompt_acceuil(user_id);
+    	
     	fgets(buffer, 127, stdin);
     	if(buffer[0]==' '){
     		printf("Action inexistante\n");
     		continue;
     	}
-    	int lenght = strlen(buffer);    //je l'ai mis en commentaire, et j'ai rajouter des \n après les commande seules, dans les "if"
-    	if(lenght<=1)continue;          //car avec cette solution a gauche, si on met ' ' en commande, ça fait un dump
+    	int lenght = strlen(buffer); 
+    	if(lenght<=1)continue;    
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
- 
     	
     	char *commande = strtok(buffer, " ");
    
@@ -30,7 +30,7 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
     		bdd_supprimer_utilisateur(user_id);
-    		printf("Utilisateur %lu ", user_id);
+    		printf("Utilisateur %lu supprimé\n", user_id);
     		return 1;
     	}
     	else if(!(strcmp(commande, "open"))){
@@ -51,14 +51,14 @@ int menu_Acceuil(unsigned long int user_id){
 
 void help_acceuil(){
 	printf("Commandes disponibles au menu acceuil :\n");
-	printf("\tcreate servername\n");
-	printf("\tjoin serverID\n");
-	printf("\tquit serverID\n");
-	printf("\tdelete serverID\n");
+	printf("\tcreate servernName\n");
+	printf("\tjoin serverName\n");
+	printf("\tquit serverName\n");
+	printf("\tdelete serverName\n");
 	printf("\tlistserver\n");
 	printf("\tlistinvitation\n");
-	printf("\taccept serverID (invitation)\n");
-	printf("\topen serverID\n");
+	printf("\taccept serverName (invitation)\n");
+	printf("\topen serverName\n");
 	
 	printf("\tlogout\n");
 	printf("\texit\n");
@@ -90,6 +90,7 @@ int create_serv(unsigned long int idProprio){
 	fclose(fichier);
 	bd_creationServeur(servname,idProprio);
 	bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
+	
 	return 0;
 }
 
@@ -150,13 +151,14 @@ int join_serv(unsigned long int userid){
 	while(fread(&demande,sizeof(Demande),1,fichier)!=EOF&&i<size){
 		if(serveur_id==demande.server_id){
 			fclose(fichier);
-			printf("demande deja existante!\n");
+			printf("Demande deja existante!\n");
 			return 1;
 		}
 		++i;
 	}
 	fclose(fichier);
 	bdd_stock_demande(userid,serveur_id);
+	printf("Demande envoyé à %s\n", servername);
 	return 0;
 }
 
@@ -176,7 +178,7 @@ int list_serv(unsigned int long user_id){
 			if(file == NULL)return -1;
 			int j=0;
 			while(fread(&serveur,sizeof(Serveur),1,file)!=EOF&&j<sizes){
-				if(membre.idServeur=serveur.id){
+				if(membre.idServeur==serveur.id){
 					printf("\t%s\n",serveur.nom);
 				}
 				++j;

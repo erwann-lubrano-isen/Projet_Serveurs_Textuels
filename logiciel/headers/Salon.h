@@ -4,7 +4,7 @@
 #include "stdio.h"
 #include "Table.h"
 #include "Serial.h"
-
+#include "Permissions_Salon.h"
 typedef struct salon {
 	unsigned long int idSalon;
 	unsigned long int idServeur;
