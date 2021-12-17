@@ -63,17 +63,33 @@ void helpServeur() {
 int invitation(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " "); 
 	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
+	
+	
 	if (idU == 0) {
 		printf("\n%s n'existe pas !\n", pseudo);
 		return 0;		
 	}
 	
-	FILE *fichier = fopen("rsc/invitation.dat", "r");
+	fichier = fopen("rsc/demande.dat","r");
+	Demande demande;
+	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&demande, sizeof(Demande), 1, fichier)) {
+		if(demande.user_id == user_id, demande.server_id == server_id) {
+			bdd_creer_membre(idServ, idU, "Membre");
+			printf("%s est devenu membre du serveur\n", pseudo);
+			bdd_supprimer_invitation(idU, idServ);
+			bdd_supprimer_demande(idU, idServ);
+			fclose(fichier);
+			return 0;		
+		}
+	}
+	
+	fclose(fichier);
+	fichier = fopen("rsc/invitation.dat", "r");
 	
 	Invitation invitation;
 	
 	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
-		if(invitation.user_id == idU && invitation.server_id) {
+		if(invitation.user_id == idU && invitation.server_id == idServ) {
 			printf("%s à déjà été invité dans ce serveur\n", pseudo);
 			fclose(fichier);
 			return 0;
@@ -216,7 +232,7 @@ int assignationRole(unsigned long int idServ) {
 }
 
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
-	int size = bdd_getSize_table("utilisateur");
+	int size = bdd_getSize_table("utilisateur");	
 	int i =0;
 	Utilisateur utilisateur;
 	FILE * file = NULL;
