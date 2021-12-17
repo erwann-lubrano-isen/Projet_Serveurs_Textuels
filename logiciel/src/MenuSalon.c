@@ -14,7 +14,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "exit\n"))) return 0;
     	else if(!(strcmp(commande, "back\n"))) return 1;
-    	//else if(!(strcmp(commande, "!display"))) ;//display
+    	else if(!(strcmp(commande, "display\n")))displayMsg(id_utilisateur, id_serveur, id_salon);
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
 }
@@ -80,3 +80,62 @@ FILE * fichier;
 	return 0;
 }
 */
+
+int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
+
+	if(!readPerm(id_salon,id_utilisateur))return 1;
+	int sizeMessage = bdd_getSize_table("message");
+	puts("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+	Message message;
+	int nbMessage=0;
+	{
+		int c =0;
+		FILE * file3 = NULL;
+		file3 = fopen("rsc/message.dat","r");
+		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
+		puts("eee");
+			if(message.id_salon==id_salon){
+				++nbMessage;
+			}
+			++c;
+		}
+		fclose(file3);
+	}
+	Message msgs[nbMessage];
+	nbMessage=0;
+	{
+		int c =0;
+		FILE * file3 = NULL;
+		file3 = fopen("rsc/message.dat","r");
+		while(fread(&message, sizeof(Message), 1, file3) != EOF && c < sizeMessage){
+		puts("eee");
+			if(message.id_salon==id_salon){
+				memcpy(&msgs[nbMessage],&message,sizeof(Message));
+				++nbMessage;
+			}
+			++c;
+		}
+		fclose(file3);
+	}
+	
+	for(Message * it = msgs;it < msgs+nbMessage-1;++it){
+		for(Message * jt = it+1;jt < msgs+nbMessage;++jt){
+			if(it->date > jt->date){
+				time_t date = jt->date;
+				jt->date = it->date;
+				it->date=date;
+			}
+		}
+	}
+	
+	for(Message * msg = msgs;msg < msgs+nbMessage;++msg){
+		printf("%s\n%s\n\n",ctime(&msg->date),msg->texte);
+	}
+
+}
+
+/*
+unsigned long int id_salon;
+	unsigned long int id_utilisateur;
+	time_t date;
+	char texte[120];*/

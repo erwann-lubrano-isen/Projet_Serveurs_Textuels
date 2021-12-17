@@ -29,7 +29,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 				if(salon_id==0){
 					printf("Salon inexistant\n");
 				}else{
-					menuSalon(salon_id, idUtilisateur, idServ);
+					if(menuSalon(salon_id, idUtilisateur, idServ)==0)return 0;
 				}
 			}
 		}else if(strcmp(commande, "perm") == 0 ) return 7;
