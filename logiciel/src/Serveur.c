@@ -94,3 +94,5 @@ void bdd_afficher_serveurs(){
 	}
 	fclose(file);
 }
+
+

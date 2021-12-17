@@ -139,4 +139,19 @@ unsigned long int bdd_getSalon_id(unsigned long int id_serveur, const char * nam
 	return 0;
 }
 
-
+unsigned long int bdd_getServeur_id_by_salon_id(unsigned long int id_salon){
+	int size = bdd_getSize_table("salon");
+	int i =0;
+	Salon salon;
+	FILE * file = NULL;
+	file = fopen("rsc/salon.dat","r");
+	while(fread(&salon,sizeof(Salon),1,file) != EOF && i <= size){
+		if(id_salon==salon.idSalon){
+			fclose(file);
+			return salon.idServeur;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
