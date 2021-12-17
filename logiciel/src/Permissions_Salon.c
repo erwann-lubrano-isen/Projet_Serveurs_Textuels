@@ -45,7 +45,7 @@ int readPerm(unsigned long int id_salon, unsigned long int id_user){
 			int size2=bdd_getSize_table("permission_salon");
 			FILE * file2 = NULL;
 			file2=fopen("rsc/permission_salon.dat","r");
-			for(int i=0;i < size; ++i){
+			for(int j=0;j < size2; ++j){
 				fread(&membre,sizeof(Membre),1,file2);
 				if(strcmp(membre.role,perm.Role)==0){
 					if(perm.perms[0]=='r'){
@@ -60,7 +60,6 @@ int readPerm(unsigned long int id_salon, unsigned long int id_user){
 				}
 			}
 			fclose(file2);
-			break;
 		}
 	}
 	fclose(file);

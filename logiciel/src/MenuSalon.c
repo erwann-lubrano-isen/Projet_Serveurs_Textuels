@@ -30,11 +30,11 @@ void helpSalon(){
 
 int permSalon(unsigned long int id_salon){
 	char *role = strtok(NULL, " ");
-    	char *perm = strtok(NULL, "\n");
-    	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
-    		printf("Commande invalide\n");
-    		return -1;
-    	}
+	char *perm = strtok(NULL, "\n");
+	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
+		printf("Commande invalide\n");
+		return -1;
+	}
 	insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
 	return 0;
 }
