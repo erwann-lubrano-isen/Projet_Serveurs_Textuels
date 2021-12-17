@@ -25,5 +25,5 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur);
 int permServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 int accept(unsigned long int idServ);
 int assignationRole(unsigned long int idServ);
-
+void listeMembres(unsigned long int idServ);
 #endif

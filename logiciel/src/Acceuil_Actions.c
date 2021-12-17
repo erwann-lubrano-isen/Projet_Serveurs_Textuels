@@ -1,10 +1,11 @@
 #include "../headers/Acceuil_Actions.h"
 
 int menu_Acceuil(unsigned long int user_id){
-	char buffer[128];
-    
+    char buffer[128];
+
     do{
     	prompt_acceuil(user_id);
+    	
     	fgets(buffer, 127, stdin);
     	if(buffer[0]==' '){
     		printf("Action inexistante\n");
@@ -14,7 +15,6 @@ int menu_Acceuil(unsigned long int user_id){
     	if(lenght<=1)continue;    
     	buffer[lenght-1]=' ';
     	buffer[lenght]='\0';
- 
     	
     	char *commande = strtok(buffer, " ");
    

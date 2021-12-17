@@ -2,10 +2,12 @@
 
 
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
-	while (1) {
-		prompt_serveur(idUtilisateur,idServ);
-		char buffer[128];
-		fgets(buffer, 127, stdin);
+    	char buffer[128];
+    
+    	do{
+    		prompt_serveur(idUtilisateur , idServ);
+    	
+    		fgets(buffer, 127, stdin);
     		if(buffer[0]==' '){
     			printf("Action inexistante\n");
     			continue;
@@ -15,14 +17,14 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
     		buffer[lenght-1]=' ';
     		buffer[lenght]='\0';
 			
-			
 		char *commande = strtok(buffer, " ");
-		printf("\n%s\n", buffer);
 		if(strcmp(commande, "help") == 0) helpServeur();
 		else if(strcmp(commande, "invite") == 0) invitation(idServ);
 		else if(strcmp(commande, "accept") == 0) accept(idServ);
+		else if(strcmp(commande, "listesalon") == 0) listeSalon(idServ, idUtilisateur);
 		else if(strcmp(commande, "create") == 0) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0) deleteSalon(idServ);
+		else if(!(strcmp(commande, "listemembres"))) listeMembres(idServ);
 		else if((strcmp(commande, "role") == 0 ));
 		else if((strcmp(commande, "open")==0)){
 			char * salonname = strtok(NULL," ");
@@ -40,15 +42,17 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		else if((strcmp(commande, "back") == 0 )) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
-	}
+	}while(1);
 }
 
 void helpServeur() {
 	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu\n");
 	printf("\n!invite \"pseudonyme\" :\n\tPermet d'inviter un utilisateur\n");
 	printf("\n!accept \"pseudonyme\" :\n\tPermet d'accepter l'inviation d'un utilisateur\n");
+	printf("\n!listsalon:\n\tAffiche la liste des salons disponible\n");
 	printf("\n!create \"nom de salon\" :\n\tPermet de créer un salon\n");
 	printf("\n!delete \"nom du salon\" :\n\tPermet de détruire un salon\n");
+	printf("\n!listemembres :\n\tPermet d'afficher les membres/role du serveur\n");
 	printf("\n!role \"pseudonyme\" \"nom du role\" :\n\tPermet d'affecter un membre à un rôle\n");
 	printf("\n!perm \"nom de rôle\" \"permissions\" :\n\tPermet de créer un rôle\n");
 	printf("\n!back :\n\tRetour à l'accueil\n");
@@ -153,7 +157,7 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 	char nomRole[30];
 	
 	int i = 0;
-	while(i < bdd_getSize_table("membre_serveur") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) {
+	while(i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) {
 		if(membre.idUtilisateur == idUtilisateur && idServ == membre.idServeur) {
 			strcpy(nomRole, membre.role);
 			break;
@@ -169,17 +173,18 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 	
 	for(i = 0; i < bdd_getSize_table("salon") && fread(&salon, sizeof(Salon), 1, fichier) != EOF ; ++i) {
 		if(salon.idServeur == idServ) {
-			FILE *fichier2 = fopen("rsc/permissions_salon.dat", "r");
+			FILE *fichier2 = fopen("rsc/permission_salon.dat", "r");
 			Permissions_Salon PS;
-			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier);++y) {
+			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier);++y) 			{
 				if(PS.id_salon == salon.idSalon)
-					if(PS.perms[0] == 'r')
+					if(PS.perms[0] == 'r' || bdd_getProprietaireServeur_id(idServ))
 						printf("%s\n", salon.nom);
-			}
+			}fclose(fichier2);
 		}
 	}
 	fclose(fichier);
 }
+
 
 int assignationRole(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " ");
@@ -251,7 +256,7 @@ void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 	fclose(file);
 }
 
-int isAdmin(unsigned long int id_user,unsigned long int id_serveur){ //EN ATTENTE DE LA FONCTION ROLE
+int isAdmin(unsigned long int id_user,unsigned long int id_serveur){ 
     int size = bdd_getSize_table("membres");
     if(size==0)return 0;
     int i =0;
@@ -290,5 +295,35 @@ int isAdmin(unsigned long int id_user,unsigned long int id_serveur){ //EN ATTENT
     return 0;        
 }
 
+void listeMembres(unsigned long int idServ) {
 
+	FILE *fichier = fopen("rsc/membre.dat", "r");
+	
+	Membre membre;
+	char nomRole[30];
+	char nomUser[30];
+	int i = 0;
+	printf("\nMembres : [%d]\n",bdd_getSize_table("membre"));
+	
+	
+	while(i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) {
+		
+		if(idServ == membre.idServeur) {
+			//strcpy(nomRole,membre.role);
+			FILE *fichier2 = fopen("rsc/utilisateur.dat", "r");
+			Utilisateur utilisateur;
+			for(int y = 0; y < bdd_getSize_table("utilisateur") && fread(&utilisateur, sizeof(Utilisateur), 1, fichier2) ;++y) 				{
+				if(membre.idUtilisateur == utilisateur.id){	
+					printf("\t%s : %s\n", utilisateur.pseudo, membre.role);
+				}
+			}
+			fclose(fichier2);
+			break;
+		}
+		++i;
+	}
+
+	fclose(fichier);
+	
+}
 
