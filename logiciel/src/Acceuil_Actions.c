@@ -25,7 +25,7 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
     	
     	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
-	else if(!(strcmp(commande, "logout")))return 1;
+		else if(!(strcmp(commande, "logout")))return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
