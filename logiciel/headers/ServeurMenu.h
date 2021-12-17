@@ -23,6 +23,8 @@ int isAdmin(unsigned long int id_user, unsigned long int id_serveur);
 void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id);
 void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur);
 int permServeur(unsigned long int idServ);
+int getMembres(unsigned long int idServ);
+int getSalon(unsigned long int idServ);
 int accept(unsigned long int idServ);
 void permMembres(unsigned long int idServ);
 int assignationRole(unsigned long int idServ);

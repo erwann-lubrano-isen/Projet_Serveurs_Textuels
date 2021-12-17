@@ -154,15 +154,19 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 	fichier = fopen("rsc/salon.dat", "r");
 	
 	Salon salon;
-	
+	printf("Salon[%d]\n",getSalon(idServ));
 	for(i = 0; i < bdd_getSize_table("salon") && fread(&salon, sizeof(Salon), 1, fichier) != EOF ; ++i) {
 		if(salon.idServeur == idServ) {
 			FILE *fichier2 = fopen("rsc/permission_salon.dat", "r");
 			Permissions_Salon PS;
-			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier);++y) 			{
+			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier2);++y) 			{
 				if(PS.id_salon == salon.idSalon)
+				{
 					if(PS.perms[0] == 'r' || bdd_getProprietaireServeur_id(idServ))
-						printf("%s\n", salon.nom);
+					{
+						printf("\t%s\n", salon.nom);
+					}break;
+				}
 			}fclose(fichier2);
 		}
 	}
@@ -288,7 +292,7 @@ void listeMembres(unsigned long int idServ) {
 	char nomRole[30];
 	char nomUser[30];
 	int i = 0;
-	printf("\nMembres : [%d]\n",bdd_getSize_table("membre"));
+	printf("\nMembres : [%d]\n",getMembres(idServ));
 	permMembres(idServ);
 	while(i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) 
 	{	
@@ -328,6 +332,44 @@ void permMembres(unsigned long int idServ) {
 	}
 	fclose(fichier);
 	return;
+}
+int getMembres(unsigned long int idServ) {
+
+	int size = bdd_getSize_table("membre");
+	FILE *fichier = fopen("rsc/membre.dat", "r");
+	Membre membres;
+	int i = 0;
+	int count=0;	
+	while(i < size && fread(&membres, sizeof(Membre), 1, fichier) != EOF) 
+	{	
+		if(membres.idServeur==idServ) 
+		{
+			count++;
+		
+		}
+	i++;
+	}
+	fclose(fichier);
+	return count;
+}
+int getSalon(unsigned long int idServ) {
+
+	int size = bdd_getSize_table("salon");
+	FILE *fichier = fopen("rsc/salon.dat", "r");
+	Salon salon;
+	int i = 0;
+	int count=0;	
+	while(i < size && fread(&salon, sizeof(Salon), 1, fichier) != EOF) 
+	{	
+		if(salon.idServeur==idServ) 
+		{
+			count++;
+		
+		}
+	i++;
+	}
+	fclose(fichier);
+	return count;
 }
 
 int permServeur(unsigned long int idServ){
