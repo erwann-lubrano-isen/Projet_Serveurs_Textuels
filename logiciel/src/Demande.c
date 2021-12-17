@@ -55,13 +55,13 @@ int bdd_supprimer_demande(unsigned long int user_id, unsigned long server_id){
 	fclose(file);
 	return 0;
 }
+
+
+
 int bdd_supprimer_demande_parId(unsigned long int user_id){
 	int size = bdd_getSize_table("demande");
 	if(size==0)return 0;
-	if(size==1){
-		bdd_decrement_table("demande");
-		return 0;
-	}
+
 	int i =0;
 	Demande demande;
 	Demande dernierDemande;

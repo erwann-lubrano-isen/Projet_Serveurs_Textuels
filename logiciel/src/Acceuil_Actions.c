@@ -21,7 +21,7 @@ int menu_Acceuil(unsigned long int user_id){
     	if(!(strcmp(commande, "help")))help_acceuil();
     	else if(!(strcmp(commande, "create")))create_serv(user_id);
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
-    	//else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
+    	else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
     	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
     	
     	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
@@ -94,7 +94,7 @@ int create_serv(unsigned long int idProprio){
 	return 0;
 }
 
-int delete_serveur(char commande[], unsigned long int user_id){	//char commande[], 
+int delete_serveur(unsigned long int user_id){	
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
 		printf("commande incorrecte\n");
@@ -109,8 +109,8 @@ int delete_serveur(char commande[], unsigned long int user_id){	//char commande[
 	}
 	FILE * fichier;
 	Serveur serveur;
-	fichier = fopen("rsc/s.dat","r");
-	int size = bdd_getSize_table("utilisateur");
+	fichier = fopen("rsc/serveur.dat","r+");
+	int size = bdd_getSize_table("serveur");
 	int i=0;
 	if(fichier == NULL)return -1;
 	while(fread(&serveur,sizeof(Serveur),1,fichier)!=EOF&&i<size){

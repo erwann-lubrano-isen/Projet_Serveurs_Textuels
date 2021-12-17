@@ -20,7 +20,6 @@ int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 }
 
 int bdd_supprimer_utilisateur(unsigned long int id){
-
 	//membre 
 	supprimer_membres_parId(id);
 	//demande
@@ -29,7 +28,9 @@ int bdd_supprimer_utilisateur(unsigned long int id){
 	bdd_supprimer_invitation_parId(id);
 	//serveur
 	bdd_supprimer_serveur_parId(id);
-
+	
+	
+	
 	int size = bdd_getSize_table("utilisateur");
 	if(size==0)return 0;
 	if(size==1){
