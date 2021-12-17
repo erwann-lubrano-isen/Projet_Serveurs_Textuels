@@ -20,19 +20,26 @@ int bdd_creer_utilisateur(char pseudo[], char motDePasse[]){
 }
 
 int bdd_supprimer_utilisateur(unsigned long int id){
-
+	//membre 
+	supprimer_membres_parId(id);
+	//demande
+	bdd_supprimer_demande_parId(id);
+	//invite
+	bdd_supprimer_invitation_parId(id);
+	//serveur
+	bdd_supprimer_serveur_parId(id);
+	
+	
+	
 	int size = bdd_getSize_table("utilisateur");
 	if(size==0)return 0;
 	if(size==1){
 		bdd_decrement_table("utilisateur");
 		return 0;
 	}
-	
-	
 	int i =0;
 	Utilisateur utilisateur;
 	Utilisateur dernierUtilisateur; //struc user qui stockera le dernier pour le remplacer
-	
 	
 	FILE * file = NULL;
 	file = fopen("rsc/utilisateur.dat","r+");

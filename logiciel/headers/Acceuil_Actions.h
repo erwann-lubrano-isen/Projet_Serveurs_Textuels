@@ -20,6 +20,7 @@
 *		 quit_serveur, join_serveur,...)
 *********************************************************************************/
 int menu_Acceuil(unsigned long int user_id);
+<<<<<<< HEAD
 
 /********************************************************************************	
 *	@brief delete_serveur : permet de supprimer un serveur si on en est le propriétaire
@@ -39,7 +40,7 @@ int delete_serveur(char commande[], unsigned long int user_id);
 int join_serv(unsigned long int userid);
 
 /********************************************************************************	
-*	@brief join_serv : permet de créer un serveur
+*	@brief create_serv : permet de créer un serveur
 *
 *	@param user_id : prend l'ID utilisateur afin de tester certaines conditions 	*	   
 	necessaire pour demander a rejoindre le serveur (ex : si deja exisant)

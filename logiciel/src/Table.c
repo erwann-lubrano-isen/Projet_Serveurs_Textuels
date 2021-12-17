@@ -33,6 +33,7 @@ int bdd_getSize_table(const char * const name){
 	return -2;
 }
 
+
 int bdd_decrement_table(const char * const name){
 	FILE * file =NULL;
 	file= fopen("rsc/table.dat","r+");

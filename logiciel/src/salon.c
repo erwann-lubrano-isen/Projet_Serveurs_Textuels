@@ -32,12 +32,15 @@ int bdd_create_Salon(char nom[], unsigned long int idServeur){
 	fichier = fopen("rsc/salon.dat","r+"); //ouverture de salon.dat
 	if(fichier == NULL)return 0;
 	salon.idSalon=incrementeSerial("salon");	//renvoie la taille de salon (en fct de incrementation ou decrementation, valeur change)
+	insert_perm_salon(salon.idSalon, "Admin", "rw");
+	insert_perm_salon(salon.idSalon, "Membre", "rw");
+	
 	fseek(fichier, sizeof(Salon)*(bdd_getSize_table("salon")), SEEK_SET);
 	fwrite(&salon,sizeof(Salon),1,fichier); // ecriture du nouveau salon dans le fichier
 	fclose(fichier);	
 	bdd_increment_table("salon");
 
-	}
+}
 	
 int bdd_supprimer_salon(unsigned long int idSalon, unsigned long idServeur){
 	int size = bdd_getSize_table("salon");
@@ -139,4 +142,19 @@ unsigned long int bdd_getSalon_id(unsigned long int id_serveur, const char * nam
 	return 0;
 }
 
-
+unsigned long int bdd_getServeur_id_by_salon_id(unsigned long int id_salon){
+	int size = bdd_getSize_table("salon");
+	int i =0;
+	Salon salon;
+	FILE * file = NULL;
+	file = fopen("rsc/salon.dat","r");
+	while(fread(&salon,sizeof(Salon),1,file) != EOF && i <= size){
+		if(id_salon==salon.idSalon){
+			fclose(file);
+			return salon.idServeur;
+		}
+		++i;
+	}
+	fclose(file);
+	return 0;
+}
