@@ -51,14 +51,14 @@ int menu_Acceuil(unsigned long int user_id){
 
 void help_acceuil(){
 	printf("Commandes disponibles au menu acceuil :\n");
-	printf("\tcreate servername\n");
-	printf("\tjoin serverID\n");
-	printf("\tquit serverID\n");
-	printf("\tdelete serverID\n");
+	printf("\tcreate servernName\n");
+	printf("\tjoin serverName\n");
+	printf("\tquit serverName\n");
+	printf("\tdelete serverName\n");
 	printf("\tlistserver\n");
 	printf("\tlistinvitation\n");
-	printf("\taccept serverID (invitation)\n");
-	printf("\topen serverID\n");
+	printf("\taccept serverName (invitation)\n");
+	printf("\topen serverName\n");
 	
 	printf("\tlogout\n");
 	printf("\texit\n");
@@ -90,6 +90,8 @@ int create_serv(unsigned long int idProprio){
 	fclose(fichier);
 	bd_creationServeur(servname,idProprio);
 	bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
+	insert_perm_serveur(bdd_getServeur_id(servname), "Admin", "wx");
+	
 	return 0;
 }
 
@@ -150,13 +152,14 @@ int join_serv(unsigned long int userid){
 	while(fread(&demande,sizeof(Demande),1,fichier)!=EOF&&i<size){
 		if(serveur_id==demande.server_id){
 			fclose(fichier);
-			printf("demande deja existante!\n");
+			printf("Demande deja existante!\n");
 			return 1;
 		}
 		++i;
 	}
 	fclose(fichier);
 	bdd_stock_demande(userid,serveur_id);
+	printf("Demande envoyé à %s", servername);
 	return 0;
 }
 

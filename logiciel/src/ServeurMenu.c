@@ -298,32 +298,31 @@ int isAdmin(unsigned long int id_user,unsigned long int id_serveur){
 void listeMembres(unsigned long int idServ) {
 
 	FILE *fichier = fopen("rsc/membre.dat", "r");
-	
+	FILE *fichier2 = fopen("rsc/utilisateur.dat", "r");
 	Membre membre;
+	Utilisateur utilisateur;
 	char nomRole[30];
 	char nomUser[30];
 	int i = 0;
 	printf("\nMembres : [%d]\n",bdd_getSize_table("membre"));
 	
-	
-	while(i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) {
-		
-		if(idServ == membre.idServeur) {
-			//strcpy(nomRole,membre.role);
-			FILE *fichier2 = fopen("rsc/utilisateur.dat", "r");
-			Utilisateur utilisateur;
-			for(int y = 0; y < bdd_getSize_table("utilisateur") && fread(&utilisateur, sizeof(Utilisateur), 1, fichier2) ;++y) 				{
-				if(membre.idUtilisateur == utilisateur.id){	
+	while(i < bdd_getSize_table("membre") && fread(&membre, sizeof(Membre), 1, fichier) != EOF) 
+	{	
+		if(idServ == membre.idServeur) 
+		{
+			for(int y=0 ; y < bdd_getSize_table("utilisateur"); y++) 
+			{
+				fread(&utilisateur, sizeof(Utilisateur), 1, fichier2);
+				if(membre.idUtilisateur == utilisateur.id)
+				{	
 					printf("\t%s : %s\n", utilisateur.pseudo, membre.role);
+					break;
 				}
 			}
-			fclose(fichier2);
-			break;
 		}
-		++i;
+	i++;
 	}
-
-	fclose(fichier);
-	
+	fclose(fichier2);
+	fclose(fichier);	
 }
 
