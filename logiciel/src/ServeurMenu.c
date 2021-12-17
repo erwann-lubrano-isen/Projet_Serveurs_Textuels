@@ -25,7 +25,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		else if(strcmp(commande, "create") == 0) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0) deleteSalon(idServ);
 		else if(!(strcmp(commande, "listemembres"))) listeMembres(idServ);
-		else if((strcmp(commande, "role") == 0 ));
+		else if((strcmp(commande, "role") == 0 )) assignationRole(idServ);
 		else if((strcmp(commande, "open")==0)){
 			char * salonname = strtok(NULL," ");
 			if(salonname == NULL || strlen(salonname) > 30){
@@ -175,7 +175,7 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 		if(salon.idServeur == idServ) {
 			FILE *fichier2 = fopen("rsc/permission_salon.dat", "r");
 			Permissions_Salon PS;
-			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier2);++y) 			{
+			for(int y = 0; y < bdd_getSize_table("permission_salon") && fread(&PS, sizeof(Permissions_Salon), 1, fichier2);++y) {
 				if(PS.id_salon == salon.idSalon)
 				{
 					if(PS.perms[0] == 'r' || bdd_getProprietaireServeur_id(idServ))

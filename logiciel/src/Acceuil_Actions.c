@@ -136,8 +136,7 @@ int join_serv(unsigned long int userid){
 		return 1;
 	}
 	
-	FILE * fichier;
-	
+	FILE * fichier = fopen("rsc/invitation.dat");
 	Invitation invitation;
 	unsigned long int idServ = bdd_getServeur_id(servername);
 	
@@ -147,12 +146,11 @@ int join_serv(unsigned long int userid){
 			printf("Vous avez rejoint %s\n", servername);
 			bdd_supprimer_invitation(userid, idServ);
 			bdd_supprimer_demande(userid, idServ);
-			
 			fclose(fichier);
 			return 0;
 		}
 	}
-	
+	fclose(fichier);
 	Demande demande;
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
