@@ -98,7 +98,7 @@ int delete_serveur(unsigned long int user_id){
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
 		printf("commande incorrecte\n");
-		return 0;
+		return -1;
 	}
 	
 	unsigned long serveur_id=bdd_getServeur_id(serveur_name);
