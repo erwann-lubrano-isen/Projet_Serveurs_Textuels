@@ -19,13 +19,13 @@ int menu_Acceuil(unsigned long int user_id){
     	char *commande = strtok(buffer, " ");
    
     	if(!(strcmp(commande, "help")))help_acceuil();
-    	else if(!(strcmp(commande, "create")))create_serv(user_id);
+    	else if(strcmp(commande, "create")==0 || strcmp(commande, "mkdir")==0)create_serv(user_id);
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
     	else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
-    	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
+    	else if(strcmp(commande, "listserver")==0||strcmp(commande, "ls")==0)list_serv(user_id);
     	
     	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
-		else if(!(strcmp(commande, "logout")))return 1;
+		else if(strcmp(commande, "logout") == 0 || strcmp(commande, "cd..")==0)return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
@@ -33,7 +33,7 @@ int menu_Acceuil(unsigned long int user_id){
     		printf("Utilisateur %lu supprimé\n", user_id);
     		return 1;
     	}
-    	else if(!(strcmp(commande, "open"))){
+    	else if((strcmp(commande, "open")==0)|| (strcmp(commande, "cd")==0)){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
     			if(menuServeur(id_serveur,user_id)==0)return 0;
@@ -198,7 +198,6 @@ int list_serv(unsigned int long user_id){
 				}
 				++j;
 			}
-			break;
 		}
 		++i;
 	}
