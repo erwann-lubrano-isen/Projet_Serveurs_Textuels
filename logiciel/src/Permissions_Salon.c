@@ -14,7 +14,10 @@ int insert_perm_salon(unsigned long int id_salon, char Role[], char perms[]){
 		++i;
 		if(strcmp(perm_salon.Role,Role)==0 && perm_salon.id_salon == id_salon){
 		strcpy(perm_salon.perms,perms);
+		fseek(fichier,-sizeof(Permissions_Salon),SEEK_CUR);  //on repositione le curseur juste avant
+		fwrite(&perm_salon,sizeof(Permissions_Salon),1,fichier); //on ecrase le membre par nouveau
 		printf("Changement de droits pour %s \n", Role);
+		fclose(fichier);
 		return 0;
 		}
 	}

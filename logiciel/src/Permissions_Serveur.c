@@ -14,7 +14,10 @@ int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[])
 		++i;
 		if(strcmp(perm_serveur.Role,Role)==0 && id_serveur == perm_serveur.id_serveur){
 		strcpy(perm_serveur.perms,perms);
+		fseek(fichier,-sizeof(Permissions_Serveur),SEEK_CUR);  //on repositione le curseur juste avant
+		fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier); //on ecrase le membre par nouveau
 		printf("Changement de droits pour %s \n", Role);
+		fclose(fichier);
 		return 0;
 		}
 	}	
