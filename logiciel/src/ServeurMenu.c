@@ -402,6 +402,7 @@ int permServeur(unsigned long int idServ){
     		printf("Commande invalide\n");
     		return -1;
     	}
+    	insert_perm_salon(idServ, role, perm);
 	insert_perm_serveur(idServ, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
 	return 0;
 }
