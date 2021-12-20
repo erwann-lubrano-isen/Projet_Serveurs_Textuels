@@ -29,4 +29,5 @@ int accept(unsigned long int idServ);
 void permMembres(unsigned long int idServ);
 int assignationRole(unsigned long int idServ);
 void listeMembres(unsigned long int idServ);
+int list_demande(unsigned int long id_serveur);
 #endif

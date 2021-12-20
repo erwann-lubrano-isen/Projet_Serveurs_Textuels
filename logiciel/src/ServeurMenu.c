@@ -20,9 +20,10 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		
 		if(strcmp(commande, "help") == 0) helpServeur(idServ, idUtilisateur);
 		else if(strcmp(commande, "invite") == 0 && Admin==1 ) invitation(idServ);
+		else if(strcmp(commande, "listdemande") == 0 && Admin==1 )list_demande(idServ);
 		else if(strcmp(commande, "accept") == 0 && Admin==1 ) accept(idServ);
 		else if(strcmp(commande, "role") == 0 && Admin==1 ) assignationRole(idServ);
-		else if(strcmp(commande, "create") == 0 && Admin==1 || strcmp(commande, "mkdir")==0) createSalon(idServ);
+		else if(strcmp(commande, "create") == 0 && Admin==1 || strcmp(commande, "mkdir")==0 && Admin==1) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0 && Admin==1) deleteSalon(idServ);
 		else if(!(strcmp(commande, "perm"))&& Admin==1) permServeur(idServ);
 		
@@ -432,3 +433,31 @@ int permServeur(unsigned long int idServ){
 	return 0;
 }
 */
+
+
+int list_demande(unsigned int long id_serveur){
+	int size = bdd_getSize_table("demande");
+	FILE * file = NULL;
+	file = fopen("rsc/demande.dat","r");
+	if(file==NULL)return -1;
+	Demande demande;
+	for(int i=0;i<size;++i){
+		fread(&demande,sizeof(Demande),1,file);
+		if(demande.server_id== id_serveur){
+			int sizeUser = bdd_getSize_table("utilisateur");
+			FILE *file2=NULL;
+			file2 = fopen("rsc/utilisateur.dat","r");
+			Utilisateur utilisateur;
+			for(int j=0;j<sizeUser;++j){
+				fread(&utilisateur,sizeof(Utilisateur),1,file2);
+				if(demande.user_id==utilisateur.id){
+					printf("%s\n",utilisateur.pseudo);
+					break;
+				}
+			}
+			fclose(file2);
+		}
+	}
+	fclose(file);
+	return 0;
+}
