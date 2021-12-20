@@ -21,12 +21,12 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		if(strcmp(commande, "help") == 0) helpServeur();
 		else if(strcmp(commande, "invite") == 0) invitation(idServ);
 		else if(strcmp(commande, "accept") == 0) accept(idServ);
-		else if(strcmp(commande, "listesalon") == 0) listeSalon(idServ, idUtilisateur);
-		else if(strcmp(commande, "create") == 0) createSalon(idServ);
+		else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
+		else if(strcmp(commande, "create") == 0 || strcmp(commande, "mkdir")==0) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0) deleteSalon(idServ);
-		else if(!(strcmp(commande, "listemembres"))) listeMembres(idServ);
+		else if((strcmp(commande, "listemembres")==0)) listeMembres(idServ);
 		else if((strcmp(commande, "role") == 0 )) assignationRole(idServ);
-		else if((strcmp(commande, "open")==0)){
+		else if((strcmp(commande, "open")==0) || (strcmp(commande, "cd")==0)){
 			char * salonname = strtok(NULL," ");
 			if(salonname == NULL || strlen(salonname) > 30){
 				printf("commande invalide\n");
@@ -39,8 +39,8 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 				}
 			}
 		}
-		else if(strcmp(commande, "perm") == 0 ) permServeur(idServ);
-		else if((strcmp(commande, "back") == 0 )) return 1;
+		else if(strcmp(commande, "perm") == 0 || (strcmp(commande, "chmod")==0)) permServeur(idServ);
+		else if((strcmp(commande, "back") == 0 ) || (strcmp(commande, "cd..")==0)) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
 	}while(1);

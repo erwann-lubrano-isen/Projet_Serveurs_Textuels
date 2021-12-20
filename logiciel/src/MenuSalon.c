@@ -18,12 +18,12 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
     	if(!(strcmp(commande, "help"))) helpSalon();
-    	else if(!(strcmp(commande, "perm")) /*&& isAdmin(id_utilisateur, id_serveur)*/) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	else if(strcmp(commande, "perm")==0 || strcmp(commande, "chmod")==0 /*&& isAdmin(id_utilisateur, id_serveur)*/) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
-    	else if(!(strcmp(commande, "back"))) return 1;
-    	else if(!(strcmp(commande, "display"))) displayMsg(id_utilisateur, id_serveur, id_salon);
+    	else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
+    	else if((strcmp(commande, "display")==0) || (strcmp(commande, "ls")==0)) displayMsg(id_utilisateur, id_serveur, id_salon);
     	
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
