@@ -59,7 +59,9 @@ int readPerm(unsigned long int id_salon, unsigned long int id_user){
 			FILE * file2 = NULL;
 			file2=fopen("rsc/permission_salon.dat","r");
 			for(int j=0;j < size2; ++j){
+
 				fread(&perm,sizeof(Permissions_Salon),1,file2);
+
 				if(strcmp(membre.role,perm.Role)==0){
 					if(perm.perms[0]=='r'){
 						fclose(file);
@@ -80,3 +82,4 @@ int readPerm(unsigned long int id_salon, unsigned long int id_user){
 
 	return bdd_getProprietaireServeur_id(id_serveur)==id_user;
 }
+
