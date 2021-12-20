@@ -15,7 +15,7 @@
 
 //int permServeur(unsigned long int idServ);
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur);
-void helpServeur();
+void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 int invitation();
 int createSalon(unsigned long int idServ);
 int deleteSalon(unsigned long int idServ);
