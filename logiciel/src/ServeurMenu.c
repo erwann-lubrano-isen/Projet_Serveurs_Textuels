@@ -17,17 +17,18 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
     		buffer[lenght-1]=' ';
     		buffer[lenght]='\0';
 		char *commande = strtok(buffer, " ");
+		
 		if(strcmp(commande, "help") == 0) helpServeur(idServ, idUtilisateur);
-		else if(strcmp(commande, "invite") == 0 && Admin==1) invitation(idServ);
-		else if(strcmp(commande, "accept") == 0 && Admin==1) accept(idServ);
-		else if((strcmp(commande, "role") == 0 && Admin==1)) assignationRole(idServ);
-		else if(strcmp(commande, "create") == 0 && Admin==1) createSalon(idServ);
+		else if(strcmp(commande, "invite") == 0 && Admin==1 ) invitation(idServ);
+		else if(strcmp(commande, "accept") == 0 && Admin==1 ) accept(idServ);
+		else if(strcmp(commande, "role") == 0 && Admin==1 ) assignationRole(idServ);
+		else if(strcmp(commande, "create") == 0 && Admin==1 || strcmp(commande, "mkdir")==0) createSalon(idServ);
 		else if(strcmp(commande, "delete") == 0 && Admin==1) deleteSalon(idServ);
 		else if(!(strcmp(commande, "perm"))&& Admin==1) permServeur(idServ);
 		
-		else if(strcmp(commande, "listesalon") == 0) listeSalon(idServ, idUtilisateur);
-		else if(!(strcmp(commande, "listemembres"))) listeMembres(idServ);
-		else if((strcmp(commande, "open")==0)){
+		else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
+		else if((strcmp(commande, "listemembres")==0)) listeMembres(idServ);
+		else if((strcmp(commande, "open")==0) || (strcmp(commande, "cd")==0)){
 			char * salonname = strtok(NULL," ");
 			if(salonname == NULL || strlen(salonname) > 30){
 				printf("commande invalide\n");
@@ -40,7 +41,8 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 				}
 			}
 		}
-		else if((strcmp(commande, "back") == 0 )) return 1;
+		else if(strcmp(commande, "perm") == 0 || (strcmp(commande, "chmod")==0)) permServeur(idServ);
+		else if((strcmp(commande, "back") == 0 ) || (strcmp(commande, "cd..")==0)) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
 	}while(1);
