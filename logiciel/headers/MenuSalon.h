@@ -8,6 +8,7 @@
 #include "Membre.h"
 #include "Salon.h"
 #include "Serveur.h"
+#include "Utilisateur.h"
 
 void helpSalon();
 int permSalon(unsigned long int id_salon);

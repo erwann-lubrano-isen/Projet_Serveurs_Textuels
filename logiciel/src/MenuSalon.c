@@ -3,6 +3,7 @@
 
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
     char buffer[128];
+    memset(buffer,'\0',128);
     do{
     	prompt_salon(id_utilisateur, id_serveur,  id_salon);
     	fgets(buffer, 127, stdin);
@@ -109,7 +110,42 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 	}
 	
 	for(Message * msg = msgs;msg < msgs+nbMessage;++msg){
-		printf("%s\n%s\n\n",ctime(&msg->date),msg->texte);
+		Utilisateur utilisateur;
+		int user_found=0;
+		int size_utilisateur=bdd_getSize_table("utilisateur");
+		FILE * file = NULL;
+		file = fopen("rsc/utilisateur.dat","r");
+		for(int i=0;i < size_utilisateur;++i){
+			fread(&utilisateur,sizeof(Utilisateur),1,file);
+			if(utilisateur.id==msg->id_utilisateur){
+				user_found=1;
+				break;
+			}
+		}
+		fclose(file);/*
+		char * carac = strchr(msg->texte,'\n');
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,'');
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,'');
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,0xD0);
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,0xEF);
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,0xD9);
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,0xFD);
+		if(carac != NULL)*carac='\0';
+		carac= strrchr(msg->texte,0xCD);
+		if(carac != NULL)*carac='\0';
+		*/
+		if(user_found){
+			fprintf(stdout,"%s : %s\n%s\n",utilisateur.pseudo,ctime(&msg->date),msg->texte);
+		}else{
+			fprintf(stdout,"Anonyme : %s\n%s\n",ctime(&msg->date),msg->texte);
+		}
+		
 	}
 
 }

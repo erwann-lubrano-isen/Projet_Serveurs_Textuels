@@ -5,7 +5,7 @@ bin/prog: obj/main.o obj/membre.o obj/table.o obj/message.o obj/invitation.o obj
 obj/permissions_salon.o: src/Permissions_Salon.c headers/Permissions_Salon.h headers/Salon.h headers/Table.h headers/Membre.h headers/Serveur.h
 	gcc -o obj/permissions_salon.o -c src/Permissions_Salon.c
 
-obj/menusalon.o: src/MenuSalon.c headers/MenuSalon.h headers/Permissions_Salon.h headers/Message.h headers/ServeurMenu.h headers/Membre.h headers/Serveur.h
+obj/menusalon.o: src/MenuSalon.c headers/MenuSalon.h headers/Permissions_Salon.h headers/Message.h headers/ServeurMenu.h headers/Membre.h headers/Serveur.h headers/Utilisateur.h
 	gcc -o obj/menusalon.o -c src/MenuSalon.c
 
 obj/serveur.o: src/Serveur.c headers/Serveur.h headers/Membre.h headers/Table.h headers/Salon.h headers/Serial.h
