@@ -21,11 +21,11 @@ int menu_Acceuil(unsigned long int user_id){
     	if(!(strcmp(commande, "help")))help_acceuil();
     	else if(!(strcmp(commande, "create")))create_serv(user_id);
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
-    	//else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
+    	else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
     	else if(!(strcmp(commande, "listserver")))list_serv(user_id);
     	
     	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
-	else if(!(strcmp(commande, "logout")))return 1;
+		else if(!(strcmp(commande, "logout")))return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
@@ -94,7 +94,7 @@ int create_serv(unsigned long int idProprio){
 	return 0;
 }
 
-int delete_serveur(char commande[], unsigned long int user_id){	//char commande[], 
+int delete_serveur(unsigned long int user_id){	
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
 		printf("commande incorrecte\n");
@@ -109,8 +109,8 @@ int delete_serveur(char commande[], unsigned long int user_id){	//char commande[
 	}
 	FILE * fichier;
 	Serveur serveur;
-	fichier = fopen("rsc/s.dat","r");
-	int size = bdd_getSize_table("utilisateur");
+	fichier = fopen("rsc/serveur.dat","r+");
+	int size = bdd_getSize_table("serveur");
 	int i=0;
 	if(fichier == NULL)return -1;
 	while(fread(&serveur,sizeof(Serveur),1,fichier)!=EOF&&i<size){
@@ -135,7 +135,22 @@ int join_serv(unsigned long int userid){
 		printf("commande incorrecte\n");
 		return 1;
 	}
-	FILE * fichier;
+	
+	FILE * fichier = fopen("rsc/invitation.dat","r");
+	Invitation invitation;
+	unsigned long int idServ = bdd_getServeur_id(servername);
+	
+	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
+		if(invitation.user_id == userid && invitation.server_id == idServ) {
+			bdd_creer_membre(idServ, userid, "Membre");
+			printf("Vous avez rejoint %s\n", servername);
+			bdd_supprimer_invitation(userid, idServ);
+			bdd_supprimer_demande(userid, idServ);
+			fclose(fichier);
+			return 0;
+		}
+	}
+	fclose(fichier);
 	Demande demande;
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){

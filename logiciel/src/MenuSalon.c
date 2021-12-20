@@ -17,7 +17,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
     	if(!(strcmp(commande, "help"))) helpSalon();
-    	else if(!(strcmp(commande, "perm")) && isAdmin(id_utilisateur, id_serveur)) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	else if(!(strcmp(commande, "perm")) /*&& isAdmin(id_utilisateur, id_serveur)*/) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
@@ -41,6 +41,7 @@ void helpSalon(){
 int permSalon(unsigned long int id_salon){
 	char *role = strtok(NULL, " ");
 	char *perm = strtok(NULL, " ");
+	if(role==NULL||perm==NULL)return -1;
 	printf("\nlongueur de perm %lu\n", strlen(perm));
 	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
 	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur

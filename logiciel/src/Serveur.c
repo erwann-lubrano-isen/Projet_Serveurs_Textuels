@@ -42,12 +42,8 @@ int bd_suppressionServeur(unsigned long int id) {
 	fclose(fichier);	
 }
 int bdd_supprimer_serveur_parId(unsigned long int user_id){
-	int size = bdd_getSize_table("server");
+	int size = bdd_getSize_table("serveur");
 	if(size==0)return 0;
-	if(size==1){
-		bdd_decrement_table("server");
-		return 0;
-	}
 	int i =0;
 	Serveur serveur;
 	Serveur dernierServeur;
@@ -56,8 +52,10 @@ int bdd_supprimer_serveur_parId(unsigned long int user_id){
 	fseek(file,sizeof(Serveur)*(size-1),SEEK_SET);
 	fread(&dernierServeur,sizeof(Serveur),1,file);
 	fseek(file,0,SEEK_SET);
+
 	while(fread(&serveur,sizeof(Serveur),1,file) != EOF && i < size){
 		++i;
+
 		if(serveur.idProprio==user_id){
 			fseek(file,-sizeof(Serveur),SEEK_CUR);
 			fwrite(&dernierServeur,sizeof(Serveur),1,file);
@@ -65,6 +63,7 @@ int bdd_supprimer_serveur_parId(unsigned long int user_id){
 				bdd_decrement_table("serveur");
 				--size;
 			}
+			
 			--i;
 			fseek(file,sizeof(Serveur)*(size-1),SEEK_SET);
 			fread(&dernierServeur,sizeof(Serveur),1,file);
@@ -73,6 +72,7 @@ int bdd_supprimer_serveur_parId(unsigned long int user_id){
 		
 	}
 	fclose(file);
+	
 	return 0;
 }
 
