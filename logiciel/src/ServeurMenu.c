@@ -79,7 +79,7 @@ int invitation(unsigned long int idServ) {
 	FILE * fichier=NULL;
 	fichier = fopen("rsc/demande.dat","r");
 	Demande demande;
-	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&demande, sizeof(Demande), 1, fichier);++i) {
+	for(int i = 0; i < bdd_getSize_table("demande") && fread(&demande, sizeof(Demande), 1, fichier);++i) {
 		if(demande.user_id == idU, demande.server_id == idServ) {
 			bdd_creer_membre(idServ, idU, "Membre");
 			printf("%s est devenu membre du serveur\n", pseudo);
