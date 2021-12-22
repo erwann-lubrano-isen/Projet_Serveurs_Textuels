@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 #include "Table.h"
 #include "Permissions_Serveur.h"
 #include "Permissions_Salon.h"
@@ -65,5 +67,13 @@ int supprimer_membres_parId(unsigned long int id_user);
 * @param idUtilisateur : id de l'utilisateur
 */
 int role(unsigned long int userid, unsigned long int id_serveur);
+
+/**
+* @brief "renvoie" le role d'un membre
+* @param idServeur : id du serveur
+* @param idUtilisateur : id de l'utilisateur
+* @return 0: succes 1: membre non trouvé -1: fichier non ouvert
+*/
+int bdd_getRole_membre(char role[], unsigned long int user_id, unsigned long int id_serveur);
 
 #endif

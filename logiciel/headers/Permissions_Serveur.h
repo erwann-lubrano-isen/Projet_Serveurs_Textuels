@@ -1,8 +1,12 @@
 #ifndef __PERMISSIONS_SERVEUR_H__
 #define __PERMISSIONS_SERVEUR_H__
+
 #include <stdio.h>
 #include <time.h>
+
 #include "Table.h"
+#include "Membre.h"
+#include "Serveur.h"
 
 typedef struct Permissions_Serveur{
 	unsigned long int id_serveur; //
@@ -13,5 +17,7 @@ typedef struct Permissions_Serveur{
 
 int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[]);
 void bdd_afficher_perm_serveur();
+int bdd_hasWPerm_serveur(unsigned long int serveur_id, unsigned long int user_id);
+int bdd_hasXPerm_serveur(unsigned long int serveur_id, unsigned long int user_id);
 	
 #endif

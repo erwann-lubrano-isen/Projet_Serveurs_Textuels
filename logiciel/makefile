@@ -44,7 +44,7 @@ obj/acceuil_actions.o: headers/Acceuil_Actions.h src/Acceuil_Actions.c headers/T
 obj/demande.o: src/Demande.c headers/Demande.h headers/Table.h 
 	gcc -c src/Demande.c -o obj/demande.o
 	
-obj/permissions_serveur.o: src/Permissions_Serveur.c headers/Permissions_Serveur.h headers/Table.h
+obj/permissions_serveur.o: src/Permissions_Serveur.c headers/Permissions_Serveur.h headers/Table.h headers/Membre.h headers/Serveur.h
 	gcc -c src/Permissions_Serveur.c -o obj/permissions_serveur.o
 
 obj/serveurmenu.o: src/ServeurMenu.c headers/ServeurMenu.h headers/Permissions_Serveur.h headers/MenuSalon.h headers/Utilisateur.h headers/Demande.h headers/Table.h headers/Invitation.h headers/Serveur.h

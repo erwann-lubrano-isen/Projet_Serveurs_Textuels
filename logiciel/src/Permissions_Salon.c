@@ -86,3 +86,44 @@ int readPerm(unsigned long int id_salon, unsigned long int id_user){
 	return bdd_getProprietaireServeur_id(id_serveur)==id_user;
 }
 
+int bdd_hasWPerm_salon(unsigned long int id_salon, unsigned long int id_user){
+	unsigned long int id_serveur=bdd_getServeur_id_by_salon_id(id_salon);
+	Membre membre;
+	int size=bdd_getSize_table("membre");
+	FILE * file = NULL;
+	file=fopen("rsc/membre.dat","r");
+	for(int i=0;i < size; ++i){
+		fread(&membre,sizeof(Membre),1,file);
+		if(id_user==membre.idUtilisateur && id_serveur==membre.idServeur){
+			Permissions_Salon perm;
+			int size2=bdd_getSize_table("permission_salon");
+			
+			FILE * file2 = NULL;
+			file2=fopen("rsc/permission_salon.dat","r");
+			for(int j=0;j < size2; ++j){
+
+				fread(&perm,sizeof(Permissions_Salon),1,file2);
+
+				if(strcmp(membre.role,perm.Role)==0){
+					if(perm.perms[1]=='w'){
+						fclose(file);
+						fclose(file2);
+						return 1;
+					}else{
+						fclose(file2);
+						fclose(file);
+						return bdd_getProprietaireServeur_id(id_serveur)==id_user;
+					}
+				}
+			}
+			fclose(file2);
+		}
+	}
+	fclose(file);
+	
+
+	return bdd_getProprietaireServeur_id(id_serveur)==id_user;
+}
+
+
+
