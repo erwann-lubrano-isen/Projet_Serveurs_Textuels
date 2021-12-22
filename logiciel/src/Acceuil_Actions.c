@@ -164,7 +164,7 @@ int join_serv(unsigned long int userid){
 	
 	if(fichier == NULL)return -1;
 	while(fread(&demande,sizeof(Demande),1,fichier)!=EOF&&i<size){
-		if(serveur_id==demande.server_id){
+		if(serveur_id==demande.server_id && demande.user_id==userid){
 			fclose(fichier);
 			printf("Demande deja existante!\n");
 			return 1;
