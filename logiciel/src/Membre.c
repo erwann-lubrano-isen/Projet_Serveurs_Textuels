@@ -21,7 +21,7 @@ int bdd_check_membre(unsigned long int idServeur, unsigned long idUtilisateur){
 	Membre membre;
 	FILE * file = NULL;
 	file = fopen("rsc/membre.dat","r");
-	while(fread(&membre,sizeof(Membre),1,file) != EOF && i <= size){
+	while(fread(&membre,sizeof(Membre),1,file) != EOF && i < size){
 		if(membre.idServeur==idServeur && membre.idUtilisateur==idUtilisateur){
 			fclose(file);
 			return 1;

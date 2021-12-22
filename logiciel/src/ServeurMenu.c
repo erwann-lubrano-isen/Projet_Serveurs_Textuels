@@ -71,6 +71,10 @@ int invitation(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " "); 
 	unsigned long int idU = bdd_getUtilisateur_id(pseudo);
 	
+	if(bdd_check_membre(idServ,idU)){
+		printf("%s est deja membre de ce serveur\n", pseudo);
+		return 2;
+	}
 	
 	if (idU == 0) {
 		printf("\n%s n'existe pas !\n", pseudo);
