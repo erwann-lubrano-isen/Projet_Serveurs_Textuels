@@ -178,5 +178,21 @@ int role(unsigned long int userid, unsigned long int id_serveur){
 	return 0;
 }
 
+int bdd_getRole_membre(char role[], unsigned long int user_id, unsigned long int id_serveur){
+	int size = bdd_getSize_table("membre");
+	FILE * file = fopen("rsc/membre.dat","r");
+	if(file==NULL)return -1;
+	Membre membre;
+	for(int i = 0;i < size;++i){
+		fread(&membre,sizeof(Membre),1,file);
+		if(user_id==membre.idUtilisateur && id_serveur == membre.idServeur){
+			strcpy(role, membre.role);
+			fclose(file);
+			return 0;
+		}
+	}
+	fclose(file);
+	return 1;
+}
 
 
