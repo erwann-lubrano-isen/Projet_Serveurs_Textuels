@@ -3,6 +3,10 @@
 
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
     char buffer[128];
+    if (checkRole(id_utilisateur, id_salon, id_serveur)==1){
+    return 1;
+    }
+    do{ 
     do{
     	prompt_salon(id_utilisateur, id_serveur,  id_salon);
     	fgets(buffer, 127, stdin);
@@ -16,8 +20,8 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	buffer[lenght]='\0';
     	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
-    	if(!(strcmp(commande, "help"))) helpSalon();
-    	else if(strcmp(commande, "perm")==0 || strcmp(commande, "chmod")==0 /*&& isAdmin(id_utilisateur, id_serveur)*/) permSalon(id_salon);// if isAdmin(id_user, id_serveur)==1
+    	if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
+    	else if(strcmp(commande, "perm")==0 && isAdmin(id_utilisateur, id_serveur)==1 || strcmp(commande, "chmod")==0 && isAdmin(id_utilisateur, id_serveur)==1) permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
@@ -26,19 +30,24 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	
     	else printf("%s: Action inexistante\n", commande);
     }while(1);
+}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
 }
 
-void helpSalon(){
+void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
 	printf("-------------Voici la liste des commandes--------------\n");
-	printf("!perm rolename perm :  Change les droits pour le salon\n"); // if (isAdmin(id_user, id_serveur))
 	printf("!msg text: Envoyer un message\n");
 	printf("!role : Voir les roles du salons\n");
 	printf("!exit : Quitter le programme\n");
-	printf("!back : Retur en arrière\n");
+	printf("!back : Retour en arrière\n");
 	printf("!display : Afficher tout les messages\n");
+	if (isAdmin(id_utilisateur, id_serveur)){
+		printf("\nADMINISTRATION\n");
+		printf("!perm rolename perm :  Change les droits des roles pour le salon\n");
+	}
 }
 
-int permSalon(unsigned long int id_salon){
+
+int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 	char *role = strtok(NULL, " ");
 	char *perm = strtok(NULL, " ");
 	if(role==NULL||perm==NULL)return -1;
@@ -49,6 +58,9 @@ int permSalon(unsigned long int id_salon){
 		return -1;
 	}
 	insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
+	if (checkRoleServ( id_serveur, role)==0){
+		insert_perm_serveur(id_serveur, role, "--");
+	}
 	return 0;
 }
 
@@ -207,6 +219,52 @@ void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsig
 		++i;
 	}
 fclose(file);
+}
+
+int checkRole(unsigned long int id_user, unsigned long int id_salon, unsigned long int id_serveur){
+    int size = bdd_getSize_table("membre");
+    if(size==0)return 0;
+    int i =0;
+    Membre membre;
+    char monRole[40];
+    FILE * file = NULL;
+    file = fopen("rsc/membre.dat","r");
+    rewind(file); //mettre curseur au début du fichier
+    
+    while(fread(&membre,sizeof(Membre),1,file) != EOF && i < size){   //read tant que la taille max du fichier est atteinte
+        ++i;
+        if(membre.idUtilisateur==id_user && membre.idServeur==id_serveur){  //si l'id correspond, et que le serveur aussi
+             strcpy(monRole,membre.role); //recuperation du role
+        }
+    }
+    fclose(file);
+    size = bdd_getSize_table("permission_salon");
+    if(size==0)return 0;
+    i =0;
+    Permissions_Salon perm;
+    
+    FILE * file2 = NULL;
+    file2 = fopen("rsc/permission_salon.dat","r");
+
+    rewind(file2); //mettre curseur au début du fichier
+    
+    while(fread(&perm,sizeof(Permissions_Salon),1,file2) != EOF && i < size){   //read tant que la taille max du fichier est atteinte
+        ++i;
+        if(perm.id_salon==id_salon && strcmp(perm.Role,monRole)==0 ){  //si l'id correspond
+            if(perm.perms[0]=='r'){
+            fclose(file2);
+            return 0;
+            }
+            else{
+            printf("Vous n'avez pas les droits pour entrer dans ce salon\n");
+            fclose(file2);
+            return 1;
+            }
+        }
+    }
+    fclose(file2);
+    insert_perm_salon(id_salon, monRole, "rw");
+    return 0;        
 }
 /*
 unsigned long int id_salon;

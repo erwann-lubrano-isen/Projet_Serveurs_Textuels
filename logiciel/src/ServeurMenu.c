@@ -199,35 +199,38 @@ void listeSalon(unsigned long int idServ, unsigned long int idUtilisateur) {
 
 int assignationRole(unsigned long int idServ) {
 	char *pseudo = strtok(NULL, " ");
-	char *nomRole = strtok(NULL, " ");
-	
+	char *nomRole = strtok(NULL, " ");	
+	int i = 0;
+	int roleExist=0;
+	int size=bdd_getSize_table("permission_serveur") ;
 	if(pseudo==NULL || nomRole== NULL){
 		return -2;
 	}
-	
+	Permissions_Serveur perm;
+    	FILE * file2 = NULL;
+    	file2 = fopen("rsc/permission_serveur.dat","r");
+    	rewind(file2); //mettre curseur au début du fichier
+    
+    	while(fread(&perm,sizeof(Permissions_Serveur),1,file2) != EOF && i < size && roleExist==0){   
+        ++i;
+        if(perm.id_serveur==idServ && strcmp(perm.Role,nomRole)==0){  //si l'id correspond
+            fclose(file2);
+            roleExist=1;
+	    continue;
+        }
+   	if (i == bdd_getSize_table("permission_serveur")){
+		printf("Le role %s n'existe pas\n", nomRole);
+		return 1;
+    	}
+    	}
 	FILE *fichier = fopen("rsc/membre.dat", "r+");
 	Membre membre;
-	Permissions_Serveur PS;
-	int i;
-	/*for(i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {//Vérification de l'existance du role
-		if(strcmp(PS.Role, nomRole) == 0) {
-			strcpy(membre.role, nomRole);
-			break;
-		}
-	}
-	
-	if(i == bdd_getSize_table("permission_serveur")) {
-		printf("Le role \"%s\" n'existe pas\n", nomRole);
-		return 0;
-	}
-	
-	if(bdd_getUtilisateur_id(pseudo) == 0) {
-		printf("\n");
-	
-	}*/
-	
+	i=0;
 	int sizeMembre=bdd_getSize_table("membre") ;
 	unsigned long int user_id=bdd_getUtilisateur_id(pseudo);
+	
+	
+	
 	
 	for(i = 0; i < sizeMembre && fread(&membre, sizeof(Membre), 1, fichier) != EOF ; ++i) {
 		if(membre.idUtilisateur == user_id) {
@@ -239,8 +242,9 @@ int assignationRole(unsigned long int idServ) {
 			return 0;
 		}
 	}
-	if (i == bdd_getSize_table("membre"))
+	if (i == bdd_getSize_table("membre")){
 		printf("%s n'est pas membre du serveur\n", pseudo);
+	}
 	return 0;
 }
 
@@ -460,4 +464,26 @@ int list_demande(unsigned int long id_serveur){
 	}
 	fclose(file);
 	return 0;
+}
+
+int checkRoleServ(unsigned int long id_serveur, char Role[]){
+	int i = 0;
+	int size=bdd_getSize_table("permission_serveur") ;
+	Permissions_Serveur perm;
+    	FILE * file2 = NULL;
+    	file2 = fopen("rsc/permission_serveur.dat","r");
+    	rewind(file2); //mettre curseur au début du fichier
+    
+    	while(fread(&perm,sizeof(Permissions_Serveur),1,file2) != EOF && i < size){   
+        ++i;
+        if(perm.id_serveur==id_serveur && strcmp(perm.Role,Role)==0){  //si l'id correspond
+            fclose(file2);
+	    return 1;
+        }
+   	if (i == bdd_getSize_table("permission_serveur")){
+		printf("Le role %s n'existe pas\n", Role);
+		fclose(file2);
+		return 0;
+    	}
+}
 }
