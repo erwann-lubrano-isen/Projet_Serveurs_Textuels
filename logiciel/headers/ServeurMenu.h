@@ -14,6 +14,7 @@
 #include "Permissions_Serveur.h"
 
 //int permServeur(unsigned long int idServ);
+int checkRoleServ(unsigned int long id_serveur, char Role[]);
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur);
 int invitation();
