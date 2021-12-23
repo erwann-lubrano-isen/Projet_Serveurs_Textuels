@@ -3,6 +3,7 @@
 int bdd_creer_invitation(unsigned long int user_id, unsigned long int server_id){
 	FILE * file = NULL;
 	file = fopen("rsc/invitation.dat","r+");
+	if(file==NULL)return -1;
 	Invitation invitation;
 	invitation.user_id=user_id;
 	invitation.server_id=server_id;
@@ -11,6 +12,7 @@ int bdd_creer_invitation(unsigned long int user_id, unsigned long int server_id)
 	fclose(file);
 	file = NULL;
 	bdd_increment_table("invitation");
+	return 0;
 }
 
 void bdd_afficher_invitation(){

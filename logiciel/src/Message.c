@@ -14,6 +14,7 @@ int bdd_creer_message(unsigned long int id_salon, unsigned long int id_utilisate
 	fclose(file);
 	file = NULL;
 	bdd_increment_table("message");
+	return 0;
 }
 
 void bdd_afficherMessages(){
@@ -46,7 +47,7 @@ int bdd_supprimer_message(unsigned long int id_salon, unsigned long int id_utili
 	fseek(file,0,SEEK_SET);
 	while(fread(&message,sizeof(Message),1,file) != EOF && i < size){
 		++i;
-		if(message.id_salon==id_salon && message.id_utilisateur==id_utilisateur,message.date=date){
+		if(message.id_salon==id_salon && message.id_utilisateur==id_utilisateur && message.date==date){
 			fseek(file,-sizeof(Message),SEEK_CUR);
 			fwrite(&dernierMessage,sizeof(Message),1,file);
 			if(size>=1){

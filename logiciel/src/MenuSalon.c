@@ -21,7 +21,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
     	//&& isAdmin(id_utilisateur, id_serveur)
     	char *commande = strtok(buffer, " ");
     	if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
-    	else if(strcmp(commande, "perm")==0 && isAdmin(id_utilisateur, id_serveur)==1 || strcmp(commande, "chmod")==0 && isAdmin(id_utilisateur, id_serveur)==1) permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
+    	else if((strcmp(commande, "perm")==0 && isAdmin(id_utilisateur, id_serveur)==1) || (strcmp(commande, "chmod")==0 && isAdmin(id_utilisateur, id_serveur)==1)) permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
     	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
@@ -53,7 +53,7 @@ int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 	if(role==NULL||perm==NULL)return -1;
 	printf("\nlongueur de perm %lu\n", strlen(perm));
 	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
-	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
+	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='r' && perm[0]!='-') || (perm[1]!='w' && perm[1]!='-')){ //cas derreur
 		printf("Commande invalide\n");
 		return -1;
 	}
@@ -133,24 +133,8 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 				break;
 			}
 		}
-		fclose(file);/*
-		char * carac = strchr(msg->texte,'\n');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,'');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,'');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xD0);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xEF);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xD9);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xFD);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xCD);
-		if(carac != NULL)*carac='\0';
-		*/
+		fclose(file);
+		
 		if(user_found){
 			fprintf(stdout,"%s : %s%s\n\n",utilisateur.pseudo,ctime(&msg->date),msg->texte);
 		}else{
@@ -158,14 +142,13 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		}
 		
 	}
-
+	return 0;
 }
 void permMembresSalon(unsigned long int idSalon) {
 
 	int size = bdd_getSize_table("permission_salon");
 	FILE *fichier = fopen("rsc/permission_salon.dat", "r");
 	Permissions_Salon perm;
-	char nomRole[30];
 	int i = 0;
 	
 	while(i < size && fread(&perm, sizeof(Permissions_Salon), 1, fichier) != EOF) 
@@ -178,7 +161,6 @@ void permMembresSalon(unsigned long int idSalon) {
 	i++;
 	}
 	fclose(fichier);
-	return;
 }
 void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsigned long int idSalon){
 	int size = bdd_getSize_table("utilisateur");
