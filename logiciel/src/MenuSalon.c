@@ -126,8 +126,12 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		}
 	}
 	
+	char pseudo[30];
+	if(bdd_getPseudo_utilisateur(pseudo, id_utilisateur)==-1)return -1;
+	
 	for(Message * msg = msgs;msg < msgs+nbMessage;++msg){
 		Utilisateur utilisateur;
+		
 		int user_found=0;
 		int size_utilisateur=bdd_getSize_table("utilisateur");
 		FILE * file = NULL;
@@ -140,11 +144,14 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 			}
 		}
 		fclose(file);
-		
+		const char * couleur = "\033[0m";
+		if(strstr(msg->texte, pseudo)){
+			couleur = "\033[1;45m";
+		}
 		if(user_found){
-			fprintf(stdout,"%s : %s%s\n\n",utilisateur.pseudo,ctime(&msg->date),msg->texte);
+			fprintf(stdout,"%s : %s  %s%s\033[0m\n\n", utilisateur.pseudo,ctime(&msg->date), couleur ,msg->texte);
 		}else{
-			fprintf(stdout,"Anonyme : %s%s\n\n",ctime(&msg->date),msg->texte);
+			fprintf(stdout,"Anonyme : %s%s%s\033[0m\n\n", ctime(&msg->date),couleur, msg->texte);
 		}
 		
 	}

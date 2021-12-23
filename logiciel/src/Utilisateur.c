@@ -97,3 +97,21 @@ void bdd_afficher_utilisateur(){
 	}
 	fclose(file);
 }
+
+
+int bdd_getPseudo_utilisateur(char pseudo[], unsigned long int user_id){
+	int size = bdd_getSize_table("utilisateur");
+	FILE * file = fopen("rsc/utilisateur.dat","r");
+	if(file==NULL)return -1;
+	Utilisateur utilisateur;
+	for(int i = 0;i < size;++i){
+		fread(&utilisateur,sizeof(Utilisateur),1,file);
+		if(user_id==utilisateur.id){
+			strcpy(pseudo, utilisateur.pseudo);
+			fclose(file);
+			return 0;
+		}
+	}
+	fclose(file);
+	return 1;
+}
