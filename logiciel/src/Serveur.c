@@ -39,7 +39,8 @@ int bd_suppressionServeur(unsigned long int id) {
 			return 0;
 		}
 	}
-	fclose(fichier);	
+	fclose(fichier);
+	return 0;
 }
 int bdd_supprimer_serveur_parId(unsigned long int user_id){
 	int size = bdd_getSize_table("serveur");
