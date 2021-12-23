@@ -2,35 +2,42 @@
 
 
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
+	int permR_salon=readPerm(id_salon, id_utilisateur);
+	int permW_salon=bdd_hasWPerm_salon(id_salon, id_utilisateur);
+	int permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
     char buffer[128];
     if (checkRole(id_utilisateur, id_salon, id_serveur)==1){
-    return 1;
+    	return 1;
     }
     do{ 
-    do{
-    	prompt_salon(id_utilisateur, id_serveur,  id_salon);
-    	fgets(buffer, 127, stdin);
-    	if(buffer[0]==' '){
-    		printf("Action inexistante\n");
-    		continue;
-    	}
-    	int lenght = strlen(buffer); 
-    	if(lenght<=1)continue;    
-    	buffer[lenght-1]=' ';
-    	buffer[lenght]='\0';
-    	//&& isAdmin(id_utilisateur, id_serveur)
-    	char *commande = strtok(buffer, " ");
-    	if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
-    	else if((strcmp(commande, "perm")==0 && isAdmin(id_utilisateur, id_serveur)==1) || (strcmp(commande, "chmod")==0 && isAdmin(id_utilisateur, id_serveur)==1)) permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
-    	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
-    	else if(!(strcmp(commande, "exit"))) return 0;
-    	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
-    	else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
-    	else if((strcmp(commande, "display")==0) || (strcmp(commande, "ls")==0)) displayMsg(id_utilisateur, id_serveur, id_salon);
-    	
-    	else printf("%s: Action inexistante\n", commande);
-    }while(1);
-}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
+    	do{
+			prompt_salon(id_utilisateur, id_serveur,  id_salon);
+			fgets(buffer, 127, stdin);
+			if(buffer[0]==' '){
+				printf("Action inexistante\n");
+				continue;
+			}
+			int lenght = strlen(buffer); 
+			if(lenght<=1)continue;    
+			buffer[lenght-1]=' ';
+			buffer[lenght]='\0';
+			//&& isAdmin(id_utilisateur, id_serveur)
+			char *commande = strtok(buffer, " ");
+			if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
+			else if((strcmp(commande, "perm")==0 || strcmp(commande, "chmod")==0) && permX_serveur == 1){
+				permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
+				permR_salon=readPerm(id_salon, id_utilisateur);
+				permW_salon=bdd_hasWPerm_salon(id_salon, id_utilisateur);
+				permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
+			}else if((strcmp(commande, "msg")==0) && permW_salon == 1) msgSalon(id_salon, id_utilisateur);
+			else if(!(strcmp(commande, "exit"))) return 0;
+			else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
+			else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
+			else if((strcmp(commande, "display")==0 || strcmp(commande, "ls")==0) && permR_salon == 1) displayMsg(id_utilisateur, id_serveur, id_salon);
+			
+			else printf("%s: Action inexistante\n", commande);
+		}while(1);
+	}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
 }
 
 void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
@@ -78,7 +85,6 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 
 
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
-	if(!readPerm(id_salon,id_utilisateur))return 1;
 	int sizeMessage = bdd_getSize_table("message");
 	Message message;
 	int nbMessage=0;

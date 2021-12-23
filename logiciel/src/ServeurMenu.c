@@ -3,7 +3,8 @@
 
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
     	char buffer[128];
-    	int Admin= isAdmin(idUtilisateur, idServ);
+    	int permX_serv = isAdmin(idUtilisateur, idServ);
+    	int permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
     	do{
     		prompt_serveur(idUtilisateur , idServ);
     	
@@ -19,15 +20,20 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		char *commande = strtok(buffer, " ");
 		
 		if(strcmp(commande, "help") == 0) helpServeur(idServ, idUtilisateur);
-		else if(strcmp(commande, "invite") == 0 && Admin==1 ) invitation(idServ);
-		else if(strcmp(commande, "listdemande") == 0 && Admin==1 )list_demande(idServ);
-		else if(strcmp(commande, "accept") == 0 && Admin==1 ) accept(idServ);
-		else if(strcmp(commande, "role") == 0 && Admin==1 ) assignationRole(idServ);
-		else if((strcmp(commande, "create") == 0 && Admin==1) || (strcmp(commande, "mkdir")==0 && Admin==1)) createSalon(idServ);
-		else if(strcmp(commande, "delete") == 0 && Admin==1) deleteSalon(idServ);
-		else if(!(strcmp(commande, "perm"))&& Admin==1) permServeur(idServ);
-		
-		else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
+		else if(strcmp(commande, "invite") == 0 && permX_serv==1) invitation(idServ);
+		else if(strcmp(commande, "listdemande") == 0 && permX_serv==1)list_demande(idServ);
+		else if(strcmp(commande, "accept") == 0 && permX_serv==1) accept(idServ);
+		else if(strcmp(commande, "role") == 0 && permX_serv==1){
+			assignationRole(idServ);
+			permX_serv = isAdmin(idUtilisateur, idServ);
+    		permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
+		}else if((strcmp(commande, "create") == 0 && permW_serv==1) || (strcmp(commande, "mkdir")==0 && permW_serv==1)) createSalon(idServ);
+		else if(strcmp(commande, "delete") == 0 && permW_serv==1) deleteSalon(idServ);
+		else if((strcmp(commande, "perm")==0 || (strcmp(commande, "chmod")==0))&& permX_serv==1){
+			permServeur(idServ);
+			permX_serv = isAdmin(idUtilisateur, idServ);
+    		permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
+		}else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
 		else if((strcmp(commande, "listemembres")==0)) listeMembres(idServ);
 		else if((strcmp(commande, "open")==0) || (strcmp(commande, "cd")==0)){
 			char * salonname = strtok(NULL," ");
@@ -35,14 +41,16 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 				printf("commande invalide\n");
 			}else{
 				unsigned long int salon_id = bdd_getSalon_id(idServ, salonname);
+				int permR_salon=readPerm(salon_id, idUtilisateur);
 				if(salon_id==0){
 					printf("Salon inexistant\n");
-				}else{
+				}else if(permR_salon){
 					if(menuSalon(salon_id, idUtilisateur, idServ)==0)return 0;
+				}else{
+					printf("Vous n'avez pas les droits d'accès à ce salon\n");
 				}
 			}
 		}
-		else if(strcmp(commande, "perm") == 0 || (strcmp(commande, "chmod")==0)) permServeur(idServ);
 		else if((strcmp(commande, "back") == 0 ) || (strcmp(commande, "cd..")==0)) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
