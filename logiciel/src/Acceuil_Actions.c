@@ -251,7 +251,7 @@ int quit_serv(unsigned long int userid){
 	//FILE * file = fopen("rsc/membre.dat", "r+");
 	//Membre membre;
 	Serveur serveur;
-	int i=0;
+
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
 		printf("Serveur inexistant\n");
@@ -279,6 +279,7 @@ int quit_serv(unsigned long int userid){
 	fclose(file);
 */
 	bdd_supprimer_membre(serveur_id, userid);
+	return 0;
 }
 
 unsigned long int openServeur(unsigned int long user_id){

@@ -3,6 +3,7 @@
 int bdd_creer_membre(unsigned long int idServeur, unsigned long idUtilisateur, const char * role){
 	FILE * file = NULL;
 	file = fopen("rsc/membre.dat","r+");
+	if(file==NULL)return -1;
 	Membre membre;
 	membre.idUtilisateur=idUtilisateur;
 	membre.idServeur=idServeur;
@@ -12,6 +13,7 @@ int bdd_creer_membre(unsigned long int idServeur, unsigned long idUtilisateur, c
 	fclose(file);
 	file = NULL;
 	bdd_increment_table("membre");
+	return 0;
 }
 		
 		
@@ -159,7 +161,7 @@ int role(unsigned long int userid, unsigned long int id_serveur){
 	Membre membre;
 	fichier = fopen("rsc/membre.dat","r");
 	int size = bdd_getSize_table("Membre");
-	int i=0,j=0;
+	int i=0;
 	if(fichier == NULL)return -1;
 	while(fread(&membre,sizeof(Membre),1,fichier)!=EOF&&i<size){
 		if(userid == membre.idUtilisateur && id_serveur ==membre.idServeur ){
@@ -178,5 +180,21 @@ int role(unsigned long int userid, unsigned long int id_serveur){
 	return 0;
 }
 
+int bdd_getRole_membre(char role[], unsigned long int user_id, unsigned long int id_serveur){
+	int size = bdd_getSize_table("membre");
+	FILE * file = fopen("rsc/membre.dat","r");
+	if(file==NULL)return -1;
+	Membre membre;
+	for(int i = 0;i < size;++i){
+		fread(&membre,sizeof(Membre),1,file);
+		if(user_id==membre.idUtilisateur && id_serveur == membre.idServeur){
+			strcpy(role, membre.role);
+			fclose(file);
+			return 0;
+		}
+	}
+	fclose(file);
+	return 1;
+}
 
 

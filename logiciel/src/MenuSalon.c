@@ -2,35 +2,42 @@
 
 
 int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsigned long int id_serveur) {
+	int permR_salon=readPerm(id_salon, id_utilisateur);
+	int permW_salon=bdd_hasWPerm_salon(id_salon, id_utilisateur);
+	int permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
     char buffer[128];
     if (checkRole(id_utilisateur, id_salon, id_serveur)==1){
-    return 1;
+    	return 1;
     }
     do{ 
-    do{
-    	prompt_salon(id_utilisateur, id_serveur,  id_salon);
-    	fgets(buffer, 127, stdin);
-    	if(buffer[0]==' '){
-    		printf("Action inexistante\n");
-    		continue;
-    	}
-    	int lenght = strlen(buffer); 
-    	if(lenght<=1)continue;    
-    	buffer[lenght-1]=' ';
-    	buffer[lenght]='\0';
-    	//&& isAdmin(id_utilisateur, id_serveur)
-    	char *commande = strtok(buffer, " ");
-    	if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
-    	else if(strcmp(commande, "perm")==0 && isAdmin(id_utilisateur, id_serveur)==1 || strcmp(commande, "chmod")==0 && isAdmin(id_utilisateur, id_serveur)==1) permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
-    	else if(!(strcmp(commande, "msg"))) msgSalon(id_salon, id_utilisateur);
-    	else if(!(strcmp(commande, "exit"))) return 0;
-    	else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
-    	else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
-    	else if((strcmp(commande, "display")==0) || (strcmp(commande, "ls")==0)) displayMsg(id_utilisateur, id_serveur, id_salon);
-    	
-    	else printf("%s: Action inexistante\n", commande);
-    }while(1);
-}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
+    	do{
+			prompt_salon(id_utilisateur, id_serveur,  id_salon);
+			fgets(buffer, 127, stdin);
+			if(buffer[0]==' '){
+				printf("Action inexistante\n");
+				continue;
+			}
+			int lenght = strlen(buffer); 
+			if(lenght<=1)continue;    
+			buffer[lenght-1]=' ';
+			buffer[lenght]='\0';
+			//&& isAdmin(id_utilisateur, id_serveur)
+			char *commande = strtok(buffer, " ");
+			if(!(strcmp(commande, "help"))) helpSalon(id_utilisateur, id_serveur);
+			else if((strcmp(commande, "perm")==0 || strcmp(commande, "chmod")==0) && permX_serveur == 1){
+				permSalon(id_salon, id_serveur);// if isAdmin(id_user, id_serveur)==1
+				permR_salon=readPerm(id_salon, id_utilisateur);
+				permW_salon=bdd_hasWPerm_salon(id_salon, id_utilisateur);
+				permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
+			}else if((strcmp(commande, "msg")==0) && permW_salon == 1) msgSalon(id_salon, id_utilisateur);
+			else if(!(strcmp(commande, "exit"))) return 0;
+			else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
+			else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
+			else if((strcmp(commande, "display")==0 || strcmp(commande, "ls")==0) && permR_salon == 1) displayMsg(id_utilisateur, id_serveur, id_salon);
+			
+			else printf("%s: Action inexistante\n", commande);
+		}while(1);
+	}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
 }
 
 void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
@@ -57,7 +64,7 @@ int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 	if(role==NULL||perm==NULL)return -1;
 	printf("\nlongueur de perm %lu\n", strlen(perm));
 	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
-	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='r' && perm[0]!='-' || perm[1]!='w' && perm[1]!='-'){ //cas derreur
+	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='r' && perm[0]!='-') || (perm[1]!='w' && perm[1]!='-')){ //cas derreur
 		printf("Commande invalide\n");
 		return -1;
 	}
@@ -82,7 +89,6 @@ int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 
 
 int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, unsigned long int id_salon){
-	if(!readPerm(id_salon,id_utilisateur))return 1;
 	int sizeMessage = bdd_getSize_table("message");
 	Message message;
 	int nbMessage=0;
@@ -124,8 +130,12 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 		}
 	}
 	
+	char pseudo[30];
+	if(bdd_getPseudo_utilisateur(pseudo, id_utilisateur)==-1)return -1;
+	
 	for(Message * msg = msgs;msg < msgs+nbMessage;++msg){
 		Utilisateur utilisateur;
+		
 		int user_found=0;
 		int size_utilisateur=bdd_getSize_table("utilisateur");
 		FILE * file = NULL;
@@ -137,39 +147,25 @@ int displayMsg(unsigned long int id_utilisateur, unsigned long int id_serveur, u
 				break;
 			}
 		}
-		fclose(file);/*
-		char * carac = strchr(msg->texte,'\n');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,'');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,'');
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xD0);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xEF);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xD9);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xFD);
-		if(carac != NULL)*carac='\0';
-		carac= strrchr(msg->texte,0xCD);
-		if(carac != NULL)*carac='\0';
-		*/
+		fclose(file);
+		const char * couleur = "\033[0m";
+		if(strstr(msg->texte, pseudo)){
+			couleur = "\033[1;45m";
+		}
 		if(user_found){
-			fprintf(stdout,"%s : %s%s\n\n",utilisateur.pseudo,ctime(&msg->date),msg->texte);
+			fprintf(stdout,"%s : %s  %s%s\033[0m\n\n", utilisateur.pseudo,ctime(&msg->date), couleur ,msg->texte);
 		}else{
-			fprintf(stdout,"Anonyme : %s%s\n\n",ctime(&msg->date),msg->texte);
+			fprintf(stdout,"Anonyme : %s%s%s\033[0m\n\n", ctime(&msg->date),couleur, msg->texte);
 		}
 		
 	}
-
+	return 0;
 }
 void permMembresSalon(unsigned long int idSalon) {
 
 	int size = bdd_getSize_table("permission_salon");
 	FILE *fichier = fopen("rsc/permission_salon.dat", "r");
 	Permissions_Salon perm;
-	char nomRole[30];
 	int i = 0;
 	
 	while(i < size && fread(&perm, sizeof(Permissions_Salon), 1, fichier) != EOF) 
@@ -182,7 +178,6 @@ void permMembresSalon(unsigned long int idSalon) {
 	i++;
 	}
 	fclose(fichier);
-	return;
 }
 void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsigned long int idSalon){
 	int size = bdd_getSize_table("utilisateur");

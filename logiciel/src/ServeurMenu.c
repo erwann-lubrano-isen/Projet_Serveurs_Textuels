@@ -3,7 +3,8 @@
 
 int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
     	char buffer[128];
-    	int Admin= isAdmin(idUtilisateur, idServ);
+    	int permX_serv = isAdmin(idUtilisateur, idServ);
+    	int permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
     	do{
     		prompt_serveur(idUtilisateur , idServ);
     	
@@ -19,15 +20,20 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		char *commande = strtok(buffer, " ");
 		
 		if(strcmp(commande, "help") == 0) helpServeur(idServ, idUtilisateur);
-		else if(strcmp(commande, "invite") == 0 && Admin==1 ) invitation(idServ);
-		else if(strcmp(commande, "listdemande") == 0 && Admin==1 )list_demande(idServ);
-		else if(strcmp(commande, "accept") == 0 && Admin==1 ) accept(idServ);
-		else if(strcmp(commande, "role") == 0 && Admin==1 ) assignationRole(idServ);
-		else if(strcmp(commande, "create") == 0 && Admin==1 || strcmp(commande, "mkdir")==0 && Admin==1) createSalon(idServ);
-		else if(strcmp(commande, "delete") == 0 && Admin==1) deleteSalon(idServ);
-		else if(!(strcmp(commande, "perm"))&& Admin==1) permServeur(idServ);
-		
-		else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
+		else if(strcmp(commande, "invite") == 0 && permX_serv==1) invitation(idServ);
+		else if(strcmp(commande, "listdemande") == 0 && permX_serv==1)list_demande(idServ);
+		else if(strcmp(commande, "accept") == 0 && permX_serv==1) accept(idServ);
+		else if(strcmp(commande, "role") == 0 && permX_serv==1){
+			assignationRole(idServ);
+			permX_serv = isAdmin(idUtilisateur, idServ);
+    		permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
+		}else if((strcmp(commande, "create") == 0 && permW_serv==1) || (strcmp(commande, "mkdir")==0 && permW_serv==1)) createSalon(idServ);
+		else if(strcmp(commande, "delete") == 0 && permW_serv==1) deleteSalon(idServ);
+		else if((strcmp(commande, "perm")==0 || (strcmp(commande, "chmod")==0))&& permX_serv==1){
+			permServeur(idServ);
+			permX_serv = isAdmin(idUtilisateur, idServ);
+    		permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
+		}else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
 		else if((strcmp(commande, "listemembres")==0)) listeMembres(idServ);
 		else if((strcmp(commande, "open")==0) || (strcmp(commande, "cd")==0)){
 			char * salonname = strtok(NULL," ");
@@ -35,14 +41,16 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 				printf("commande invalide\n");
 			}else{
 				unsigned long int salon_id = bdd_getSalon_id(idServ, salonname);
+				int permR_salon=readPerm(salon_id, idUtilisateur);
 				if(salon_id==0){
 					printf("Salon inexistant\n");
-				}else{
+				}else if(permR_salon){
 					if(menuSalon(salon_id, idUtilisateur, idServ)==0)return 0;
+				}else{
+					printf("Vous n'avez pas les droits d'accès à ce salon\n");
 				}
 			}
 		}
-		else if(strcmp(commande, "perm") == 0 || (strcmp(commande, "chmod")==0)) permServeur(idServ);
 		else if((strcmp(commande, "back") == 0 ) || (strcmp(commande, "cd..")==0)) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
 		else printf("%s: Action inexistante\n", commande);
@@ -78,13 +86,16 @@ int invitation(unsigned long int idServ) {
 	
 	if (idU == 0) {
 		printf("\n%s n'existe pas !\n", pseudo);
-		return 0;		
+		return 1;		
 	}
 	FILE * fichier=NULL;
 	fichier = fopen("rsc/demande.dat","r");
+	if(fichier==NULL)return -1;
 	Demande demande;
-	for(int i = 0; i < bdd_getSize_table("demande") && fread(&demande, sizeof(Demande), 1, fichier);++i) {
-		if(demande.user_id == idU, demande.server_id == idServ) {
+	int size = bdd_getSize_table("demande");
+	for(int i = 0; i < size;++i) {
+		fread(&demande, sizeof(Demande), 1, fichier);
+		if(demande.user_id == idU && demande.server_id == idServ) {
 			bdd_creer_membre(idServ, idU, "Membre");
 			printf("%s est devenu membre du serveur\n", pseudo);
 			bdd_supprimer_invitation(idU, idServ);
@@ -95,17 +106,22 @@ int invitation(unsigned long int idServ) {
 	}
 	
 	fclose(fichier);
+	
 	fichier = fopen("rsc/invitation.dat", "r");
-	
+	if(fichier==NULL)return -1;
 	Invitation invitation;
+	int size2= bdd_getSize_table("invitation");
 	
-	for(int i = 0; i < bdd_getSize_table("invitation") && fread(&invitation, sizeof(Invitation), 1, fichier) != EOF; ++i) {
+	for(int i = 0; i < size2; ++i) {
+		fread(&invitation, sizeof(Invitation), 1, fichier);
+		
 		if(invitation.user_id == idU && invitation.server_id == idServ) {
 			printf("%s à déjà été invité dans ce serveur\n", pseudo);
 			fclose(fichier);
 			return 0;
 		}
 	}
+	
 	bdd_creer_invitation(idU ,idServ);
 	fclose(fichier);
 	return 0;
@@ -310,7 +326,7 @@ int isAdmin(unsigned long int id_user,unsigned long int id_serveur){
     
     while(fread(&perm,sizeof(Permissions_Serveur),1,file2) != EOF && i < size){   //read tant que la taille max du fichier est atteinte
         ++i;
-        if(perm.id_serveur==id_serveur && strcmp(perm.Role,monRole)==0 && perm.perms[1]=='x' || bdd_getProprietaireServeur_id(id_serveur)==id_user){  //si l'id correspond
+        if((perm.id_serveur==id_serveur && strcmp(perm.Role,monRole)==0 && perm.perms[1]=='x') || bdd_getProprietaireServeur_id(id_serveur)==id_user){  //si l'id correspond
             fclose(file2);
             return 1;
         }
@@ -325,8 +341,6 @@ void listeMembres(unsigned long int idServ) {
 	FILE *fichier2 = fopen("rsc/utilisateur.dat", "r");
 	Membre membre;
 	Utilisateur utilisateur;
-	char nomRole[30];
-	char nomUser[30];
 	int i = 0;
 	printf("\nMembres : [%d]\n",getMembres(idServ));
 	permMembres(idServ);
@@ -354,7 +368,6 @@ void permMembres(unsigned long int idServ) {
 	int size = bdd_getSize_table("permission_serveur");
 	FILE *fichier = fopen("rsc/permission_serveur.dat", "r");
 	Permissions_Serveur perm;
-	char nomRole[30];
 	int i = 0;
 	
 	while(i < size && fread(&perm, sizeof(Permissions_Serveur), 1, fichier) != EOF) 
@@ -412,7 +425,7 @@ int permServeur(unsigned long int idServ){
 	char *role = strtok(NULL, " ");
     	char *perm = strtok(NULL, " ");
     	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
-    	if(strlen(role)>30 || strlen(perm)!=2 || perm[0]!='w' && perm[0]!='-' || perm[1]!='x' && perm[1]!='-'){ //cas derreur
+    	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='w' && perm[0]!='-') || (perm[1]!='x' && perm[1]!='-')){ //cas derreur
     		printf("Commande invalide\n");
     		return -1;
     	}
@@ -420,27 +433,6 @@ int permServeur(unsigned long int idServ){
 	insert_perm_serveur(idServ, role, perm); //appel de la fonction pour attribuer les role de chacun au serv
 	return 0;
 }
-
-/*
-int permServeur(unsigned long int idServ){
-	char *nomRole = strtok(NULL, " ");
-	char *perm = strtok(NULL, " ");
-	
-	FILE *fichier = fopen("rsc/permission_serveur.dat", "r+");
-	Permissions_Serveur PS;
-	
-	for(int i = 0; i < bdd_getSize_table("permission_serveur") && fread(&PS, sizeof(Permissions_Serveur), 1, fichier) != EOF ; ++i) {
-		if (strcmp(PS.Role, nomRole) == 0 && PS.id_serveur == idServ) {
-			strcpy(PS.perms, perm);
-			printf("Les droits du rôle \"%s\" ont été modifié\n", nomRole);
-			return 0;
-		}
-	}
-	insert_perm_serveur(idServ, nomRole, perm);
-	printf("Le rôle a été créé\n");
-	return 0;
-}
-*/
 
 
 int list_demande(unsigned int long id_serveur){
@@ -474,20 +466,22 @@ int checkRoleServ(unsigned int long id_serveur, char Role[]){
 	int i = 0;
 	int size=bdd_getSize_table("permission_serveur") ;
 	Permissions_Serveur perm;
-    	FILE * file2 = NULL;
-    	file2 = fopen("rsc/permission_serveur.dat","r");
-    	rewind(file2); //mettre curseur au début du fichier
-    
-    	while(fread(&perm,sizeof(Permissions_Serveur),1,file2) != EOF && i < size){   
-        ++i;
-        if(perm.id_serveur==id_serveur && strcmp(perm.Role,Role)==0){  //si l'id correspond
-            fclose(file2);
-	    return 1;
-        }
-   	if (i == bdd_getSize_table("permission_serveur")){
-		printf("Le role %s n'existe pas\n", Role);
-		fclose(file2);
-		return 0;
-    	}
-}
+	FILE * file2 = NULL;
+	file2 = fopen("rsc/permission_serveur.dat","r");
+	if(file2==NULL)return -1;
+	rewind(file2); //mettre curseur au début du fichier
+
+	while(fread(&perm,sizeof(Permissions_Serveur),1,file2) != EOF && i < size){   
+		++i;
+		if(perm.id_serveur==id_serveur && strcmp(perm.Role,Role)==0){  //si l'id correspond
+		    fclose(file2);
+		return 1;
+		}
+	   	if (i == bdd_getSize_table("permission_serveur")){
+			printf("Le role %s n'existe pas\n", Role);
+			fclose(file2);
+			return 0;
+		}
+	}
+	return 0;
 }

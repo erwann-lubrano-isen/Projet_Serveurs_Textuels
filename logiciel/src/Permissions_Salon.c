@@ -48,41 +48,57 @@ void bdd_afficher_perm_salon(){
 }
 
 int readPerm(unsigned long int id_salon, unsigned long int id_user){
-	unsigned long int id_serveur=bdd_getServeur_id_by_salon_id(id_salon);
-	Membre membre;
-	int size=bdd_getSize_table("membre");
+	char role[30];
+	switch(bdd_getRole_membre(role,id_user,bdd_getServeur_id_by_salon_id(id_salon))){
+		case -1:
+			fprintf(stderr,"Erreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\n");
+			return -2;
+		case 1:
+			fprintf(stderr,"Erreur : membre inconnu\n");
+			return 0;
+	}
+	int size = bdd_getSize_table("permission_salon");
 	FILE * file = NULL;
-	file=fopen("rsc/membre.dat","r");
-	for(int i=0;i < size; ++i){
-		fread(&membre,sizeof(Membre),1,file);
-		if(id_user==membre.idUtilisateur && id_serveur==membre.idServeur){
-			Permissions_Salon perm;
-			int size2=bdd_getSize_table("permission_salon");
-			
-			FILE * file2 = NULL;
-			file2=fopen("rsc/permission_salon.dat","r");
-			for(int j=0;j < size2; ++j){
-
-				fread(&perm,sizeof(Permissions_Salon),1,file2);
-
-				if(strcmp(membre.role,perm.Role)==0){
-					if(perm.perms[0]=='r'){
-						fclose(file);
-						fclose(file2);
-						return 1;
-					}else{
-						fclose(file2);
-						fclose(file);
-						return bdd_getProprietaireServeur_id(id_serveur)==id_user;
-					}
-				}
-			}
-			fclose(file2);
+	file = fopen("rsc/permission_salon.dat","r");
+	Permissions_Salon permissions_Salon;
+	if(file==NULL)return -1;
+	for(int i = 0;i < size;++i){
+		fread(&permissions_Salon,sizeof(Permissions_Salon),1,file);
+		if(permissions_Salon.id_salon==id_salon && strcmp(permissions_Salon.Role,role)==0){
+			fclose(file);
+			return permissions_Salon.perms[0] == 'r';
 		}
 	}
 	fclose(file);
-	
-
-	return bdd_getProprietaireServeur_id(id_serveur)==id_user;
+	return 1;
 }
+
+int bdd_hasWPerm_salon(unsigned long int id_salon, unsigned long int id_user){
+	char role[30];
+	switch(bdd_getRole_membre(role,id_user,bdd_getServeur_id_by_salon_id(id_salon))){
+		case -1:
+			fprintf(stderr,"Erreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\n");
+			return -2;
+		case 1:
+			fprintf(stderr,"Erreur : membre inconnu\n");
+			return 0;
+	}
+	int size = bdd_getSize_table("permission_salon");
+	FILE * file = NULL;
+	file = fopen("rsc/permission_salon.dat","r");
+	Permissions_Salon permissions_Salon;
+	if(file==NULL)return -1;
+	for(int i = 0;i < size;++i){
+		fread(&permissions_Salon,sizeof(Permissions_Salon),1,file);
+		if(permissions_Salon.id_salon==id_salon && strcmp(permissions_Salon.Role,role)==0){
+			fclose(file);
+			return permissions_Salon.perms[1] == 'w';
+		}
+	}
+	fclose(file);
+	return 1;
+}
+
+
+
 

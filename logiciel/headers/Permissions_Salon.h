@@ -16,4 +16,5 @@ typedef struct Permissions_Salon{
 int insert_perm_salon(unsigned long int id_salon, char Role[], char perms[]);
 void bdd_afficher_perm_salon();
 int readPerm(unsigned long int id_salon, unsigned long int id_user);
+int bdd_hasWPerm_salon(unsigned long int id_salon, unsigned long int id_user);
 #endif

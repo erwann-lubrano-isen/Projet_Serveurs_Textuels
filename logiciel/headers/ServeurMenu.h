@@ -12,6 +12,7 @@
 #include "Table.h"
 #include "MenuSalon.h"
 #include "Permissions_Serveur.h"
+#include "Permissions_Salon.h"
 
 //int permServeur(unsigned long int idServ);
 int checkRoleServ(unsigned int long id_serveur, char Role[]);
