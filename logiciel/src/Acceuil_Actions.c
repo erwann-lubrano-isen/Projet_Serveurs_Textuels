@@ -90,8 +90,10 @@ int create_serv(unsigned long int idProprio){
 		++i;
 	}
 	fclose(fichier);
-	bd_creationServeur(servname,idProprio);
-	bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin");
+	if (bd_creationServeur(servname,idProprio)==0 && bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin")==0){
+		printf("\e[1;32m- Le serveur '%s' a bien été crée\n", servname);
+	}
+	
 	
 	return 0;
 }
