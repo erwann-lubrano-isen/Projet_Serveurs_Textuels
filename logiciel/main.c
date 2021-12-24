@@ -1,3 +1,7 @@
+/**
+* @author Erwann.L, Lilian.D, Lucas.B, Jordan.P
+*/
+
 #include <stdio.h>
 
 #include "headers/MenuSalon.h"
