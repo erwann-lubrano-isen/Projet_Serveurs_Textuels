@@ -131,7 +131,7 @@ unsigned long int bdd_getSalon_id(unsigned long int id_serveur, const char * nam
 	Salon salon;
 	FILE * file = NULL;
 	file = fopen("rsc/salon.dat","r");
-	while(fread(&salon, sizeof(Salon), 1, file) != EOF && i <= size){
+	while(fread(&salon, sizeof(Salon), 1, file) != EOF && i < size){
 		if(strcmp(salon.nom,name)==0 && salon.idServeur==id_serveur){
 			fclose(file);
 			return salon.idSalon;

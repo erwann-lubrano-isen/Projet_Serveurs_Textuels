@@ -75,6 +75,13 @@ int quit_serv(unsigned long int userid);
 /**
 * @brief affiche le prompt dans le menu d'accueil
 * @param user_id : id de l'utilisateur connecté
+* @return
 */
 void prompt_acceuil(unsigned long int user_id);
+/**
+* @brief Affiche un message d'au revoir
+* @param user_id : id de l'utilisateur connecté
+* @return
+*/
+void auRevoir(unsigned long int user_id);
 #endif
