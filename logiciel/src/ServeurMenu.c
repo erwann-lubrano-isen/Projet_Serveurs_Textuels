@@ -440,11 +440,11 @@ int getSalon(unsigned long int idServ) {
 
 int permServeur(unsigned long int idServ){
 	char *role = strtok(NULL, " ");
-    	char *perm = strtok(NULL, " ");
-    	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='w' && perm[0]!='-') || (perm[1]!='x' && perm[1]!='-')){ //cas derreur
-    		printf("\e[1;31mCommande invalide\e[0m\n");
-    		return -1;
-    	}
+	char *perm = strtok(NULL, " ");
+	if(role == NULL || perm == NULL || strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='w' && perm[0]!='-') || (perm[1]!='x' && perm[1]!='-')){ //cas derreur
+		printf("\e[1;31mCommande invalide\e[0m\n");
+		return -1;
+	}
 	int result = insert_perm_serveur(idServ, role, perm); //appel de la fonction pour attribuer les role de chacun au serv
 	if (result==1){
 		printf("\n\e[1;32mChangement de Permissions effectué \e[0m\n");

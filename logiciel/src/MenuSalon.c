@@ -14,7 +14,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
 			prompt_salon(id_utilisateur, id_serveur,  id_salon);
 			fgets(buffer, 127, stdin);
 			if(buffer[0]==' '){
-				printf("\e[1;31Action inexistante\e[0m\n");
+				printf("\e[1;31mAction inexistante\e[0m\n");
 				continue;
 			}
 			int lenght = strlen(buffer); 
@@ -38,7 +38,7 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
 			else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
 			else if((strcmp(commande, "display")==0 || strcmp(commande, "ls")==0) && permR_salon == 1) displayMsg(id_utilisateur, id_serveur, id_salon);
 			
-			else printf("%s: \e[1;31Action inexistante\e[0m\n", commande);
+			else printf("\n%s: \e[1;31mAction inexistante\e[0m\n", commande);
 	}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
 	
 return 1;
