@@ -8,7 +8,7 @@ int menu_Acceuil(unsigned long int user_id){
     	
     	fgets(buffer, 127, stdin);
     	if(buffer[0]==' '){
-    		printf("Action inexistante\n");
+    		printf("\e[1;31mAction inexistante\e[0m\n");
     		continue;
     	}
     	int lenght = strlen(buffer); 
@@ -23,27 +23,20 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "join")))join_serv(user_id);
     	else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
     	else if(strcmp(commande, "listserver")==0||strcmp(commande, "ls")==0)list_serv(user_id);
-    	
     	else if(strcmp(commande, "listinvitation")==0||strcmp(commande, "li")==0)list_invit(user_id);
 		else if(strcmp(commande, "logout") == 0 || strcmp(commande, "cd..")==0)return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
     	else if(!(strcmp(commande, "die"))){
     		bdd_supprimer_utilisateur(user_id);
-    		printf("Utilisateur %lu supprimé\n", user_id);
+    		printf("\e[1;32mUtilisateur %lu supprimé\e[0m\n", user_id);
     		return 1;
-    	}
-    	else if((strcmp(commande, "open")==0)|| (strcmp(commande, "cd")==0)){
+    	}else if((strcmp(commande, "open")==0)|| (strcmp(commande, "cd")==0)){
     		unsigned long int id_serveur = openServeur(user_id);
     		if(id_serveur!=0){
     			if(menuServeur(id_serveur,user_id)==0)return 0;
     		}
-    	}
-    	else if(!(strcmp(commande, "debug"))){
-    		bdd_afficher_serveurs();
-    		bdd_afficher_membres();	
-    	}
-    	else printf("Action inexistante\n");
+    	}else printf("\e[1;31mAction inexistante\e[0m\n");
 
     }while(1);    
     return 0;
@@ -91,7 +84,7 @@ int create_serv(unsigned long int idProprio){
 	}
 	fclose(fichier);
 	if (bd_creationServeur(servname,idProprio)==0 && bdd_creer_membre(bdd_getServeur_id(servname), idProprio, "Admin")==0){
-		printf("\e[1;32m- Le serveur '%s' a bien été crée\n", servname);
+		printf("\e[1;32m- Le serveur '%s' a bien été crée\e[0m\n", servname);
 	}
 	
 	
@@ -294,7 +287,7 @@ unsigned long int openServeur(unsigned int long user_id){
 	}
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
-		printf("serveur inexistant\n");
+		printf("\e[1;31mserveur inexistant\e[0m\n");
 	}else if(bdd_check_membre(serveur_id,user_id)){
 		return serveur_id;
 	}else{

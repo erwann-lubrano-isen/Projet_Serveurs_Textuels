@@ -17,7 +17,7 @@ int signup(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(pseudo == NULL || motdepasse == NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mcommande incorrecte\e[0m\n");
 		return 1;
 	}
 	FILE * fichier;
@@ -29,13 +29,14 @@ int signup(){
 	while(fread(&utilisateur,sizeof(Utilisateur),1,fichier)!=EOF&&i<size){
 		if(strcmp(pseudo,utilisateur.pseudo)==0){
 			fclose(fichier);
-			printf("Ce pseudo est deja pris !\n");
+			printf("\e[1;31mCe pseudo est deja pris !\e[0m\n");
 			return 1;
 		}
 		++i;
 	}
 	fclose(fichier);
 	bdd_creer_utilisateur(pseudo, motdepasse);
+	printf("\e[1;32m- utilisateur %s créé\e[0m\n",pseudo);
 	return 0;
 }
 
@@ -43,7 +44,7 @@ unsigned long int  login(){
 	char * pseudo=strtok(NULL," ");
 	char * motdepasse=strtok(NULL," ");
 	if(pseudo == NULL || motdepasse == NULL || strlen(pseudo)>30 || strlen(motdepasse) > 30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mcommande incorrecte\e[0m\n");
 		return 0;
 	}
 	FILE * fichier;
@@ -57,16 +58,16 @@ unsigned long int  login(){
 			
 			if(strcmp(motdepasse,utilisateur.motDePasse)==0){
 				fclose(fichier);
-				printf("Connecte !\n");
+				printf("\e[1;32mConnecté !\e[0m\n");
 				return utilisateur.id;
 			}
-			printf("Mot de passe incorrecte\n");
+			printf("\e[1;31mMot de passe incorrecte\e[0m\n");
 			fclose(fichier);
 			return 0;
 		}
 		++i;
 	}
-	printf("utilisateur inexistant\n");
+	printf("\e[1;31mutilisateur inexistant\e[0m\n");
 	fclose(fichier);
 	return 0;
 }
@@ -79,7 +80,7 @@ int menuConnexion() {
     	
     	fgets(buffer, 127, stdin);
     	if(buffer[0]==' '){
-    		printf("Action inexistante\n");
+    		printf("\e[1;31mAction inexistante\e[0m\n");
     		continue;
     	}
     	int lenght = strlen(buffer); 
@@ -97,13 +98,13 @@ int menuConnexion() {
     			if(menu_Acceuil(user_id)==0)return 0;
     		}
     	}else if(!(strcmp(commande, "exit"))) return 0;
-    	else printf("Action inexistante\n");
+    	else printf("\e[1;31mAction inexistante\n\e[0m");
     }while(1);    
     return 0;
 }
 
 void connexion_prompt(){
-	printf(">$ ");
+	printf("\e[0m>$ ");
 }
 
 

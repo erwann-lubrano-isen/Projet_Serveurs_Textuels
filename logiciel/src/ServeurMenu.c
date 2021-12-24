@@ -21,7 +21,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		
 		if(strcmp(commande, "help") == 0) helpServeur(idServ, idUtilisateur);
 		else if(strcmp(commande, "invite") == 0 && permX_serv==1) invitation(idServ);
-		else if(strcmp(commande, "listdemande") == 0 && permX_serv==1)list_demande(idServ);
+		else if((strcmp(commande, "listedemandes") == 0 || strcmp(commande, "ld") == 0) && permX_serv==1)list_demande(idServ);
 		else if(strcmp(commande, "accept") == 0 && permX_serv==1) accept(idServ);
 		else if(strcmp(commande, "role") == 0 && permX_serv==1){
 			assignationRole(idServ);
@@ -82,7 +82,8 @@ void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		printf("\t\e[4;40;33mrole 'pseudo' 'role'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mAffecte le role a un membre\e[0m\t\e[1;35m|\e[0m\n");
 		printf("\t\e[4;40;33mperm 'role' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\t\e[1;35m|\e[0m\n");
 		printf("\t\e[4;40;33minvite 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mInviter au serveur\e[0m\t\t\e[1;35m|\e[0m\n");
-		printf("\t\e[4;40;33maccept 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mAccepte au serveur\e[0m\t\t\e[1;35m|\e[0m");
+		printf("\t\e[4;40;33maccept 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mAccepte au serveur\e[0m\t\t\e[1;35m|\e[0m\n");
+		printf("\t\e[4;40;33mlistedemandes/ld\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mAffiche la liste des demandes\e[0m\t\e[1;35m|\e[0m");
 		printf("\n\e[1;35m________________________________________________________________________|\e[0m\n");
 	}
 	else
@@ -111,7 +112,7 @@ int invitation(unsigned long int idServ) {
 		fread(&demande, sizeof(Demande), 1, fichier);
 		if(demande.user_id == idU && demande.server_id == idServ) {
 			bdd_creer_membre(idServ, idU, "Membre");
-			printf("%s est devenu membre du serveur\n", pseudo);
+			printf("\e[1;32m%s est devenu membre du serveur\n\e[0m", pseudo);
 			bdd_supprimer_invitation(idU, idServ);
 			bdd_supprimer_demande(idU, idServ);
 			fclose(fichier);
@@ -157,12 +158,12 @@ int accept(unsigned long int idServ) {
 		if(demande.user_id == idU && demande.server_id == idServ) {
 			bdd_supprimer_demande(idU, idServ);
 			bdd_creer_membre(idServ, idU, "Membre");
-			printf("\n%s est devenu membre du serveur\n", pseudo);
+			printf("\n\e[1;32m%s est devenu membre du serveur\e[0m\n", pseudo);
 			fclose(fichier);
 			return 0;
 		}
 	}
-	printf("Aucune demande de %s\n", pseudo);
+	printf("\e[1;31mAucune demande de %s\e[0m\n", pseudo);
 	fclose(fichier);
 	return 0;
 }
