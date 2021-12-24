@@ -63,12 +63,12 @@ void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 	printf("\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\n");
 	printf("\t\e[4;40;33mlistesalon/ls\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAffiche la liste des salons\e[0m\t\e[1;34m|\e[0m\n");
 	printf("\t\e[4;40;33mlistemembres/lm\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAffiche les membres du serveur\e[0m\t\e[1;34m|\e[0m\n");
-	printf("\t\e[4;40;33mopen/cd'servername'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mAller dans un salon[r]\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mopen/cd 'server'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mAller dans un salon[r]\e[0m\t\t\e[1;34m|\e[0m\n");
 	
 	
 	if(bdd_hasWPerm_serveur(idServ, idUtilisateur)){
-	printf("\t\e[4;40;33mcreate\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mCreer un salon[w]\e[0m\t\t\e[1;34m|\e[0m\n");
-	printf("\t\e[4;40;33mdelete\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mSupprimer un salon[w]\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mcreate 'salon'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mCreer un salon[w]\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mdelete 'salon'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mSupprimer un salon[w]\e[0m\t\t\e[1;34m|\e[0m\n");
 	}
 	
 	
@@ -80,7 +80,7 @@ void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 		printf("\e[1;35m------------------------[ADMINISTRATION][x]----------------------------\t|\e[0m\n");
 		printf("\t\t\t\t\t\t\t\t\t\e[1;35m|\e[0m\n");		
 		printf("\t\e[4;40;33mrole 'pseudo' 'role'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mAffecte le role a un membre\e[0m\t\e[1;35m|\e[0m\n");
-		printf("\t\e[4;40;33mperm 'rolename' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\t\e[1;35m|\e[0m\n");
+		printf("\t\e[4;40;33mperm 'role' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\t\e[1;35m|\e[0m\n");
 		printf("\t\e[4;40;33minvite 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mInviter au serveur\e[0m\t\t\e[1;35m|\e[0m\n");
 		printf("\t\e[4;40;33maccept 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mAccepte au serveur\e[0m\t\t\e[1;35m|\e[0m");
 		printf("\n\e[1;35m________________________________________________________________________|\e[0m\n");
@@ -442,9 +442,16 @@ int permServeur(unsigned long int idServ){
     		printf("\e[1;31mCommande invalide\e[0m\n");
     		return -1;
     	}
-    	//insert_perm_salon(idServ, role, perm);
-	insert_perm_serveur(idServ, role, perm); //appel de la fonction pour attribuer les role de chacun au serv
-	return 0;
+	int result = insert_perm_serveur(idServ, role, perm); //appel de la fonction pour attribuer les role de chacun au serv
+	if (result==1){
+		printf("\n\e[1;32mChangement de Permissions effectué \e[0m\n");
+		printf("\n\e[3mNouvelles permissions\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", role, perm);
+	}
+	else if (result==0){
+		printf("\n\e[1;32mCreation du role effectué \e[0m\n");
+		printf("\n\e[3mNouveau role\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", role, perm);
+	}
+return 0;
 }
 
 
@@ -491,9 +498,8 @@ int checkRoleServ(unsigned int long id_serveur, char Role[]){
 		return 1;
 		}
 	   	if (i == bdd_getSize_table("permission_serveur")){
-			printf("\e[1;31mLe role %s n'existe pas\e[0m\n", Role);
 			fclose(file2);
-			return 0;
+			return 0; //Cas ou le role nexiste pas
 		}
 	}
 	return 0;
