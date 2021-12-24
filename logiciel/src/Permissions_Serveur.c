@@ -16,7 +16,8 @@ int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[])
 		strcpy(perm_serveur.perms,perms);
 		fseek(fichier,-sizeof(Permissions_Serveur),SEEK_CUR);  //on repositione le curseur juste avant
 		fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier); //on ecrase le membre par nouveau
-		printf("Changement de droits pour %s \n", Role);
+		printf("\n\e[1;32mChangement de Permissions effectué \e[0m\n");
+		printf("\n\e[3mNouvelles permissions\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", Role, perms);
 		fclose(fichier);
 		return 0;
 		}
@@ -30,7 +31,8 @@ int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[])
 	fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier);
 	fclose(fichier);
 	bdd_increment_table("permission_serveur");
-	printf("Nouveau role : %s : permissions :  %s\n", Role, perms);
+	printf("\n\e[1;32mCreation du role effectué \e[0m\n");
+	printf("\n\e[3mNouveau role\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", Role, perms);
 	return 0;
 }
 
@@ -51,10 +53,10 @@ int bdd_hasWPerm_serveur(unsigned long int serveur_id, unsigned long int user_id
 	char role[30];
 	switch(bdd_getRole_membre(role,user_id,serveur_id)){
 		case -1:
-			fprintf(stderr,"Erreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\n");
+			fprintf(stderr,"\e[1;31mErreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\e[0m\n");
 			return -2;
 		case 1:
-			fprintf(stderr,"Erreur : membre inconnu\n");
+			fprintf(stderr,"\e[1;31mErreur : membre inconnu\e[0m\n");
 			return 0;
 	}
 	int size = bdd_getSize_table("permission_serveur");
@@ -77,10 +79,10 @@ int bdd_hasXPerm_serveur(unsigned long int serveur_id, unsigned long int user_id
 	char role[30];
 	switch(bdd_getRole_membre(role,user_id,serveur_id)){
 		case -1:
-			fprintf(stderr,"Erreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\n");
+			fprintf(stderr,"\e[1;31mErreur : Le fichier membre.dat n'a pas pu etre ouvert correctement\e[0m\n");
 			return -2;
 		case 1:
-			fprintf(stderr,"Erreur : membre inconnu\n");
+			fprintf(stderr,"\e[1;31mErreur : membre inconnu\e[0m\n");
 			return 0;
 	}
 	int size = bdd_getSize_table("permission_serveur");

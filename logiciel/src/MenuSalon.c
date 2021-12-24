@@ -7,14 +7,14 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
 	int permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
     char buffer[128];
     if (checkRole(id_utilisateur, id_salon, id_serveur)==1){
+    	printf("\e[1;31mVous n'avez pas le droit d'accès a ce serveur\e[0m\n");
     	return 1;
     }
-    do{ 
-    	do{
+    do{
 			prompt_salon(id_utilisateur, id_serveur,  id_salon);
 			fgets(buffer, 127, stdin);
 			if(buffer[0]==' '){
-				printf("Action inexistante\n");
+				printf("\e[1;31Action inexistante\e[0m\n");
 				continue;
 			}
 			int lenght = strlen(buffer); 
@@ -30,27 +30,37 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
 				permW_salon=bdd_hasWPerm_salon(id_salon, id_utilisateur);
 				permX_serveur=bdd_hasXPerm_serveur(id_serveur, id_utilisateur);
 			}else if((strcmp(commande, "msg")==0) && permW_salon == 1) msgSalon(id_salon, id_utilisateur);
-			else if(!(strcmp(commande, "exit"))) return 0;
+			else if(!(strcmp(commande, "exit"))){
+		        	auRevoir(id_utilisateur);
+		        	return 0;
+		        }
 			else if(!(strcmp(commande, "role"))) permMembresSalon(id_salon);
 			else if((strcmp(commande, "back")==0) || (strcmp(commande, "cd..")==0)) return 1;
 			else if((strcmp(commande, "display")==0 || strcmp(commande, "ls")==0) && permR_salon == 1) displayMsg(id_utilisateur, id_serveur, id_salon);
 			
-			else printf("%s: Action inexistante\n", commande);
-		}while(1);
+			else printf("%s: \e[1;31Action inexistante\e[0m\n", commande);
 	}while(checkRole(id_utilisateur, id_salon, id_serveur)==0);
+	
+return 1;
 }
 
 void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
-	printf("-------------Voici la liste des commandes--------------\n");
-	printf("!msg text: Envoyer un message\n");
-	printf("!role : Voir les roles du salons\n");
-	printf("!exit : Quitter le programme\n");
-	printf("!back : Retour en arrière\n");
-	printf("!display : Afficher tout les messages\n");
+	printf("\e[1;34m---------------------[LISTE DES COMMANDES]---------------------\t|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mmsg 'text'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mEnvoyer un message[w]\e[0m\t\t\e[1;34m|\e[0m\n"); 
+	printf("\t\e[4;40;33mdisplay\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAfficher tout les messages[r]\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mrole\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mVoir les roles du salons\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mback\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mRetour en arrière\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mexit\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mQuitter le programme\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\e[0m\n");
 	if (isAdmin(id_utilisateur, id_serveur)){
-		printf("\nADMINISTRATION\n");
-		printf("!perm rolename perm :  Change les droits des roles pour le salon\n");
+		printf("\e[1;35m-----------------------[ADMINISTRATION]------------------------\t|\e[0m\n");
+		printf("\t\t\t\t\t\t\t\t\e[1;35m|\e[0m\n");		
+		printf("\t\e[4;40;33mperm 'rolename' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\e[1;35m|\e[0m");
+		printf("\n\e[1;35m________________________________________________________________|\e[0m\n");
 	}
+	else
+		printf("\e[1;34m________________________________________________________________|\e[0m\n");
 }
 
 
@@ -58,10 +68,8 @@ int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 	char *role = strtok(NULL, " ");
 	char *perm = strtok(NULL, " ");
 	if(role==NULL||perm==NULL)return -1;
-	printf("\nlongueur de perm %lu\n", strlen(perm));
-	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
 	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='r' && perm[0]!='-') || (perm[1]!='w' && perm[1]!='-')){ //cas derreur
-		printf("Commande invalide\n");
+		printf("\e[1;31mCommande invalide\e[0m\n");
 		return -1;
 	}
 	insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
@@ -74,7 +82,7 @@ int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 int msgSalon(unsigned long int id_salon, unsigned long int id_utilisateur){
 	char *texte = strtok(NULL, "\0");  // phrase envoyé par l'utilisateur, s'arrête au \n qui signifie le dernier caractere
 	if (texte == NULL || strlen(texte)>120){ //cas d'érreur
-		printf("Message invalide\n");
+		printf("\e[1;31mMessage invalide\e[0m\n");
 		return -1;
 	}
 	time_t date=time(NULL); // date = date actuel
@@ -168,7 +176,7 @@ void permMembresSalon(unsigned long int idSalon) {
 	{	
 		if(perm.id_salon==idSalon) 
 		{
-			printf("%s [%s]\n", perm.Role, perm.perms);
+			printf("\t\e[1;34m%s\e[0m \t\e[1m[%s]\e[0m\n", perm.Role, perm.perms);
 		
 		}
 	i++;
@@ -198,7 +206,7 @@ void prompt_salon(unsigned long int user_id, unsigned long int serveur_id, unsig
 						while(fread(&salon, sizeof(Salon), 1, file3) != EOF && x <= size3){
 							if(idSalon==salon.idSalon){
 						
-								printf(">%s/%s/%s $ ",utilisateur.pseudo,serveur.nom,salon.nom);
+								printf(">\e[33m%s\e[0m/\e[34m%s\e[0m/\e[36m%s\e[0m $ ",utilisateur.pseudo,serveur.nom,salon.nom);
 								fclose(file);
 								fclose(file2);
 								fclose(file3);
@@ -251,7 +259,6 @@ int checkRole(unsigned long int id_user, unsigned long int id_salon, unsigned lo
             return 0;
             }
             else{
-            printf("Vous n'avez pas les droits pour entrer dans ce salon\n");
             fclose(file2);
             return 1;
             }

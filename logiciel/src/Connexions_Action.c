@@ -4,10 +4,12 @@
 
 
 void affich_help(){
-	printf("Liste des commandes disponibles : \n");
-	printf("\t !login userID MotDePasse \n");
-	printf("\t !signup pseudo MotDePasse \n");
-	printf("\t !exit \n");
+	printf("\e[1;34m--------------------------[LISTE DES COMMANDES]-----------------------\t|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlogin 'pseudo' 'passWord'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mSe connecter\e[0m\t\t\e[1;34m|\e[0m\n"); 
+	printf("\t\e[4;40;33msignup 'pseudo' 'passWord'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mSe connecter\e[0m\t\t\e[1;34m|\e[0m\n"); 
+	printf("\t\e[4;40;33mexit\e[0m\t\t\t\t\e[1;5m----->\e[0m\t\e[3;36mQuitter le programme\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\e[0m");	printf("\n\e[1;34m______________________________________________________________________\t|\e[0m\n");
 
 }
 

@@ -24,7 +24,7 @@ int menu_Acceuil(unsigned long int user_id){
     	else if(!(strcmp(commande, "delete")))delete_serveur(user_id);
     	else if(strcmp(commande, "listserver")==0||strcmp(commande, "ls")==0)list_serv(user_id);
     	
-    	else if(!(strcmp(commande, "listinvitation")))list_invit(user_id);
+    	else if(strcmp(commande, "listinvitation")==0||strcmp(commande, "li")==0)list_invit(user_id);
 		else if(strcmp(commande, "logout") == 0 || strcmp(commande, "cd..")==0)return 1;
     	else if(!(strcmp(commande, "exit"))) return 0;
     	else if(!(strcmp(commande, "quit")))quit_serv(user_id);
@@ -50,27 +50,29 @@ int menu_Acceuil(unsigned long int user_id){
 }
 
 void help_acceuil(){
-	printf("Commandes disponibles au menu acceuil :\n");
-	printf("\tcreate servernName\n");
-	printf("\tjoin serverName\n");
-	printf("\tquit serverName\n");
-	printf("\tdelete serverName\n");
-	printf("\tlistserver\n");
-	printf("\tlistinvitation\n");
-	printf("\taccept serverName (invitation)\n");
-	printf("\topen serverName\n");
+	printf("\e[1;34m----------------------------------[LISTE DES COMMANDES]-------------------------------\t|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mcreate/mkdir 'serverName'\e[0m\t\e[1;5m----->\e[0m\t\e[3;36mCreer un serveur\e[0m\t\t\t\e[1;34m|\e[0m\n"); 
+	printf("\t\e[4;40;33mjoin 'serverName\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mDemander a rejoindre un serveur\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mquit 'serverName'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mQuitter un serveur\e[0m\t\t\t\e[1;34m|\e[0m\n");
 	
-	printf("\tlogout\n");
-	printf("\texit\n");
-	printf("\tdie\n");
-
+	printf("\t\e[4;40;33mdelete 'serverName'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mSupprimer votre serveur\e[0m\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlistserver/ls\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mListe des serveurs disponible\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlistinvitation/li\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mListe des invitations disponible\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33maccept 'servername'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAccepte une invitation disponible\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mopen/cd'servername'\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAller dans un serveur disponible\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlogout\e[0m\t\t\t\t\e[1;5m----->\e[0m\t\e[3;36mSe deconnecter disponible\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mdie\e[0m\t\t\t\t\e[1;5m----->\e[0m\t\e[3;36mSupprimer le compte disponible\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mexit\e[0m\t\t\t\t\e[1;5m----->\e[0m\t\e[3;36mQuitter le programme\e[0m\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\e[0m");
+	printf("\n\e[1;34m______________________________________________________________________________________\t|\e[0m\n");
 }
 
 int create_serv(unsigned long int idProprio){
 	char * servname=strtok(NULL," ");
 
 	if(servname==NULL || strlen(servname)>30 || strlen(servname) > 30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mCommande incorrecte\e[0m\n");
 		return 1;
 	}
 	FILE * fichier;
@@ -82,7 +84,7 @@ int create_serv(unsigned long int idProprio){
 	while(fread(&serveur,sizeof(Serveur),1,fichier)!=EOF&&i<size){
 		if(strcmp(servname,serveur.nom)==0){
 			fclose(fichier);
-			printf("Ce nom de serveur existe deja!\n");
+			printf("\e[1;31mCe nom de serveur existe deja\e[0m\n");
 			return 1;
 		}
 		++i;
@@ -97,14 +99,14 @@ int create_serv(unsigned long int idProprio){
 int delete_serveur(unsigned long int user_id){	
 	char * serveur_name=strtok(NULL," ");
 	if(serveur_name == NULL || strlen(serveur_name)>30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mCommande incorrecte\e[0m\n");
 		return -1;
 	}
 	
 	unsigned long serveur_id=bdd_getServeur_id(serveur_name);
 	
 	if(serveur_id==0){
-		printf("Serveur inconnu\n");
+		printf("\e[1;31mServeur inconnu\e[0m\n");
 		return 1;
 	}
 	FILE * fichier;
@@ -120,7 +122,7 @@ int delete_serveur(unsigned long int user_id){
 				bd_suppressionServeur(serveur.id);
 				return 0;
 			}else{
-				printf("Ce serveur ne vous appartient pas\n");
+				printf("\e[1;31mCe serveur ne vous appartient pas\e[0m\n");
 				return 2;
 			}
 		}
@@ -132,12 +134,12 @@ int delete_serveur(unsigned long int user_id){
 int join_serv(unsigned long int userid){
 	char * servername=strtok(NULL," ");
 	if(servername==NULL || strlen(servername)>30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mCommande incorrecte\e[0m\n");
 		return 1;
 	}
 	unsigned long int idServ = bdd_getServeur_id(servername);
 	if(bdd_check_membre(idServ,userid)){
-		printf("Vous etes deja membre de ce serveur\n");
+		printf("\e[1;31mVous etes deja membre de ce serveur\e[0m\n");
 		return 2;
 	}
 	
@@ -159,7 +161,7 @@ int join_serv(unsigned long int userid){
 	Demande demande;
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
-		printf("Serveur inexistant\n");
+		printf("\e[1;31mServeur inexistant\e[0m\n");
 		return 1;
 	}
 	fichier = fopen("rsc/demande.dat","r");
@@ -171,7 +173,7 @@ int join_serv(unsigned long int userid){
 	while(fread(&demande,sizeof(Demande),1,fichier)!=EOF&&i<size){
 		if(serveur_id==demande.server_id && demande.user_id==userid){
 			fclose(fichier);
-			printf("Demande deja existante!\n");
+			printf("\e[1;31mDemande deja existante!\e[0m\n");
 			return 1;
 		}
 		++i;
@@ -244,7 +246,7 @@ int list_invit(unsigned int long user_id){
 int quit_serv(unsigned long int userid){
 	char * servername=strtok(NULL," ");
 	if(servername==NULL || strlen(servername)>30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mCommande incorrecte\e[0m\n");
 		return 1;
 	}
 	FILE * fichier = fopen("rsc/serveur.dat", "r+");
@@ -254,12 +256,12 @@ int quit_serv(unsigned long int userid){
 
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
 	if(serveur_id==0){
-		printf("Serveur inexistant\n");
+		printf("\e[1;31mServeur inexistant\e[0m\n");
 		return 1;
 	}
 	for(int i = 0; i < bdd_getSize_table("serveur") && fread(&serveur, sizeof(Serveur), 1, fichier) != EOF; ++i) {
 		if (serveur_id == serveur.id && userid == serveur.idProprio) {
-			printf("Impossible pour le propietaire du serveur\n");
+			printf("\e[1;31mImpossible pour le propietaire du serveur\e[0m\n");
 			fclose(fichier);
 			return 0;
 		}
@@ -285,7 +287,7 @@ int quit_serv(unsigned long int userid){
 unsigned long int openServeur(unsigned int long user_id){
 	char * servername=strtok(NULL," ");
 	if(servername==NULL || strlen(servername)>30){
-		printf("commande incorrecte\n");
+		printf("\e[1;31mCommande incorrecte\e[0m\n");
 		return 0;
 	}
 	unsigned long int serveur_id=bdd_getServeur_id(servername);
@@ -294,7 +296,7 @@ unsigned long int openServeur(unsigned int long user_id){
 	}else if(bdd_check_membre(serveur_id,user_id)){
 		return serveur_id;
 	}else{
-		printf("Vous n'etes pas membre de ce serveur\n");
+		printf("\e[1;31mVous n'etes pas membre de ce serveur\e[0m\n");
 	}
 	return 0;
 }
@@ -308,7 +310,23 @@ void prompt_acceuil(unsigned long int user_id){
 	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
 		if(user_id==utilisateur.id){
 			fclose(file);
-			printf(">%s $ ",utilisateur.pseudo);
+			printf(">\e[33m%s\e[0m $ ",utilisateur.pseudo);
+			return;
+		}
+		++i;
+	}
+	fclose(file);
+}
+void auRevoir(unsigned long int user_id){
+	int size = bdd_getSize_table("utilisateur");
+	int i =0;
+	Utilisateur utilisateur;
+	FILE * file = NULL;
+	file = fopen("rsc/utilisateur.dat","r");
+	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
+		if(user_id==utilisateur.id){
+			fclose(file);
+			printf("\n\e[1;33;44mAu revoir %s !\e[0m\n", utilisateur.pseudo);
 			return;
 		}
 		++i;
