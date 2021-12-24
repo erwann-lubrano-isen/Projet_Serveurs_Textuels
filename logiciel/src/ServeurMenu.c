@@ -170,7 +170,9 @@ int accept(unsigned long int idServ) {
 int createSalon(unsigned long int idServ) {
 	char *nomSalon = strtok(NULL, " ");
 	if(bdd_getSalon_id(idServ ,nomSalon) == 0) {
-		bdd_create_Salon(nomSalon, idServ);
+		if(bdd_create_Salon(nomSalon, idServ)==0){
+			printf("\e[1;32m- Le salon '%s' a bien été crée\e[0m\n", nomSalon);
+		};
 	}
 	else printf("\e[1;31mSalon déjà existant\e[0m\n");
 	return 0;
