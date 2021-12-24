@@ -34,16 +34,20 @@ int menuSalon(unsigned long int id_salon, unsigned long int id_utilisateur, unsi
 }
 
 void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
-	printf("-------------Voici la liste des commandes--------------\n");
-	printf("!msg text: Envoyer un message\n");
-	printf("!role : Voir les roles du salons\n");
-	printf("!exit : Quitter le programme\n");
-	printf("!back : Retour en arrière\n");
-	printf("!display : Afficher tout les messages\n");
+	printf("------------Voici la liste des commandes---------------\t|\n");
+	printf("\t\t\t\t\t\t\t|\n");
+	printf("\t!msg 'text'\t Envoyer un message\t\t|\n"); 
+	printf("\t!role \t\t Voir les roles du salons\t|\n");
+	printf("\t!exit \t\t Quitter le programme\t\t|\n");
+	printf("\t!back \t\t Retour en arrière\t\t|\n");
+	printf("\t!display \t Afficher tout les messages\t|\n");
+	printf("\t\t\t\t\t\t\t|");
 	if (isAdmin(id_utilisateur, id_serveur)){
-		printf("\nADMINISTRATION\n");
-		printf("!perm rolename perm :  Change les droits des roles pour le salon\n");
+		printf("\t\t\t\t\t\t\t|\n");
+		printf("\t!perm rolename perm : Crée/Modifier un role\t|\n");
 	}
+	else
+		printf("________________________________________________________|\n");
 }
 
 
