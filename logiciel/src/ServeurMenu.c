@@ -10,7 +10,7 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
     	
     		fgets(buffer, 127, stdin);
     		if(buffer[0]==' '){
-    			printf("Action inexistante\n");
+    			printf("\e[1;31Action inexistante\e[0m\n");
     			continue;
     		}
     		int lenght = strlen(buffer); 
@@ -34,45 +34,53 @@ int menuServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
 			permX_serv = isAdmin(idUtilisateur, idServ);
     		permW_serv = bdd_hasWPerm_serveur(idServ, idUtilisateur);
 		}else if(strcmp(commande, "listesalon") == 0 || (strcmp(commande, "ls")==0)) listeSalon(idServ, idUtilisateur);
-		else if((strcmp(commande, "listemembres")==0)) listeMembres(idServ);
+		else if(strcmp(commande, "listemembres")==0 || (strcmp(commande, "lm")==0)) listeMembres(idServ);
 		else if((strcmp(commande, "open")==0) || (strcmp(commande, "cd")==0)){
 			char * salonname = strtok(NULL," ");
 			if(salonname == NULL || strlen(salonname) > 30){
-				printf("commande invalide\n");
+				printf("\e[1;31mCommande invalide\e[0m\n");
 			}else{
 				unsigned long int salon_id = bdd_getSalon_id(idServ, salonname);
 				int permR_salon=readPerm(salon_id, idUtilisateur);
 				if(salon_id==0){
-					printf("Salon inexistant\n");
+					printf("\e[1;31mSalon inexistant\e[0m\n");
 				}else if(permR_salon){
 					if(menuSalon(salon_id, idUtilisateur, idServ)==0)return 0;
 				}else{
-					printf("Vous n'avez pas les droits d'accès à ce salon\n");
+					printf("\e[1;31mVous n'avez pas les droits d'accès à ce salon\e[0m\n");
 				}
 			}
 		}
 		else if((strcmp(commande, "back") == 0 ) || (strcmp(commande, "cd..")==0)) return 1;
 		else if((strcmp(commande, "exit") == 0 )) return 0;
-		else printf("%s: Action inexistante\n", commande);
+		else printf("%s: \e[1;31Action inexistante\e[0m\n", commande);
 	}while(1);
 }
 
 void helpServeur(unsigned long int idServ, unsigned long int idUtilisateur) {
-	printf("!help :\n\tPermet d'afficher toutes les commandes de ce menu\n");
-	printf("\n!listesalon:\n\tAffiche la liste des salons disponible\n");
-	printf("\n!listemembres :\n\tPermet d'afficher les membres/role du serveur\n");
-	printf("\n!back :\n\tRetour à l'accueil\n");
-	printf("\n!exit :\n\tQuitter\n");
-	if(isAdmin(idUtilisateur, idServ))
-	{
-		printf("\nADMINISTRATION\n");
-		printf("\n!role \"pseudonyme\" \"nom du role\" :\n\tPermet d'affecter un membre à un rôle\n");
-		printf("\n!perm \"nom de rôle\" \"permissions\" :\n\tPermet de créer un rôle\n");
-		printf("\n!invite \"pseudonyme\" :\n\tPermet d'inviter un utilisateur\n");
-		printf("\n!accept \"pseudonyme\" :\n\tPermet d'accepter l'inviation d'un utilisateur\n");
-		printf("\n!create \"nom de salon\" :\n\tPermet de créer un salon\n");
-		printf("\n!delete \"nom du salon\" :\n\tPermet de détruire un salon\n");
+
+	printf("\e[1;34m------------------------[LISTE DES COMMANDES]--------------------------\t|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlistesalon/ls\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAffiche la liste des salons\e[0m\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mlistemembres/lm\e[0m\t\t\e[1;5m----->\e[0m\t\e[3;36mAffiche les membres du serveur\e[0m\t\e[1;34m|\e[0m\n");
+	if(bdd_hasWPerm_serveur(idServ, idUtilisateur)){
+	printf("\t\e[4;40;33mcreate\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mCreer un salon\e[0m\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mdelete\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mSupprimer un salon\e[0m\t\t\e[1;34m|\e[0m\n");
 	}
+	printf("\t\e[4;40;33mback\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mRetour à l'acceuil\e[0m\t\t\e[1;34m|\e[0m\n");
+	printf("\t\e[4;40;33mexit\e[0m\t\t\t\e[1;5m----->\e[0m\t\e[3;36mQuitter\e[0m\t\t\t\t\e[1;34m|\e[0m\n");
+	printf("\t\t\t\t\t\t\t\t\t\e[1;34m|\e[0m\e[0m\n");
+	if (isAdmin(idUtilisateur, idServ)){
+		printf("\e[1;35m--------------------------[ADMINISTRATION]-----------------------------\t|\e[0m\n");
+		printf("\t\t\t\t\t\t\t\t\t\e[1;35m|\e[0m\n");		
+		printf("\t\e[4;40;33mrole 'pseudo' 'role'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mAffecte le role a un membre\e[0m\t\e[1;35m|\e[0m\n");
+		printf("\t\e[4;40;33mperm 'rolename' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\t\e[1;35m|\e[0m\n");
+		printf("\t\e[4;40;33minvite 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mInviter au serveur\e[0m\t\t\e[1;35m|\e[0m\n");
+		printf("\t\e[4;40;33maccept 'pseudo'\e[0m\t\t\e[1;5m---->\e[0m\t\e[3;36mAccepte au serveur\e[0m\t\t\e[1;35m|\e[0m");
+		printf("\n\e[1;35m________________________________________________________________________|\e[0m\n");
+	}
+	else
+		printf("\n\e[1;35m________________________________________________________________________|\e[0m\n");
 }
 
 int invitation(unsigned long int idServ) {
@@ -283,7 +291,7 @@ void prompt_serveur(unsigned long int user_id, unsigned long int serveur_id){
 				file2 = fopen("rsc/serveur.dat","r");
 				while(fread(&serveur, sizeof(Serveur), 1, file2) != EOF && j <= size2){
 					if(serveur_id==serveur.id){
-						printf(">%s/%s $ ",utilisateur.pseudo,serveur.nom);
+						printf(">\e[33m%s\e[0m/\e[34m%s\e[0m $ ",utilisateur.pseudo,serveur.nom);
 						fclose(file);
 						fclose(file2);
 						return;
@@ -424,7 +432,6 @@ int getSalon(unsigned long int idServ) {
 int permServeur(unsigned long int idServ){
 	char *role = strtok(NULL, " ");
     	char *perm = strtok(NULL, " ");
-    	printf("\n\n%s : %c%c\n", role, perm[0],perm[1]);
     	if(strlen(role)>30 || strlen(perm)!=2 || (perm[0]!='w' && perm[0]!='-') || (perm[1]!='x' && perm[1]!='-')){ //cas derreur
     		printf("Commande invalide\n");
     		return -1;

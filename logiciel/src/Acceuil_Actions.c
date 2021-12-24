@@ -308,7 +308,7 @@ void prompt_acceuil(unsigned long int user_id){
 	while(fread(&utilisateur, sizeof(Utilisateur), 1, file) != EOF && i <= size){
 		if(user_id==utilisateur.id){
 			fclose(file);
-			printf(">%s $ ",utilisateur.pseudo);
+			printf(">\e[33m%s\e[0m $ ",utilisateur.pseudo);
 			return;
 		}
 		++i;
