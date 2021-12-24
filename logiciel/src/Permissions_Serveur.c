@@ -16,10 +16,8 @@ int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[])
 		strcpy(perm_serveur.perms,perms);
 		fseek(fichier,-sizeof(Permissions_Serveur),SEEK_CUR);  //on repositione le curseur juste avant
 		fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier); //on ecrase le membre par nouveau
-		printf("\n\e[1;32mChangement de Permissions effectué \e[0m\n");
-		printf("\n\e[3mNouvelles permissions\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", Role, perms);
 		fclose(fichier);
-		return 0;
+		return 1;
 		}
 	}	
 	
@@ -31,8 +29,6 @@ int insert_perm_serveur(unsigned long int id_serveur, char Role[], char perms[])
 	fwrite(&perm_serveur,sizeof(Permissions_Serveur),1,fichier);
 	fclose(fichier);
 	bdd_increment_table("permission_serveur");
-	printf("\n\e[1;32mCreation du role effectué \e[0m\n");
-	printf("\n\e[3mNouveau role\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", Role, perms);
 	return 0;
 }
 

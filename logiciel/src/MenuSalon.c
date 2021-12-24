@@ -56,7 +56,7 @@ void helpSalon(unsigned long int id_utilisateur, unsigned long int id_serveur){
 	if (isAdmin(id_utilisateur, id_serveur)){
 		printf("\e[1;35m-----------------------[ADMINISTRATION]------------------------\t|\e[0m\n");
 		printf("\t\t\t\t\t\t\t\t\e[1;35m|\e[0m\n");		
-		printf("\t\e[4;40;33mperm 'rolename' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\e[1;35m|\e[0m");
+		printf("\t\e[4;40;33mperm 'role' 'perm'\e[0m\t\e[1;5m---->\e[0m\t\e[3;36mCrée/Modifier un role\e[0m\t\e[1;35m|\e[0m");
 		printf("\n\e[1;35m________________________________________________________________|\e[0m\n");
 	}
 	else
@@ -72,8 +72,17 @@ int permSalon(unsigned long int id_salon, unsigned long int id_serveur){
 		printf("\e[1;31mCommande invalide\e[0m\n");
 		return -1;
 	}
-	insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
+	int result=insert_perm_salon(id_salon, role, perm); //appel de la fonction pour attribuer les role de chacun a un salon
+	if (result==1){
+		printf("\n\e[1;32mChangement de Permissions effectué \e[0m\n");
+		printf("\n\e[3mNouvelles permissions\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", role, perm);
+	}
+	else if (result==0){
+		printf("\n\e[1;32mCreation du role effectué \e[0m\n");
+		printf("\n\e[3mNouveau role\e[0m : \e[4m%s\e[0m \e[1m[%s]\e[0m\n\n", role, perm);
+	}
 	if (checkRoleServ( id_serveur, role)==0){
+		printf("\n\e[3mNouveau role également pour le serveur \e[0m : \e[4m%s\e[0m \e[1m[--]\e[0m\n\n", role);
 		insert_perm_serveur(id_serveur, role, "--");
 	}
 	return 0;
